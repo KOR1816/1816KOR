@@ -5,11 +5,16 @@ const translations = {
   zh:{language:"语言",navHome:"首页",navSword:"圣剑争夺",navThree:"三大联盟战",navSiege:"攻城战",navBear:"猎熊",navSeating:"位置安排",navRules:"规则",bearTitle:"猎熊",bearText:"请查看猎熊信息。",bearHeroes:"请查看集结英雄和参与信息。",footer:"KOR 1816 联盟网站",bearTitle:"猎熊",bearText:"请查看猎熊信息。",bearHeroes:"请查看集结英雄和参与信息。",homeTitle:"KOR 1816",homeText:"欢迎来到 KOR 1816 联盟网站。",swordTitle:"圣剑争夺",threeTitle:"三大联盟战",siegeTitle:"攻城战",bearTitle:"猎熊",seatingTitle:"位置安排",seatingText:"请查看联盟位置安排。",rulesTitle:"规则",rulesText:"请查看联盟规则和通知。",seatRow:"行",seatNo:"编号",seatMember:"成员",mapLabel:"猎熊位置图"},
   de:{language:"Sprache",navHome:"Startseite",navSword:"Heiliges Schwert",navThree:"Drei Allianzen",navSiege:"Belagerung",navBear:"Bärenjagd",navSeating:"Platzierung",navRules:"Regeln",bearTitle:"Bärenjagd",bearText:"Informationen zur Bärenjagd.",bearHeroes:"Informationen zu Rallye-Helden und Teilnahme.",footer:"KOR 1816 Allianz-Website",bearTitle:"Bärenjagd",bearText:"Informationen zur Bärenjagd.",bearHeroes:"Informationen zu Rallye-Helden und Teilnahme.",homeTitle:"KOR 1816",homeText:"Willkommen auf der KOR 1816 Allianz-Website.",swordTitle:"Heiliges Schwert",threeTitle:"Drei Allianzen",siegeTitle:"Belagerung",bearTitle:"Bärenjagd",seatingTitle:"Platzierung",seatingText:"Informationen zur Allianz-Platzierung.",rulesTitle:"Regeln",rulesText:"Prüfe die Allianzregeln und Hinweise.",seatRow:"Reihe",seatNo:"Nr.",seatMember:"Mitglied",mapLabel:"Bärenjagd-Platzierung"}
 };
-const seatingData=[
+const defaultSeatingData=[
  {row:"Row 1",names:["체리찡!!","샌디에이고","살라딘!!","Nemesis","SsungBi","jinno","용이군","moon","jiwon","momo","MONSTER","GGGz"]},
  {row:"Row 2",names:["Chan Dam Bom","DAWN","띵띵v","Pham","Veggie","pika","hhHa","JackeyLove","lan","ROKA","MomSaidNoWar","EGOIST","miiiiia","Sant Jordi","bossi","LSJ","Commander_쥬","El Elegido","Lager"]},
  {row:"Row 3",names:["","Architect","Agares","hair loss beam","coculim","HiGH FiVE","Dajjal","aimee","OMEGA","Dingdong","AVA","Aril","Nyctifer_v","T","Libby","DDoRo","Hani","jennie","Zidf","SUMMER","Gideon","ADOPATI","HERA","GieZues","imNotKorean","스타리아"]}
 ];
+function getSeatingData(){
+  try{return JSON.parse(localStorage.getItem("kor1816_seating"))||defaultSeatingData;}
+  catch(e){return defaultSeatingData;}
+}
+let seatingData=getSeatingData();
 const pages={home:["homeTitle","homeText"],sword:["swordTitle"],three:["threeTitle"],siege:["siegeTitle"],bear:["bearTitle"],seating:["seatingTitle","seatingText"],rules:["rulesTitle","rulesText"]};
 let currentPage=localStorage.getItem("kor1816_page")||"home";
 let currentLanguage=localStorage.getItem("kor1816_language")||"ko";
@@ -22,9 +27,17 @@ function renderPage(){
   let extra="";
   if(currentPage==="bear") extra='<p>'+t("bearHeroes")+'</p>';
   if(currentPage==="seating"){
-    const rows=seatingData.map(function(group){
+    const edit=localStorage.getItem("kor1816_seating_edit")==="1";
+    extra='<div class="seating-actions"><button id="seatEditBtn" class="action-btn">'+(edit?"편집 종료":"자리배치 수정")+'</button>'+(edit?'<button id="seatSaveBtn" class="action-btn primary">저장</button><button id="seatResetBtn" class="action-btn danger">초기화</button>':"")+'</div>';
+  }
+  if(currentPage==="seating"){
+    const editMode=localStorage.getItem("kor1816_seating_edit")==="1";
+    const rows=seatingData.map(function(group,gi){
       return '<tr class="seat-group"><th colspan="3">'+group.row.replace("Row",t("seatRow"))+'</th></tr>'+
-        group.names.map(function(name,i){return '<tr><td>'+group.row.replace("Row",t("seatRow"))+'</td><td>'+ (name ? (i+1) : "") +'</td><td>'+name+'</td></tr>';}).join("");
+        group.names.map(function(name,i){
+          const value=String(name||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+          return '<tr><td>'+group.row.replace("Row",t("seatRow"))+'</td><td>'+ (name ? (i+1) : "") +'</td><td>'+(editMode?'<input class="seat-input" data-row="'+gi+'" data-index="'+i+'" value="'+value+'">':value)+'</td></tr>';
+        }).join("");
     }).join("");
     extra='<div class="seating-map"><div class="map-title">'+t("mapLabel")+'</div><svg class="seat-map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760" role="img" aria-label="'+t("mapLabel")+'">'+
       '<rect width="760" height="760" rx="24" fill="#fff"/>'+
@@ -39,6 +52,26 @@ function renderPage(){
       '<div class="table-wrap"><table class="seat-table"><thead><tr><th>'+t("seatRow")+'</th><th>'+t("seatNo")+'</th><th>'+t("seatMember")+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   }
   app.innerHTML='<section class="card">'+(image?'<div class="hero-image"><img src="'+image+'" alt="'+title+'"></div>':"")+'<h1>'+title+'</h1>'+(text?'<p>'+text+'</p>':"")+extra+'</section>';
+  if(currentPage==="seating"){
+    const editBtn=document.getElementById("seatEditBtn");
+    if(editBtn) editBtn.onclick=function(){localStorage.setItem("kor1816_seating_edit",editMode?"0":"1");renderPage();};
+    const saveBtn=document.getElementById("seatSaveBtn");
+    if(saveBtn) saveBtn.onclick=function(){
+      document.querySelectorAll(".seat-input").forEach(function(input){
+        seatingData[Number(input.dataset.row)].names[Number(input.dataset.index)]=input.value;
+      });
+      localStorage.setItem("kor1816_seating",JSON.stringify(seatingData));
+      localStorage.setItem("kor1816_seating_edit","0");
+      renderPage();
+    };
+    const resetBtn=document.getElementById("seatResetBtn");
+    if(resetBtn) resetBtn.onclick=function(){
+      seatingData=JSON.parse(JSON.stringify(defaultSeatingData));
+      localStorage.setItem("kor1816_seating",JSON.stringify(seatingData));
+      localStorage.setItem("kor1816_seating_edit","0");
+      renderPage();
+    };
+  }
   document.querySelectorAll(".nav-button").forEach(function(b){b.classList.toggle("active",b.dataset.page===currentPage);});
 }
 function applyLanguage(){
