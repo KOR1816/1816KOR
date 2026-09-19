@@ -44,3 +44,29 @@ body { margin:0; font-family:Arial,"Noto Sans KR",sans-serif; background:#0b1220
 .edit-card label{display:block;font-weight:800;margin:0 0 7px}.home-edit-input{width:100%;box-sizing:border-box;border:1px solid #b9c6d5;border-radius:8px;padding:9px;font:inherit;color:#dce7f5;margin-bottom:12px;background:#0d1728}.home-edit-area{min-height:130px;resize:vertical}
 .edit-buttons{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 @media(max-width:760px){.home-grid,.home-editor{grid-template-columns:1fr}}
+
+
+/* KOR1816 balanced dark theme */
+body{background:linear-gradient(180deg,#0b1426 0%,#101b30 45%,#0b1426 100%);color:#fff}
+.site-header{background:linear-gradient(135deg,#172b4a,#0d1b31);border-bottom:1px solid #35547d;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.brand{color:#fff}
+.nav{background:#0d192d;border-bottom:1px solid #294365;box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.nav-button{background:#172941;color:#fff;border:1px solid #29476b}
+.nav-button:hover{background:#203b5f}
+.nav-button.active{background:linear-gradient(135deg,#245d94,#347fbe);color:#fff;border-color:#4e91c8}
+.content{color:#fff}
+.card,.home-box,.edit-card,.seating-map{background:linear-gradient(145deg,#152640,#101d32);border:1px solid #2d496d;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+.card h1,.card h2,.card h3,.home-box h2,.edit-card label,.map-title{color:#fff}
+.home-content{color:#fff}
+.footer{color:#fff}
+.seat-table{background:#111f34;color:#fff}
+.seat-table th,.seat-table td{border-color:#304866;color:#fff}
+.seat-table thead th{background:#1d4168;color:#fff}
+.seat-table .seat-group th{background:#1a304c;color:#fff}
+.seat-table tbody tr:nth-child(even):not(.seat-group){background:#14243a}
+.action-btn{background:#203652;color:#fff;border:1px solid #355577}
+.action-btn.primary{background:linear-gradient(135deg,#2868a5,#3b88c7);color:#fff}
+.action-btn.danger{color:#fff}
+.home-edit-input,.home-edit-area,.seat-input{background:#0b1729;color:#fff;border:1px solid #3a5678}
+.home-edit-input::placeholder,.home-edit-area::placeholder,.seat-input::placeholder{color:#aebbd0}
+.language select{background:#172941;color:#fff;border:1px solid #355577}
