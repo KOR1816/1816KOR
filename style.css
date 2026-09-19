@@ -13,3 +13,20 @@ body { margin:0; font-family:Arial,"Noto Sans KR",sans-serif; background:#f4f6f8
 .footer { padding:20px; text-align:center; color:#6b7280; font-size:13px; }
 @media (max-width:600px) { .site-header{align-items:flex-start;flex-direction:column;} .content{padding:16px 12px;} .card{padding:18px;} }
 .hero-image{text-align:center;margin-bottom:20px}.hero-image img{display:block;max-width:100%;height:auto;max-height:420px;margin:0 auto;border-radius:12px;border:1px solid #2e4672;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+
+.seating-map{margin:22px auto 28px;max-width:760px;padding:14px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden}
+.map-title{text-align:center;font-weight:800;font-size:1.05rem;margin:4px 0 10px;color:#14263d}
+.seat-map-svg{display:block;width:100%;height:auto}
+.table-wrap{overflow-x:auto;margin-top:20px}
+.seat-table{width:100%;border-collapse:collapse;background:#fff;color:#17283d;min-width:520px}
+.seat-table th,.seat-table td{border:1px solid #d6dce5;padding:10px 12px;text-align:left}
+.seat-table thead th{background:#172f4b;color:#fff;font-weight:800}
+.seat-table .seat-group th{background:#e9eef5;color:#17324d;text-align:left;font-size:1rem;padding:9px 12px}
+.seat-table tbody tr:nth-child(even):not(.seat-group){background:#f8fafc}
+.seat-table td:first-child{width:90px;font-weight:700}
+.seat-table td:nth-child(2){width:70px;text-align:center;font-weight:800}
+@media(max-width:600px){
+  .seating-map{padding:8px;border-radius:12px}
+  .seat-table th,.seat-table td{padding:8px 9px;font-size:.92rem}
+}
