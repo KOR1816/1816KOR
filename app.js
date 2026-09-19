@@ -15,6 +15,18 @@ function getSeatingData(){
   catch(e){return defaultSeatingData;}
 }
 let seatingData=getSeatingData();
+const defaultHomeData={
+  latestTitle:"📢 공지",
+  latestBody:"KOR 1816에 오신 것을 환영합니다.",
+  schedule:"이벤트 일정을 입력해주세요.",
+  welcome:"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!"
+};
+function getHomeData(){
+  try{return JSON.parse(localStorage.getItem("kor1816_home"))||defaultHomeData;}
+  catch(e){return defaultHomeData;}
+}
+let homeData=getHomeData();
+
 const pages={home:["homeTitle","homeText"],sword:["swordTitle"],three:["threeTitle"],siege:["siegeTitle"],bear:["bearTitle"],seating:["seatingTitle","seatingText"],rules:["rulesTitle","rulesText"]};
 let currentPage=localStorage.getItem("kor1816_page")||"home";
 let currentLanguage=localStorage.getItem("kor1816_language")||"ko";
@@ -25,6 +37,23 @@ function renderPage(){
   const images={home:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/1816.jpg?v=2",sword:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/holy_sword1.png",three:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/333.jpg"};
   const image=images[currentPage];
   let extra="";
+  if(currentPage==="home"){
+    const edit=localStorage.getItem("kor1816_home_edit")==="1";
+    if(edit){
+      extra='<div class="home-editor">'+
+        '<div class="edit-card"><label>공지 제목</label><input id="homeTitleInput" class="home-edit-input" value="'+String(homeData.latestTitle).replace(/"/g,"&quot;")+'">'+
+        '<label>공지 내용</label><textarea id="homeBodyInput" class="home-edit-input home-edit-area">'+String(homeData.latestBody).replace(/</g,"&lt;")+'</textarea></div>'+
+        '<div class="edit-card"><label>이벤트 일정</label><textarea id="homeScheduleInput" class="home-edit-input home-edit-area">'+String(homeData.schedule).replace(/</g,"&lt;")+'</textarea></div>'+
+        '<div class="edit-card"><label>환영 문구</label><textarea id="homeWelcomeInput" class="home-edit-input home-edit-area">'+String(homeData.welcome).replace(/</g,"&lt;")+'</textarea></div>'+
+        '<div class="edit-buttons"><button id="homeSaveBtn" class="action-btn primary">저장</button><button id="homeCancelBtn" class="action-btn">수정 종료</button><button id="homeResetBtn" class="action-btn danger">초기화</button></div>'+
+      '</div>';
+    }else{
+      extra='<div class="home-grid"><div class="home-box"><span>📢</span><h2>'+homeData.latestTitle+'</h2><div class="home-content">'+String(homeData.latestBody).replace(/\n/g,"<br>")+'</div></div>'+
+      '<div class="home-box"><span>📅</span><h2>이벤트 일정</h2><div class="home-content">'+String(homeData.schedule).replace(/\n/g,"<br>")+'</div></div>'+
+      '<div class="home-box"><span>🌍</span><h2>Kingdom 1816</h2><div class="home-content">'+String(homeData.welcome).replace(/\n/g,"<br>")+'</div></div></div>'+
+      '<div class="home-actions"><button id="homeEditBtn" class="action-btn">🔐 홈 수정</button></div>';
+    }
+  }
   if(currentPage==="bear") extra='<p>'+t("bearHeroes")+'</p>';
   if(currentPage==="seating"){
     const edit=localStorage.getItem("kor1816_seating_edit")==="1";
