@@ -55,6 +55,31 @@ function renderPage(){
     }
   }
   if(currentPage==="bear") extra='<p>'+t("bearHeroes")+'</p>';
+  if(currentPage==="home"){
+    const editBtn=document.getElementById("homeEditBtn");
+    if(editBtn) editBtn.onclick=function(){localStorage.setItem("kor1816_home_edit","1");renderPage();};
+    const cancelBtn=document.getElementById("homeCancelBtn");
+    if(cancelBtn) cancelBtn.onclick=function(){localStorage.setItem("kor1816_home_edit","0");renderPage();};
+    const saveBtn=document.getElementById("homeSaveBtn");
+    if(saveBtn) saveBtn.onclick=function(){
+      homeData={
+        latestTitle:document.getElementById("homeTitleInput").value,
+        latestBody:document.getElementById("homeBodyInput").value,
+        schedule:document.getElementById("homeScheduleInput").value,
+        welcome:document.getElementById("homeWelcomeInput").value
+      };
+      localStorage.setItem("kor1816_home",JSON.stringify(homeData));
+      localStorage.setItem("kor1816_home_edit","0");
+      renderPage();
+    };
+    const resetBtn=document.getElementById("homeResetBtn");
+    if(resetBtn) resetBtn.onclick=function(){
+      homeData=JSON.parse(JSON.stringify(defaultHomeData));
+      localStorage.setItem("kor1816_home",JSON.stringify(homeData));
+      localStorage.setItem("kor1816_home_edit","0");
+      renderPage();
+    };
+  }
   if(currentPage==="seating"){
     const edit=localStorage.getItem("kor1816_seating_edit")==="1";
     extra='<div class="seating-actions"><button id="seatEditBtn" class="action-btn">'+(edit?"편집 종료":"자리배치 수정")+'</button>'+(edit?'<button id="seatSaveBtn" class="action-btn primary">저장</button><button id="seatResetBtn" class="action-btn danger">초기화</button>':"")+'</div>';
