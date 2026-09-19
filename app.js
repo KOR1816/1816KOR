@@ -1,140 +1,92 @@
-const translations = {
-  ko:{language:"언어",navHome:"홈",navSword:"성검쟁탈",navThree:"3대연맹전",navSiege:"공성전",navBear:"곰사냥",navSeating:"자리배치",navRules:"규칙",footer:"KOR 1816 연맹 사이트",homeTitle:"KOR 1816",homeText:"KOR 1816 연맹 사이트에 오신 것을 환영합니다.",swordTitle:"성검쟁탈",threeTitle:"3대연맹전",siegeTitle:"공성전",bearTitle:"곰사냥",seatingTitle:"자리배치",seatingText:"연맹원의 자리배치 정보를 확인하세요.",rulesTitle:"규칙",rulesText:"연맹 규칙과 안내사항을 확인하세요."},
-  en:{language:"Language",navHome:"Home",navSword:"Sacred Sword",navThree:"Three Alliances",navSiege:"Siege",navBear:"Bear Hunt",navSeating:"Seating",navRules:"Rules",bearTitle:"Bear Hunt",bearText:"Check Bear Hunt information.",bearHeroes:"Check rally heroes and participation information.",footer:"KOR 1816 Alliance Site",bearTitle:"Bear Hunt",bearText:"Check Bear Hunt information.",bearHeroes:"Check rally heroes and participation information.",homeTitle:"KOR 1816",homeText:"Welcome to the KOR 1816 alliance site.",swordTitle:"Sacred Sword",threeTitle:"Three Alliances",siegeTitle:"Siege",bearTitle:"Bear Hunt",seatingTitle:"Seating",seatingText:"Check alliance seating information.",rulesTitle:"Rules",rulesText:"Check alliance rules and notices.",seatRow:"Row",seatNo:"No.",seatMember:"Member",mapLabel:"Bear Hunt Seating Map"},
-  ja:{language:"言語",navHome:"ホーム",navSword:"聖剣争奪",navThree:"3大連盟戦",navSiege:"攻城戦",navBear:"熊狩り",navSeating:"配置",navRules:"ルール",bearTitle:"熊狩り",bearText:"熊狩りの情報を確認してください。",bearHeroes:"集結英雄と参加情報を確認してください。",footer:"KOR 1816 連盟サイト",bearTitle:"熊狩り",bearText:"熊狩りの情報を確認してください。",bearHeroes:"集結英雄と参加情報を確認してください。",homeTitle:"KOR 1816",homeText:"KOR 1816 連盟サイトへようこそ。",swordTitle:"聖剣争奪",threeTitle:"3大連盟戦",siegeTitle:"攻城戦",bearTitle:"熊狩り",seatingTitle:"配置",seatingText:"連盟の配置情報を確認してください。",rulesTitle:"ルール",rulesText:"連盟のルールと案内を確認してください。",seatRow:"行",seatNo:"番号",seatMember:"メンバー",mapLabel:"熊狩り配置図"},
-  zh:{language:"语言",navHome:"首页",navSword:"圣剑争夺",navThree:"三大联盟战",navSiege:"攻城战",navBear:"猎熊",navSeating:"位置安排",navRules:"规则",bearTitle:"猎熊",bearText:"请查看猎熊信息。",bearHeroes:"请查看集结英雄和参与信息。",footer:"KOR 1816 联盟网站",bearTitle:"猎熊",bearText:"请查看猎熊信息。",bearHeroes:"请查看集结英雄和参与信息。",homeTitle:"KOR 1816",homeText:"欢迎来到 KOR 1816 联盟网站。",swordTitle:"圣剑争夺",threeTitle:"三大联盟战",siegeTitle:"攻城战",bearTitle:"猎熊",seatingTitle:"位置安排",seatingText:"请查看联盟位置安排。",rulesTitle:"规则",rulesText:"请查看联盟规则和通知。",seatRow:"行",seatNo:"编号",seatMember:"成员",mapLabel:"猎熊位置图"},
-  de:{language:"Sprache",navHome:"Startseite",navSword:"Heiliges Schwert",navThree:"Drei Allianzen",navSiege:"Belagerung",navBear:"Bärenjagd",navSeating:"Platzierung",navRules:"Regeln",bearTitle:"Bärenjagd",bearText:"Informationen zur Bärenjagd.",bearHeroes:"Informationen zu Rallye-Helden und Teilnahme.",footer:"KOR 1816 Allianz-Website",bearTitle:"Bärenjagd",bearText:"Informationen zur Bärenjagd.",bearHeroes:"Informationen zu Rallye-Helden und Teilnahme.",homeTitle:"KOR 1816",homeText:"Willkommen auf der KOR 1816 Allianz-Website.",swordTitle:"Heiliges Schwert",threeTitle:"Drei Allianzen",siegeTitle:"Belagerung",bearTitle:"Bärenjagd",seatingTitle:"Platzierung",seatingText:"Informationen zur Allianz-Platzierung.",rulesTitle:"Regeln",rulesText:"Prüfe die Allianzregeln und Hinweise.",seatRow:"Reihe",seatNo:"Nr.",seatMember:"Mitglied",mapLabel:"Bärenjagd-Platzierung"}
+const I18N={
+ko:{home:"홈",sword:"성검쟁탈",three:"3대연맹전",siege:"공성전",bear:"곰사냥",seating:"자리배치",rules:"규칙",edit:"수정",save:"저장",close:"수정 종료",reset:"초기화",refresh:"새로고침",notice:"공지",schedule:"이벤트 일정",welcome:"환영합니다",member:"연맹원",row:"행",no:"번호",rally:"집결",attack:"공격",defense:"수성",heroes:"영웅",time:"시간"},
+en:{home:"Home",sword:"Sacred Sword",three:"Three Alliances",siege:"Siege",bear:"Bear Hunt",seating:"Seating",rules:"Rules",edit:"Edit",save:"Save",close:"Close",reset:"Reset",refresh:"Refresh",notice:"Notice",schedule:"Schedule",welcome:"Welcome",member:"Member",row:"Row",no:"No.",rally:"Rally",attack:"Attack",defense:"Defense",heroes:"Heroes",time:"Time"},
+ja:{home:"ホーム",sword:"聖剣争奪",three:"3大連盟戦",siege:"攻城戦",bear:"熊狩り",seating:"配置",rules:"ルール",edit:"編集",save:"保存",close:"終了",reset:"初期化",refresh:"更新",notice:"お知らせ",schedule:"イベント日程",welcome:"ようこそ",member:"メンバー",row:"行",no:"番号",rally:"集結",attack:"攻撃",defense:"守城",heroes:"英雄",time:"時間"},
+zh:{home:"首页",sword:"圣剑争夺",three:"三大联盟战",siege:"攻城战",bear:"猎熊",seating:"位置安排",rules:"规则",edit:"编辑",save:"保存",close:"结束",reset:"重置",refresh:"刷新",notice:"公告",schedule:"活动日程",welcome:"欢迎",member:"成员",row:"行",no:"编号",rally:"集结",attack:"攻击",defense:"防守",heroes:"英雄",time:"时间"},
+de:{home:"Startseite",sword:"Heiliges Schwert",three:"Drei Allianzen",siege:"Belagerung",bear:"Bärenjagd",seating:"Platzierung",rules:"Regeln",edit:"Bearbeiten",save:"Speichern",close:"Beenden",reset:"Zurücksetzen",refresh:"Aktualisieren",notice:"Ankündigung",schedule:"Terminplan",welcome:"Willkommen",member:"Mitglied",row:"Reihe",no:"Nr.",rally:"Rallye",attack:"Angriff",defense:"Verteidigung",heroes:"Helden",time:"Zeit"}
 };
-const defaultSeatingData=[
- {row:"Row 1",names:["체리찡!!","샌디에이고","살라딘!!","Nemesis","SsungBi","jinno","용이군","moon","jiwon","momo","MONSTER","GGGz"]},
- {row:"Row 2",names:["Chan Dam Bom","DAWN","띵띵v","Pham","Veggie","pika","hhHa","JackeyLove","lan","ROKA","MomSaidNoWar","EGOIST","miiiiia","Sant Jordi","bossi","LSJ","Commander_쥬","El Elegido","Lager"]},
- {row:"Row 3",names:["","Architect","Agares","hair loss beam","coculim","HiGH FiVE","Dajjal","aimee","OMEGA","Dingdong","AVA","Aril","Nyctifer_v","T","Libby","DDoRo","Hani","jennie","Zidf","SUMMER","Gideon","ADOPATI","HERA","GieZues","imNotKorean","스타리아"]}
-];
-function getSeatingData(){
-  try{return JSON.parse(localStorage.getItem("kor1816_seating"))||defaultSeatingData;}
-  catch(e){return defaultSeatingData;}
-}
-let seatingData=getSeatingData();
-const defaultHomeData={
-  latestTitle:"📢 공지",
-  latestBody:"KOR 1816에 오신 것을 환영합니다.",
-  schedule:"이벤트 일정을 입력해주세요.",
-  welcome:"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!"
+const IMG={home:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/1816.jpg?v=2",sword:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/holy_sword1.png",three:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/333.jpg"};
+const defaults={
+home:{title:"📢 공지",body:"KOR 1816에 오신 것을 환영합니다.",schedule:"이벤트 일정을 입력해주세요.",welcome:"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!"},
+sword:{teams:{A:Array(7).fill(""),B:Array(7).fill(""),C:Array(7).fill(""),D:Array(7).fill(""),extra:["",""],subs:Array(10).fill("")}},
+three:{groups:{1:["","","","",""],2:["","","","",""],3:["","","","",""],4:["","","","",""]}},
+siege:{cards:[
+{title:"⚔️ 집결장 공격",text:"아마데 / 페라 / 로사\n비율: 505 / 55.5.40 / 514 / 415 / 406"},
+{title:"🛡️ 수성",text:"알카 / 마르고 / 살로\n상대가 강하면 예거 고려\n연습: 집결장 631 · 집결원 640"},
+{title:"👥 집결원 공격",text:"1열: 2첸코 / 2아마\n2열: 2첸코 / 아마네 / 파드\n3열: 2살로 / 첸코 / 아마네\n4열: 2힐데 / 살로 / 첸코"},
+{title:"👥 집결원 수성",text:"1열: 2힐데 / 살로 / 첸코\n2열: 4힐데\n3열: 2힐데 / 살로 / 고든"}]},
+bear:{text:"곰 1트랩: 23:00\n곰 2트랩: 09:10",heroes:"아마데우스\n첸코\n연우\n마르고(4성🙏)\n아마네\n영웅없이"},
+rules:{text:"### 📋 KOR1816 운영진 및 안내\n\n[KOR]༺༒༽Pham༼༒༻ - 총대장 / 정신적지주\n\n[KOR]Nemesis - 집결장 / 외교, 이민 / 유적쟁탈\n\n[KOR]Agaresᴷᴼᴿ - 전체적인 벨런스(에이스)\n\n[KOR]༺༒༽LJ༼༒༻ - 거점총사령관\n\n[KOR]샌디에이고 - 집결장 / 댕댕이전문가\n\n[KOR]momo - 캐슬전 통솔자 / 모모찡엄마\n\n[KOR]Rarara - SIN연맹장 / 천사의마음씨\n\n[KOR]Aimée - 분위기메이커 / 태그담당자\n\n[KOR]GGGz需要起床 - 히어로 / 영어·중국어가능\n\n[KOR]DAWN - 침묵의왕자 / 그저조용하다\n\n[KOR]KOREAN MONSTER - 동물의숲\n\n[KOR]Hair loss beam - 탈모를원하는가?"}
 };
-function getHomeData(){
-  try{return JSON.parse(localStorage.getItem("kor1816_home"))||defaultHomeData;}
-  catch(e){return defaultHomeData;}
+const seating=[
+{row:"Row 1",names:["체리찡!!","샌디에이고","살라딘!!","Nemesis","SsungBi","jinno","용이군","moon","jiwon","momo","MONSTER","GGGz"]},
+{row:"Row 2",names:["Chan Dam Bom","DAWN","띵띵v","Pham","Veggie","pika","hhHa","JackeyLove","lan","ROKA","MomSaidNoWar","EGOIST","miiiiia","Sant Jordi","bossi","LSJ","Commander_쥬","El Elegido","Lager"]},
+{row:"Row 3",names:["","Architect","Agares","hair loss beam","coculim","HiGH FiVE","Dajjal","aimee","OMEGA","Dingdong","AVA","Aril","Nyctifer_v","T","Libby","DDoRo","Hani","jennie","Zidf","SUMMER","Gideon","ADOPATI","HERA","GieZues","imNotKorean","스타리아"]}];
+let lang=localStorage.getItem("kor1816_language")||"ko",page=localStorage.getItem("kor1816_page")||"home";
+const app=document.getElementById("app"),sel=document.getElementById("languageSelect");
+const clone=x=>JSON.parse(JSON.stringify(x));
+function tr(k){return I18N[lang][k]||I18N.ko[k]||k}
+function get(k){try{return JSON.parse(localStorage.getItem("kor1816_"+k))||clone(defaults[k])}catch(e){return clone(defaults[k])}}
+function put(k,v){localStorage.setItem("kor1816_"+k,JSON.stringify(v))}
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function text(v){return esc(v).replace(/\n/g,"<br>")}
+function btn(id,label,cls=""){return '<button id="'+id+'" class="action-btn '+cls+'">'+label+'</button>'}
+function render(){
+let d=get(page),title=tr(page),html='<section class="card page-card">';
+if(IMG[page])html+='<div class="hero-image"><img src="'+IMG[page]+'" alt="'+esc(title)+'"></div>';
+html+='<h1>'+title+'</h1>';
+if(page==="home")html+=home(d);
+if(page==="sword")html+=sword(d);
+if(page==="three")html+=three(d);
+if(page==="siege")html+=siege(d);
+if(page==="bear")html+=bear(d);
+if(page==="seating")html+=seat();
+if(page==="rules")html+=rules(d);
+html+='</section>';app.innerHTML=html;wire();
 }
-let homeData=getHomeData();
-
-const pages={home:["homeTitle","homeText"],sword:["swordTitle"],three:["threeTitle"],siege:["siegeTitle"],bear:["bearTitle"],seating:["seatingTitle","seatingText"],rules:["rulesTitle","rulesText"]};
-let currentPage=localStorage.getItem("kor1816_page")||"home";
-let currentLanguage=localStorage.getItem("kor1816_language")||"ko";
-const app=document.getElementById("app"), languageSelect=document.getElementById("languageSelect");
-function t(key){return translations[currentLanguage][key]||translations.ko[key]||key;}
-function renderPage(){
-  const keys=pages[currentPage]||pages.home, title=t(keys[0]), text=keys[1]?t(keys[1]):"";
-  const images={home:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/1816.jpg?v=2",sword:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/holy_sword1.png",three:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/333.jpg"};
-  const image=images[currentPage];
-  let extra="";
-  if(currentPage==="home"){
-    const edit=localStorage.getItem("kor1816_home_edit")==="1";
-    if(edit){
-      extra='<div class="home-editor">'+
-        '<div class="edit-card"><label>공지 제목</label><input id="homeTitleInput" class="home-edit-input" value="'+String(homeData.latestTitle).replace(/"/g,"&quot;")+'">'+
-        '<label>공지 내용</label><textarea id="homeBodyInput" class="home-edit-input home-edit-area">'+String(homeData.latestBody).replace(/</g,"&lt;")+'</textarea></div>'+
-        '<div class="edit-card"><label>이벤트 일정</label><textarea id="homeScheduleInput" class="home-edit-input home-edit-area">'+String(homeData.schedule).replace(/</g,"&lt;")+'</textarea></div>'+
-        '<div class="edit-card"><label>환영 문구</label><textarea id="homeWelcomeInput" class="home-edit-input home-edit-area">'+String(homeData.welcome).replace(/</g,"&lt;")+'</textarea></div>'+
-        '<div class="edit-buttons"><button id="homeSaveBtn" class="action-btn primary">저장</button><button id="homeCancelBtn" class="action-btn">수정 종료</button><button id="homeResetBtn" class="action-btn danger">초기화</button></div>'+
-      '</div>';
-    }else{
-      extra='<div class="home-grid"><div class="home-box"><span>📢</span><h2>'+homeData.latestTitle+'</h2><div class="home-content">'+String(homeData.latestBody).replace(/\n/g,"<br>")+'</div></div>'+
-      '<div class="home-box"><span>📅</span><h2>이벤트 일정</h2><div class="home-content">'+String(homeData.schedule).replace(/\n/g,"<br>")+'</div></div>'+
-      '<div class="home-box"><span>🌍</span><h2>Kingdom 1816</h2><div class="home-content">'+String(homeData.welcome).replace(/\n/g,"<br>")+'</div></div></div>'+
-      '<div class="home-actions"><button id="homeEditBtn" class="action-btn">🔐 홈 수정</button></div>';
-    }
-  }
-  if(currentPage==="bear") extra='<p>'+t("bearHeroes")+'</p>';
-  if(currentPage==="home"){
-    const editBtn=document.getElementById("homeEditBtn");
-    if(editBtn) editBtn.onclick=function(){localStorage.setItem("kor1816_home_edit","1");renderPage();};
-    const cancelBtn=document.getElementById("homeCancelBtn");
-    if(cancelBtn) cancelBtn.onclick=function(){localStorage.setItem("kor1816_home_edit","0");renderPage();};
-    const saveBtn=document.getElementById("homeSaveBtn");
-    if(saveBtn) saveBtn.onclick=function(){
-      homeData={
-        latestTitle:document.getElementById("homeTitleInput").value,
-        latestBody:document.getElementById("homeBodyInput").value,
-        schedule:document.getElementById("homeScheduleInput").value,
-        welcome:document.getElementById("homeWelcomeInput").value
-      };
-      localStorage.setItem("kor1816_home",JSON.stringify(homeData));
-      localStorage.setItem("kor1816_home_edit","0");
-      renderPage();
-    };
-    const resetBtn=document.getElementById("homeResetBtn");
-    if(resetBtn) resetBtn.onclick=function(){
-      homeData=JSON.parse(JSON.stringify(defaultHomeData));
-      localStorage.setItem("kor1816_home",JSON.stringify(homeData));
-      localStorage.setItem("kor1816_home_edit","0");
-      renderPage();
-    };
-  }
-  if(currentPage==="seating"){
-    const edit=localStorage.getItem("kor1816_seating_edit")==="1";
-    extra='<div class="seating-actions"><button id="seatEditBtn" class="action-btn">'+(edit?"편집 종료":"자리배치 수정")+'</button>'+(edit?'<button id="seatSaveBtn" class="action-btn primary">저장</button><button id="seatResetBtn" class="action-btn danger">초기화</button>':"")+'</div>';
-  }
-  if(currentPage==="seating"){
-    const editMode=localStorage.getItem("kor1816_seating_edit")==="1";
-    const rows=seatingData.map(function(group,gi){
-      return '<tr class="seat-group"><th colspan="3">'+group.row.replace("Row",t("seatRow"))+'</th></tr>'+
-        group.names.map(function(name,i){
-          const value=String(name||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
-          return '<tr><td>'+group.row.replace("Row",t("seatRow"))+'</td><td>'+ (name ? (i+1) : "") +'</td><td>'+(editMode?'<input class="seat-input" data-row="'+gi+'" data-index="'+i+'" value="'+value+'">':value)+'</td></tr>';
-        }).join("");
-    }).join("");
-    extra='<div class="seating-map"><div class="map-title">'+t("mapLabel")+'</div><svg class="seat-map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760" role="img" aria-label="'+t("mapLabel")+'">'+
-      '<rect width="760" height="760" rx="24" fill="#fff"/>'+
-      '<g transform="translate(380 380)">'+
-      Array.from({length:17},(_,yy)=>Array.from({length:17},(_,xx)=>{const x=xx-8,y=yy-8,d=Math.abs(x)+Math.abs(y);if(d>8||d<2||(Math.abs(x)<=1&&Math.abs(y)<=1)||(x-y)%2)return "";const s=42,px=x*s*.72,py=y*s*.72,fill=d>=6?"#ffbf16":(d>=4?"#65a74e":"#4678bd"),n=((Math.abs(x*3+y*5)%9)+1);return '<polygon points="'+px+','+(py-s)+' '+(px+s)+','+py+' '+px+','+(py+s)+' '+(px-s)+','+py+'" fill="'+fill+'" stroke="#19364f" stroke-width="2"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="800" fill="#fff">'+n+'</text>';}).join("")).join("")+
-      '<polygon points="0,-70 70,0 0,70 -70,0" fill="#f47d2d" stroke="#19364f" stroke-width="2"/><text x="0" y="9" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="800" fill="#fff">bear</text>'+
-      '<g font-family="Arial,sans-serif" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">'+
-      '<polygon points="0,-240 28,-212 0,-184 -28,-212" fill="#f47d2d" stroke="#19364f" stroke-width="2"/><text x="0" y="-208">깃발</text>'+
-      '<polygon points="240,0 212,28 184,0 212,-28" fill="#f47d2d" stroke="#19364f" stroke-width="2"/><text x="212" y="5">깃발</text>'+
-      '<polygon points="0,240 28,212 0,184 -28,212" fill="#f47d2d" stroke="#19364f" stroke-width="2"/><text x="0" y="217">깃발</text>'+
-      '<polygon points="-240,0 -212,28 -184,0 -212,-28" fill="#f47d2d" stroke="#19364f" stroke-width="2"/><text x="-212" y="5">깃발</text></g></g></svg></div>'+
-      '<div class="table-wrap"><table class="seat-table"><thead><tr><th>'+t("seatRow")+'</th><th>'+t("seatNo")+'</th><th>'+t("seatMember")+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
-  }
-  app.innerHTML='<section class="card">'+(image?'<div class="hero-image"><img src="'+image+'" alt="'+title+'"></div>':"")+'<h1>'+title+'</h1>'+(text?'<p>'+text+'</p>':"")+extra+'</section>';
-  if(currentPage==="seating"){
-    const editBtn=document.getElementById("seatEditBtn");
-    if(editBtn) editBtn.onclick=function(){const now=localStorage.getItem("kor1816_seating_edit")==="1";localStorage.setItem("kor1816_seating_edit",now?"0":"1");renderPage();};
-    const saveBtn=document.getElementById("seatSaveBtn");
-    if(saveBtn) saveBtn.onclick=function(){
-      document.querySelectorAll(".seat-input").forEach(function(input){
-        seatingData[Number(input.dataset.row)].names[Number(input.dataset.index)]=input.value;
-      });
-      localStorage.setItem("kor1816_seating",JSON.stringify(seatingData));
-      localStorage.setItem("kor1816_seating_edit","0");
-      renderPage();
-    };
-    const resetBtn=document.getElementById("seatResetBtn");
-    if(resetBtn) resetBtn.onclick=function(){
-      seatingData=JSON.parse(JSON.stringify(defaultSeatingData));
-      localStorage.setItem("kor1816_seating",JSON.stringify(seatingData));
-      localStorage.setItem("kor1816_seating_edit","0");
-      renderPage();
-    };
-  }
-  document.querySelectorAll(".nav-button").forEach(function(b){b.classList.toggle("active",b.dataset.page===currentPage);});
+function toolbar(prefix){return '<div class="page-actions">'+btn(prefix+"Edit","🔐 "+tr("edit"))+'</div>'}
+function home(d){
+if(localStorage.getItem("kor1816_"+page+"_edit")==="1")return '<div class="home-editor"><div class="edit-card"><label>'+tr("notice")+'</label><input id="hTitle" class="edit-input" value="'+esc(d.title)+'"><textarea id="hBody" class="edit-input area">'+esc(d.body)+'</textarea></div><div class="edit-card"><label>'+tr("schedule")+'</label><textarea id="hSchedule" class="edit-input area">'+esc(d.schedule)+'</textarea></div><div class="edit-card"><label>'+tr("welcome")+'</label><textarea id="hWelcome" class="edit-input area">'+esc(d.welcome)+'</textarea></div><div class="edit-buttons">'+btn("hSave","💾 "+tr("save"),"primary")+btn("hClose",""+tr("close"))+btn("hReset",""+tr("reset"),"danger")+'</div></div>';
+return '<div class="home-grid"><div class="home-box"><h2>'+d.title+'</h2><div>'+text(d.body)+'</div></div><div class="home-box"><h2>📅 '+tr("schedule")+'</h2><div>'+text(d.schedule)+'</div></div><div class="home-box"><h2>🌍 '+tr("welcome")+'</h2><div>'+text(d.welcome)+'</div></div></div>'+toolbar("homeEdit");
 }
-function applyLanguage(){
-  document.documentElement.lang=currentLanguage;
-  document.querySelectorAll("[data-i18n]").forEach(function(e){e.textContent=t(e.dataset.i18n);});
-  languageSelect.value=currentLanguage;
-  localStorage.setItem("kor1816_language",currentLanguage);
-  renderPage();
+function sword(d){
+const edit=localStorage.getItem("kor1816_sword_edit")==="1";
+let s='<div class="team-grid">';
+for(const t of ["A","B","C","D"]){s+='<div class="team-box"><h3>'+t+' TEAM</h3>';for(let i=0;i<7;i++)s+=edit?'<input class="edit-input team-in" data-team="'+t+'" data-i="'+i+'" value="'+esc(d.teams[t][i])+'" placeholder="'+(i+1)+'">'+('<span></span>'):('<div class="slot-row"><b>'+ (i+1)+'</b><span>'+esc(d.teams[t][i])+'</span></div>');s+='</div>'}
+s+='</div><div class="sub-box"><h3>EXTRA / SUB</h3>'+d.teams.extra.map((x,i)=>edit?'<input class="edit-input extra-in" data-i="'+i+'" value="'+esc(x)+'">':'<div class="slot-row"><b>EX'+(i+1)+'</b><span>'+esc(x)+'</span></div>').join("")+d.teams.subs.map((x,i)=>edit?'<input class="edit-input sub-in" data-i="'+i+'" value="'+esc(x)+'">':'<div class="slot-row"><b>S'+(i+1)+'</b><span>'+esc(x)+'</span></div>').join("")+'</div>';
+return s+(edit?'<div class="page-actions">'+btn("sSave","💾 "+tr("save"),"primary")+btn("sClose",tr("close"))+btn("sReset",tr("reset"),"danger")+'</div>':toolbar("sEdit"));
 }
-document.querySelectorAll(".nav-button").forEach(function(b){b.addEventListener("click",function(){currentPage=b.dataset.page;localStorage.setItem("kor1816_page",currentPage);renderPage();});});
-languageSelect.addEventListener("change",function(){currentLanguage=languageSelect.value;applyLanguage();});
-applyLanguage();
+function three(d){
+const edit=localStorage.getItem("kor1816_three_edit")==="1";let s='<div class="alliance-grid">';
+for(let t=1;t<=4;t++){s+='<div class="alliance-box"><h3>'+t+'팀</h3>';for(let i=0;i<5;i++)s+=edit?'<input class="edit-input three-in" data-t="'+t+'" data-i="'+i+'" value="'+esc(d.groups[t][i])+'" placeholder="닉네임">':'<div class="slot-row"><b>'+(i+1)+'</b><span>'+esc(d.groups[t][i])+'</span></div>';s+='</div>'}return s+'</div>'+(edit?'<div class="page-actions">'+btn("tSave","💾 "+tr("save"),"primary")+btn("tClose",tr("close"))+btn("tReset",tr("reset"),"danger")+'</div>':toolbar("tEdit"));
+}
+function siege(d){
+const edit=localStorage.getItem("kor1816_siege_edit")==="1";let s='<div class="info-grid">';
+d.cards.forEach((x,i)=>s+='<div class="info-box">'+(edit?'<input class="edit-input" data-si="'+i+'" data-field="title" value="'+esc(x.title)+'">':'<h2>'+esc(x.title)+'</h2>')+(edit?'<textarea class="edit-input area" data-si="'+i+'" data-field="text">'+esc(x.text)+'</textarea>':'<div class="info-text">'+text(x.text)+'</div>')+'</div>');s+='</div>';return s+(edit?'<div class="page-actions">'+btn("gSave","💾 "+tr("save"),"primary")+btn("gClose",tr("close"))+btn("gReset",tr("reset"),"danger")+'</div>':toolbar("gEdit"));
+}
+function bear(d){
+const edit=localStorage.getItem("kor1816_bear_edit")==="1";return (edit?'<div class="info-grid"><div class="info-box"><h2>🐻 '+tr("time")+'</h2><textarea id="bText" class="edit-input area">'+esc(d.text)+'</textarea></div><div class="info-box"><h2>⚔️ '+tr("heroes")+'</h2><textarea id="bHeroes" class="edit-input area">'+esc(d.heroes)+'</textarea></div></div><div class="page-actions">'+btn("bSave","💾 "+tr("save"),"primary")+btn("bClose",tr("close"))+btn("bReset",tr("reset"),"danger")+'</div>':'<div class="info-grid"><div class="info-box"><h2>🐻 '+tr("time")+'</h2><div class="info-text">'+text(d.text)+'</div></div><div class="info-box"><h2>⚔️ '+tr("heroes")+'</h2><div class="info-text">'+text(d.heroes)+'</div></div></div>'+toolbar("bEdit"));
+}
+function seat(){
+const edit=localStorage.getItem("kor1816_seating_edit")==="1",data=get("seating")||clone(seating);
+let rows=data.map((g,gi)=>'<tr class="seat-group"><th colspan="3">'+g.row.replace("Row",tr("row"))+'</th></tr>'+g.names.map((n,i)=>'<tr><td>'+g.row.replace("Row",tr("row"))+'</td><td>'+(n?i+1:"")+'</td><td>'+(edit?'<input class="seat-input" data-r="'+gi+'" data-i="'+i+'" value="'+esc(n)+'">':esc(n))+'</td></tr>').join("")).join("");
+let map='<div class="seating-map"><div class="map-title">🐻 '+tr("bear")+'</div><svg class="seat-map-svg" viewBox="0 0 760 760"><rect width="760" height="760" rx="24" fill="#fff"/><g transform="translate(380 380)">'+Array.from({length:17},(_,y)=>Array.from({length:17},(_,x)=>{x-=8;y-=8;let q=Math.abs(x)+Math.abs(y);if(q>8||q<2||(Math.abs(x)<=1&&Math.abs(y)<=1)||(x-y)%2)return "";let s=42,px=x*s*.72,py=y*s*.72,fill=q>=6?"#ffbf16":q>=4?"#65a74e":"#4678bd",n=(Math.abs(x*3+y*5)%9)+1;return '<polygon points="'+px+','+(py-s)+' '+(px+s)+','+py+' '+px+','+(py+s)+' '+(px-s)+','+py+'" fill="'+fill+'" stroke="#19364f" stroke-width="2"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">'+n+'</text>'}).join(""))+'<polygon points="0,-70 70,0 0,70 -70,0" fill="#f47d2d"/><text x="0" y="9" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">bear</text></g></svg></div>';
+return map+(edit?'<div class="page-actions">'+btn("pSave","💾 "+tr("save"),"primary")+btn("pClose",tr("close"))+btn("pReset",tr("reset"),"danger")+'</div>':'<div class="page-actions">'+btn("pEdit","🔐 "+tr("edit"))+'</div>')+'<div class="table-wrap"><table class="seat-table"><thead><tr><th>'+tr("row")+'</th><th>'+tr("no")+'</th><th>'+tr("member")+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+function rules(d){
+const edit=localStorage.getItem("kor1816_rules_edit")==="1";return edit?'<textarea id="rText" class="edit-input rules-area">'+esc(d.text)+'</textarea><div class="page-actions">'+btn("rSave","💾 "+tr("save"),"primary")+btn("rClose",tr("close"))+btn("rReset",tr("reset"),"danger")+'</div>':'<div class="rules-text">'+text(d.text)+'</div>'+toolbar("rEdit");
+}
+function wire(){
+const id=(x)=>document.getElementById(x);
+if(page==="home"){if(id("homeEdit"))id("homeEdit").onclick=()=>{localStorage.setItem("kor1816_home_edit","1");render()};if(id("hClose"))id("hClose").onclick=()=>{localStorage.setItem("kor1816_home_edit","0");render()};if(id("hSave"))id("hSave").onclick=()=>{put("home",{title:id("hTitle").value,body:id("hBody").value,schedule:id("hSchedule").value,welcome:id("hWelcome").value});localStorage.setItem("kor1816_home_edit","0");render()};if(id("hReset"))id("hReset").onclick=()=>{put("home",clone(defaults.home));localStorage.setItem("kor1816_home_edit","0");render()}}
+if(page==="sword"){if(id("swordEdit"))id("swordEdit").onclick=()=>{localStorage.setItem("kor1816_sword_edit","1");render()};if(id("sClose"))id("sClose").onclick=()=>{localStorage.setItem("kor1816_sword_edit","0");render()};if(id("sSave"))id("sSave").onclick=()=>{const d=get("sword");document.querySelectorAll(".team-in").forEach(e=>d.teams[e.dataset.team][+e.dataset.i]=e.value);document.querySelectorAll(".extra-in").forEach(e=>d.teams.extra[+e.dataset.i]=e.value);document.querySelectorAll(".sub-in").forEach(e=>d.teams.subs[+e.dataset.i]=e.value);put("sword",d);localStorage.setItem("kor1816_sword_edit","0");render()};if(id("sReset"))id("sReset").onclick=()=>{put("sword",clone(defaults.sword));render()}}
+if(page==="three"){if(id("threeEdit"))id("threeEdit").onclick=()=>{localStorage.setItem("kor1816_three_edit","1");render()};if(id("tClose"))id("tClose").onclick=()=>{localStorage.setItem("kor1816_three_edit","0");render()};if(id("tSave"))id("tSave").onclick=()=>{const d=get("three");document.querySelectorAll(".three-in").forEach(e=>d.groups[e.dataset.t][+e.dataset.i]=e.value);put("three",d);localStorage.setItem("kor1816_three_edit","0");render()};if(id("tReset"))id("tReset").onclick=()=>{put("three",clone(defaults.three));render()}}
+if(page==="siege"){if(id("siegeEdit"))id("siegeEdit").onclick=()=>{localStorage.setItem("kor1816_siege_edit","1");render()};if(id("gClose"))id("gClose").onclick=()=>{localStorage.setItem("kor1816_siege_edit","0");render()};if(id("gSave"))id("gSave").onclick=()=>{const d=get("siege");document.querySelectorAll("[data-si]").forEach(e=>d.cards[+e.dataset.si][e.dataset.field]=e.value);put("siege",d);localStorage.setItem("kor1816_siege_edit","0");render()};if(id("gReset"))id("gReset").onclick=()=>{put("siege",clone(defaults.siege));render()}}
+if(page==="bear"){if(id("bearEdit"))id("bearEdit").onclick=()=>{localStorage.setItem("kor1816_bear_edit","1");render()};if(id("bClose"))id("bClose").onclick=()=>{localStorage.setItem("kor1816_bear_edit","0");render()};if(id("bSave"))id("bSave").onclick=()=>{put("bear",{text:id("bText").value,heroes:id("bHeroes").value});localStorage.setItem("kor1816_bear_edit","0");render()};if(id("bReset"))id("bReset").onclick=()=>{put("bear",clone(defaults.bear));render()}}
+if(page==="seating"){if(id("pEdit"))id("pEdit").onclick=()=>{localStorage.setItem("kor1816_seating_edit","1");render()};if(id("pClose"))id("pClose").onclick=()=>{localStorage.setItem("kor1816_seating_edit","0");render()};if(id("pSave"))id("pSave").onclick=()=>{const d=get("seating");document.querySelectorAll(".seat-input").forEach(e=>d[+e.dataset.r].names[+e.dataset.i]=e.value);put("seating",d);localStorage.setItem("kor1816_seating_edit","0");render()};if(id("pReset"))id("pReset").onclick=()=>{put("seating",clone(seating));render()}}
+if(page==="rules"){if(id("rulesEdit"))id("rulesEdit").onclick=()=>{localStorage.setItem("kor1816_rules_edit","1");render()};if(id("rClose"))id("rClose").onclick=()=>{localStorage.setItem("kor1816_rules_edit","0");render()};if(id("rSave"))id("rSave").onclick=()=>{put("rules",{text:id("rText").value});localStorage.setItem("kor1816_rules_edit","0");render()};if(id("rReset"))id("rReset").onclick=()=>{put("rules",clone(defaults.rules));render()}}
+}
+document.querySelectorAll(".nav-button").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;localStorage.setItem("kor1816_page",page);render()}));
+if(sel)sel.addEventListener("change",()=>{lang=sel.value;localStorage.setItem("kor1816_language",lang);render()});
+if(sel)sel.value=lang;
+render();
