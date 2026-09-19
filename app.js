@@ -52,7 +52,7 @@ return localGet(k)
 function put(k,v){localPut(k,v);return cloudPut(k,v)}
 
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
-function text(v){return esc(v).replace(/\\n/g,"<br>")}
+function text(v){return esc(v).replace(/\n/g,"<br>")}
 function btn(id,label,cls=""){return '<button id="'+id+'" class="action-btn '+cls+'">'+label+'</button>'}
 function setStaticI18n(){const l=document.querySelector(".language label");if(l)l.textContent=tr("language");const f=document.querySelector(".footer span");if(f)f.textContent=tr("footer");document.title="KOR 1816 · "+tr(page);document.querySelectorAll(".nav-button").forEach(b=>{b.textContent=tr(b.dataset.page);b.classList.toggle("active",b.dataset.page===page)})}
 async function render(){
