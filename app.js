@@ -14,7 +14,7 @@ function renderPage(){
   const keys=pages[currentPage]||pages.home, title=t(keys[0]), text=keys[1]?t(keys[1]):"";
   const images={home:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/1816.jpg?v=2",sword:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/holy_sword1.png",three:"https://raw.githubusercontent.com/KOR1816/KOR1816/main/333.jpg"};
   const image=images[currentPage];
-  app.innerHTML='<section class="card">'+(image?'<div class="hero-image"><img src="'+image+'" alt="'+title+'"></div>':"")+'<h1>'+title+'</h1>'+(text?'<p>'+text+'</p>':"")+'</section>';
+  app.innerHTML='<section class="card">'+(image?'<div class="hero-image"><img src="'+image+'" alt="'+title+'"></div>':"")+'<h1>'+title+'</h1>'+(text?'<p>'+text+'</p>':"")+(currentPage==="bear"?'<p>'+t("bearHeroes")+'</p>':"")+'</section>';
   document.querySelectorAll(".nav-button").forEach(function(b){b.classList.toggle("active",b.dataset.page===currentPage);});
 }
 function applyLanguage(){
