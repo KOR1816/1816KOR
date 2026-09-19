@@ -54,7 +54,7 @@ function renderPage(){
   app.innerHTML='<section class="card">'+(image?'<div class="hero-image"><img src="'+image+'" alt="'+title+'"></div>':"")+'<h1>'+title+'</h1>'+(text?'<p>'+text+'</p>':"")+extra+'</section>';
   if(currentPage==="seating"){
     const editBtn=document.getElementById("seatEditBtn");
-    if(editBtn) editBtn.onclick=function(){localStorage.setItem("kor1816_seating_edit",editMode?"0":"1");renderPage();};
+    if(editBtn) editBtn.onclick=function(){const now=localStorage.getItem("kor1816_seating_edit")==="1";localStorage.setItem("kor1816_seating_edit",now?"0":"1");renderPage();};
     const saveBtn=document.getElementById("seatSaveBtn");
     if(saveBtn) saveBtn.onclick=function(){
       document.querySelectorAll(".seat-input").forEach(function(input){
