@@ -70,3 +70,8 @@ body{background:linear-gradient(180deg,#0b1426 0%,#101b30 45%,#0b1426 100%);colo
 .home-edit-input,.home-edit-area,.seat-input{background:#0b1729;color:#fff;border:1px solid #3a5678}
 .home-edit-input::placeholder,.home-edit-area::placeholder,.seat-input::placeholder{color:#aebbd0}
 .language select{background:#172941;color:#fff;border:1px solid #355577}
+
+/* Uploaded seating map image */
+.seating-map{overflow:hidden}
+.seat-map-image{display:block;width:100%;max-width:611px;height:auto;margin:10px auto 4px;border-radius:8px;object-fit:contain;background:#fff}
+@media(max-width:760px){.seat-map-image{width:100%;max-width:100%}}
