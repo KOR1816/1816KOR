@@ -30,3 +30,8 @@ body { margin:0; font-family:Arial,"Noto Sans KR",sans-serif; background:#f4f6f8
   .seating-map{padding:8px;border-radius:12px}
   .seat-table th,.seat-table td{padding:8px 9px;font-size:.92rem}
 }
+.seating-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin:12px 0 8px}
+.action-btn{border:0;border-radius:9px;padding:9px 14px;font-weight:800;cursor:pointer;background:#e8eef5;color:#17324d}
+.action-btn.primary{background:#2f78c4;color:#fff}
+.action-btn.danger{background:#d9534f;color:#fff}
+.seat-input{width:100%;box-sizing:border-box;border:1px solid #b9c6d5;border-radius:6px;padding:7px 8px;font:inherit;background:#fff;color:#17283d}
