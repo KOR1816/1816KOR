@@ -374,9 +374,11 @@ function getHomeLangData(lang=readLocal("kor1816_lang","ko")){
 }
 function renderHome(d){
  homeData=normalizeHomeData(d||homeData);
- const data=getHomeLangData();
+ const lang=readLocal("kor1816_lang","ko");
+ const data=getHomeLangData(lang);
  const title=document.getElementById("homeLatestTitle"),body=document.getElementById("homeLatest"),sch=document.getElementById("homeSchedule"),wel=document.getElementById("homeWelcome");
- if(title)title.textContent="📢 "+(data.latestTitle||"공지");
+ const noticeFallback={ko:"공지",en:"Notice",ja:"お知らせ",zh:"公告",de:"Hinweis",it:"Avviso",es:"Aviso"};
+ if(title)title.textContent="📢 "+(data.latestTitle||noticeFallback[lang]||"Notice");
  if(body)body.innerHTML=lines(safe(data.latestBody));
  if(sch)sch.innerHTML=lines(safe(data.schedule));
  if(wel)wel.textContent=data.welcome||"";
@@ -449,8 +451,10 @@ function translatePage(lang){
  document.querySelectorAll("input[placeholder],textarea[placeholder]").forEach(e=>{const v=translateString(e.placeholder,lang);if(v!==e.placeholder)e.placeholder=v;});
 }
 function setLanguage(lang){
+ lang=I18N[lang]?lang:"ko";
  try{localStorage.setItem("kor1816_lang",lang);}catch{}
- const vals=NAV[lang]||NAV.ko;document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
+ const vals=NAV[lang]||NAV.ko;
+ document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  document.documentElement.lang=lang==="zh"?"zh-CN":lang;
  translatePage(lang);
  if(typeof homeData!=="undefined")renderHome(homeData);
