@@ -290,7 +290,7 @@ async function loadTeams(){
    if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();setMsg("teamMsg","최신 성검쟁탈 팀편성을 불러왔습니다.");}
  }catch(e){console.warn("teams read",e);setMsg("teamMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
 }
-async let teamsAdmin=false;
+let teamsAdmin=false;
 function setTeamsInputsEnabled(enabled){document.querySelectorAll("#teams input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});}
 function toggleTeamsAdmin(){
  if(teamsAdmin){teamsAdmin=false;setTeamsInputsEnabled(false);document.getElementById("teamsSaveBtn").style.display="none";document.getElementById("teamsAdminBtn").textContent="🔐 관리자 수정";return;}
