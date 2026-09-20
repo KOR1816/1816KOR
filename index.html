@@ -222,7 +222,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 <div class="team-column"><div class="team-title">A1</div><div class="slot"><span>1</span><input id="team-A-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="team-A-2" placeholder="Player ID"></div><div class="slot"><span>3</span><input id="team-A-3" placeholder="Player ID"></div><div class="slot"><span>4</span><input id="team-A-4" placeholder="Player ID"></div><div class="slot"><span>5</span><input id="team-A-5" placeholder="Player ID"></div><div class="slot"><span>6</span><input id="team-A-6" placeholder="Player ID"></div><div class="slot"><span>7</span><input id="team-A-7" placeholder="Player ID"></div></div><div class="team-column"><div class="team-title">A2</div><div class="slot"><span>1</span><input id="team-B-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="team-B-2" placeholder="Player ID"></div><div class="slot"><span>3</span><input id="team-B-3" placeholder="Player ID"></div><div class="slot"><span>4</span><input id="team-B-4" placeholder="Player ID"></div><div class="slot"><span>5</span><input id="team-B-5" placeholder="Player ID"></div><div class="slot"><span>6</span><input id="team-B-6" placeholder="Player ID"></div><div class="slot"><span>7</span><input id="team-B-7" placeholder="Player ID"></div></div><div class="team-column"><div class="team-title">D1</div><div class="slot"><span>1</span><input id="team-C-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="team-C-2" placeholder="Player ID"></div><div class="slot"><span>3</span><input id="team-C-3" placeholder="Player ID"></div><div class="slot"><span>4</span><input id="team-C-4" placeholder="Player ID"></div><div class="slot"><span>5</span><input id="team-C-5" placeholder="Player ID"></div><div class="slot"><span>6</span><input id="team-C-6" placeholder="Player ID"></div><div class="slot"><span>7</span><input id="team-C-7" placeholder="Player ID"></div></div><div class="team-column"><div class="team-title">D2</div><div class="slot"><span>1</span><input id="team-D-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="team-D-2" placeholder="Player ID"></div><div class="slot"><span>3</span><input id="team-D-3" placeholder="Player ID"></div><div class="slot"><span>4</span><input id="team-D-4" placeholder="Player ID"></div><div class="slot"><span>5</span><input id="team-D-5" placeholder="Player ID"></div><div class="slot"><span>6</span><input id="team-D-6" placeholder="Player ID"></div><div class="slot"><span>7</span><input id="team-D-7" placeholder="Player ID"></div></div>
 <div class="team-column special"><div class="team-title">💥 개돌조</div><div class="slot"><span>1</span><input id="extra-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="extra-2" placeholder="Player ID"></div></div>
 <div class="team-column subs"><div class="team-title">🔄 대체자</div><div class="slot"><span>1</span><input id="sub-1" placeholder="Player ID"></div><div class="slot"><span>2</span><input id="sub-2" placeholder="Player ID"></div><div class="slot"><span>3</span><input id="sub-3" placeholder="Player ID"></div><div class="slot"><span>4</span><input id="sub-4" placeholder="Player ID"></div><div class="slot"><span>5</span><input id="sub-5" placeholder="Player ID"></div><div class="slot"><span>6</span><input id="sub-6" placeholder="Player ID"></div><div class="slot"><span>7</span><input id="sub-7" placeholder="Player ID"></div><div class="slot"><span>8</span><input id="sub-8" placeholder="Player ID"></div><div class="slot"><span>9</span><input id="sub-9" placeholder="Player ID"></div><div class="slot"><span>10</span><input id="sub-10" placeholder="Player ID"></div></div>
-</div></div></div><div class="admin-bar page-admin"><button class="admin-btn" onclick="saveAllTeams()">💾 전체 저장</button><button class="admin-btn" onclick="refreshTeams()">🔄 새로고침</button></div></section>
+</div></div></div><div class="admin-bar page-admin"><button class="admin-btn" onclick="refreshTeams()">🔄 새로고침</button><button class="admin-btn" id="teamsAdminBtn" onclick="toggleTeamsAdmin()">🔐 관리자 수정</button><button class="admin-btn" id="teamsSaveBtn" onclick="saveAllTeams()" style="display:none">💾 전체 저장</button></div></section>
 
 
 
@@ -311,8 +311,17 @@ async function loadTeams(){
    if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();setMsg("teamMsg","최신 성검쟁탈 팀편성을 불러왔습니다.");}
  }catch(e){console.warn("teams read",e);setMsg("teamMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
 }
-async function saveAllTeams(){
- teamData=collectTeams();writeLocal(TEAM_KEY,teamData);renderTeams();
+async let teamsAdmin=false;
+function setTeamsInputsEnabled(enabled){document.querySelectorAll("#teams input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});}
+function toggleTeamsAdmin(){
+ if(teamsAdmin){teamsAdmin=false;setTeamsInputsEnabled(false);document.getElementById("teamsSaveBtn").style.display="none";document.getElementById("teamsAdminBtn").textContent="🔐 관리자 수정";return;}
+ const p=prompt("관리자 비밀번호를 입력하세요.");
+ if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}
+ teamsAdmin=true;setTeamsInputsEnabled(true);document.getElementById("teamsSaveBtn").style.display="inline-block";document.getElementById("teamsAdminBtn").textContent="🔒 수정 종료";
+}
+function saveAllTeams(){
+ if(!teamsAdmin)return;
+ teamData=collectTeams();writeLocal(TEAM_KEY,teamData);renderTeams();setTeamsInputsEnabled(true);
  try{if(teamDoc)await setDoc(teamDoc,teamData);setMsg("teamMsg","성검쟁탈 전체 저장 완료!");}
  catch(e){console.error(e);setMsg("teamMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
 }
@@ -384,10 +393,10 @@ async function initFirebase(){
    loadAlliance();loadHome();loadSeating();
  }catch(e){console.error("Firebase init",e);}
 }
-window.show=show;window.loadHome=loadHome;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
+window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",()=>{
  const lang=document.getElementById("languageSelect");setLanguage(readLocal("kor1816_lang","ko"));if(lang){lang.value=readLocal("kor1816_lang","ko");lang.addEventListener("change",e=>setLanguage(e.target.value));}
- renderHome(readLocal(HOME_KEY,homeData));renderTeams();renderAlliance();loadSeating();restorePage();
+ renderHome(readLocal(HOME_KEY,homeData));renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
