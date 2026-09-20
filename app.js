@@ -30,6 +30,7 @@ const seating=[
 {row:"Row 3",names:["","Architect","Agares","hair loss beam","coculim","HiGH FiVE","Dajjal","aimee","OMEGA","Dingdong","AVA","Aril","Nyctifer_v","T","Libby","DDoRo","Hani","jennie","Zidf","SUMMER","Gideon","ADOPATI","HERA","GieZues","imNotKorean","스타리아"]}];
 
 let lang=localStorage.getItem("kor1816_language")||"ko",page=localStorage.getItem("kor1816_page")||"home";
+if(!["home","sword","three","siege","bear","seating","rules"].includes(page))page="home";
 const app=document.getElementById("app"),sel=document.getElementById("languageSelect");
 const clone=x=>JSON.parse(JSON.stringify(x));
 function tr(k){return (I18N[lang]&&I18N[lang][k])||I18N.ko[k]||k}
@@ -56,6 +57,7 @@ function text(v){return esc(v).replace(/\n/g,"<br>")}
 function btn(id,label,cls=""){return '<button id="'+id+'" class="action-btn '+cls+'">'+label+'</button>'}
 function setStaticI18n(){const l=document.querySelector(".language label");if(l)l.textContent=tr("language");const f=document.querySelector(".footer span");if(f)f.textContent=tr("footer");document.title="KOR 1816 · "+tr(page);document.querySelectorAll(".nav-button").forEach(b=>{b.textContent=tr(b.dataset.page);b.classList.toggle("active",b.dataset.page===page)})}
 async function render(){
+if(!app)return;
 app.innerHTML='<section class="card page-card"><div class="loading">'+tr("loading")+'</div></section>';
 setStaticI18n();
 const d=await get(page),title=tr(page);let html='<section class="card page-card">';
