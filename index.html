@@ -326,8 +326,7 @@ function renderViking(data){
     const title=(data.titles&&data.titles[i-1])||VIKING_DEFAULT.titles[i-1];
     const body=(data.texts&&data.texts[i-1])||'';
     document.getElementById('vikingTitle'+i).textContent=title;
-    document.getElementById('vikingText'+i).innerHTML=escapeHome(body).replace(/
-/g,'<br>');
+    document.getElementById('vikingText'+i).innerHTML=escapeHome(body).split('\n').join('<br>');
     document.getElementById('vikingTitleInput'+i).value=title;
     document.getElementById('vikingTextInput'+i).value=body;
   }
@@ -392,8 +391,7 @@ function renderHome(data){
 
   if(latest)latest.innerHTML='<b>'+escapeHome(latestTitle)+'</b>'+
     ((latestTitle&&latestBody)?'<br><br>':'')+
-    escapeHome(latestBody).replace(/
-/g,'<br>');
+    escapeHome(latestBody).split('\n').join('<br>');
   if(scheduleEl)scheduleEl.innerHTML=escapeHome(schedule).split('\n').filter(Boolean).map(x=>'<p>'+x+'</p>').join('');
   if(welcomeEl)welcomeEl.textContent=welcome;
 
@@ -540,8 +538,7 @@ function renderCastle(data){
     const title=(data.titles&&data.titles[i-1])||CASTLE_DEFAULT.titles[i-1];
     const body=(data.texts&&data.texts[i-1])||'';
     document.getElementById('castleTitle'+i).textContent=title;
-    document.getElementById('castleText'+i).innerHTML=escapeHome(body).replace(/
-/g,'<br>');
+    document.getElementById('castleText'+i).innerHTML=escapeHome(body).split('\n').join('<br>');
     document.getElementById('castleTitleInput'+i).value=title;
     document.getElementById('castleTextInput'+i).value=body;
   }
@@ -676,8 +673,7 @@ function renderRules(data){
   const text=String(data.text||'').replace(/\
 /g,'
 ');
-  if(v)v.innerHTML=escapeHome(text).replace(/
-/g,'<br>');
+  if(v)v.innerHTML=escapeHome(text).split('\n').join('<br>');
   if(i)i.value=text;
 }
 let rulesAdmin=false;
