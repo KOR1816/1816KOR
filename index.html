@@ -386,11 +386,30 @@ function renderHome(d){
  if(a)a.value=data.latestTitle||"";if(b)b.value=data.latestBody||"";if(s)s.value=data.schedule||"";if(w)w.value=data.welcome||"";
 }
 async function loadHome(){
- homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);
- if(!homeDoc)return;
- try{const s=await Promise.race([getDoc(homeDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){homeData=normalizeHomeData({...homeData,...s.data()});writeLocal(HOME_KEY,homeData);renderHome(homeData);setMsg("homeMsg","최신 홈 내용을 불러왔습니다.");}
- }catch(e){console.warn("home read",e);}
+ homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));
+ renderHome(homeData);
+ if(!homeDoc){
+   if(readLocal("kor1816_lang","ko")!=="ko")await translateHomeDynamic(readLocal("kor1816_lang","ko"));
+   return;
+ }
+ try{
+   const s=await Promise.race([getDoc(homeDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(s.exists()){
+     homeData=normalizeHomeData({...homeData,...s.data()});
+     writeLocal(HOME_KEY,homeData);
+     renderHome(homeData);
+     const lang=readLocal("kor1816_lang","ko");
+     if(lang!=="ko")await translateHomeDynamic(lang);
+     setMsg("homeMsg","최신 홈 내용을 불러왔습니다.");
+   }else{
+     const lang=readLocal("kor1816_lang","ko");
+     if(lang!=="ko")await translateHomeDynamic(lang);
+   }
+ }catch(e){
+   console.warn("home read",e);
+   const lang=readLocal("kor1816_lang","ko");
+   if(lang!=="ko")await translateHomeDynamic(lang);
+ }
 }
 async function saveHome(){
  const lang=readLocal("kor1816_lang","ko");
