@@ -93,7 +93,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 #teams .page-admin,#alliance .page-admin,#bear .page-admin,#rules .page-admin{margin-top:10px!important}
 #teams>.card{overflow:visible!important}
 #teams .team-columns-wrap{overflow-x:hidden!important;overflow-y:visible!important}
-@media(max-width:600px){.page-admin{gap:6px!important;margin-top:8px!important}.admin-btn{padding:7px 9px!important;font-size:12px!important}}\n<style id="teams-mobile-responsive-fix">\n@media(max-width:600px){\n  #teams .team-columns-wrap{overflow-x:hidden!important;overflow-y:visible!important}\n  #teams .team-columns{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%!important;min-width:0!important}\n  #teams .team-column{min-width:0!important;padding:7px!important}\n  #teams .slot{min-width:0!important;gap:3px!important}\n  #teams .slot span{flex:0 0 18px!important;width:18px!important}\n  #teams .slot input{min-width:0!important;width:100%!important;padding:8px 3px!important;font-size:11px!important}\n  #teams .team-title{font-size:14px!important;padding:9px 2px!important;white-space:nowrap!important}\n}\n</style>
+@media(max-width:600px){.page-admin{gap:6px!important;margin-top:8px!important}.admin-btn{padding:7px 9px!important;font-size:12px!important}}
 </style><style id="castle-2x2">
 #castleView{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 #castleEdit{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -172,7 +172,17 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 #bear #bearText{text-align:center!important;line-height:2!important}
 #bear #bearText br{display:block}
 </style>
-</head><body>
+<style id="teams-mobile-responsive-fix">
+@media(max-width:600px){
+  #teams .team-columns-wrap{overflow-x:hidden!important;overflow-y:visible!important}
+  #teams .team-columns{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%!important;min-width:0!important}
+  #teams .team-column{min-width:0!important;padding:7px!important}
+  #teams .slot{min-width:0!important;gap:3px!important}
+  #teams .slot span{flex:0 0 18px!important;width:18px!important}
+  #teams .slot input{min-width:0!important;width:100%!important;padding:8px 3px!important;font-size:11px!important}
+  #teams .team-title{font-size:14px!important;padding:9px 2px!important;white-space:nowrap!important}
+}
+</style></head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
 <main class="wrap">
