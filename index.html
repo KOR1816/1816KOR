@@ -973,14 +973,11 @@ document.addEventListener('DOMContentLoaded',function(){
   try{setBearAdminMode();}catch(e){console.error(e)}
   try{renderRules(rulesDataLocal());setRulesAdminMode();}catch(e){console.error(e)}
   restorePageFromUrl();
-  // First paint is independent from Firebase/network work.
-  requestAnimationFrame(function(){
-    setTimeout(function(){
-      if(!firebaseInitPromise){
-        firebaseInitPromise=initFirebase().catch(e=>console.error('Firebase init failed:',e));
-      }
-    },800);
-  });
+  // Start Firebase immediately so shared Holy Sword / Three Alliances data
+  // is restored on the first page load instead of waiting behind a delayed timer.
+  if(!firebaseInitPromise){
+    firebaseInitPromise=initFirebase().catch(e=>console.error('Firebase init failed:',e));
+  }
 });
 </script><script id="full-i18n">
 (function(){
