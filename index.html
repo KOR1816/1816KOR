@@ -586,18 +586,12 @@ function bearSaveLocal(d){
 }
 function renderBear(data){
   data=data||BEAR_DEFAULT;
-  const text=String(data.text||'').replace(/\
-/g,'
-');
-  const heroes=String(data.heroes||'').replace(/\
-/g,'
-');
+  const text=String(data.text||'');
+  const heroes=String(data.heroes||'');
   const t=document.getElementById('bearText'),h=document.getElementById('bearHeroes');
   const ti=document.getElementById('bearTextInput'),hi=document.getElementById('bearHeroesInput');
-  if(t)t.innerHTML=escapeHome(text).replace(/
-/g,'<br>');
-  if(h)h.innerHTML=heroes.split(/
-+/).filter(Boolean).map(x=>escapeHome(x.trim())).join('<br>');
+  if(t)t.innerHTML=escapeHome(text).replace(/\\n/g,'<br>');
+  if(h)h.innerHTML=heroes.split(/\\n+/).filter(Boolean).map(x=>escapeHome(x.trim())).join('<br>');
   if(ti)ti.value=text;
   if(hi)hi.value=heroes;
 }
