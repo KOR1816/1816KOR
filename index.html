@@ -481,16 +481,32 @@ function translatePage(lang){
 }
 async function translateDynamicText(text,lang){
  if(!text||lang==="ko")return text||"";
+ const exact={
+  "공지":"Notice",
+  "당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.":"For the time being, rewards from fort and sanc will mainly be distributed to immigrants who came at the cost of sacrificing troops.\nWe respectfully ask for the understanding of existing KOR alliance members.",
+  "소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다.":"We are working together around communication, cooperation, growth, and KVK organization."
+ };
+ if(lang==="en" && exact[text])return exact[text];
  const key="kor1816_tr_"+lang+"_"+text;
  try{const cached=localStorage.getItem(key);if(cached)return cached;}catch{}
- try{
-   const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(text);
-   const res=await fetch(url,{mode:"cors"});
-   if(!res.ok)throw Error("translation http "+res.status);
+ const services=[
+  "https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=ko|"+encodeURIComponent(lang),
+  "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(text)
+ ];
+ for(const url of services){
+  try{
+   const res=await fetch(url,{mode:"cors",cache:"no-store"});
+   if(!res.ok)continue;
    const data=await res.json();
-   const out=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||"").join(""):text;
-   if(out&&out!==text){try{localStorage.setItem(key,out);}catch{}return out;}
- }catch(e){console.warn("dynamic translation",e);}
+   let out="";
+   if(data?.responseData?.translatedText)out=data.responseData.translatedText;
+   else if(Array.isArray(data?.[0]))out=data[0].map(x=>x?.[0]||"").join("");
+   if(out&&out!==text){
+    try{localStorage.setItem(key,out);}catch{}
+    return out;
+   }
+  }catch(e){console.warn("translation service",e);}
+ }
  return text;
 }
 async function translateHomeDynamic(lang){
