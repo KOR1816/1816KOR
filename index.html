@@ -324,25 +324,70 @@ async function saveAlliance(){
  try{if(allianceDoc)await setDoc(allianceDoc,allianceData);setMsg("allianceMsg","3대연맹전 저장 완료!");}
  catch(e){console.error(e);setMsg("allianceMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
 }
+const HOME_LANGS=["ko","en","ja","zh","de","it","es"];
+const HOME_DEFAULT_TRANSLATIONS={
+ ko:{latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.",schedule:"⚔️ 성검쟁탈 · 23:00 (UTC 14:00)\n🛡️ 바이킹 · 23:00 (UTC 14:00)\n🐻 곰 1트랩 · 23:00 (UTC 14:00)\n🐻 곰 2트랩 · 09:10 (UTC 00:10)",welcome:"소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다."},
+ en:{latestTitle:"",latestBody:"For the time being, rewards from fort and sanc will mainly be distributed to immigrants who came at the cost of sacrificing troops.\nWe respectfully ask for the understanding of existing KOR alliance members.",schedule:"⚔️ Holy Sword Clash · 23:00 (UTC 14:00)\n🛡️ Viking · 23:00 (UTC 14:00)\n🐻 Bear Trap 1 · 23:00 (UTC 14:00)\n🐻 Bear Trap 2 · 09:10 (UTC 00:10)",welcome:"We are working together around communication, cooperation, growth, and KVK organization."},
+ ja:{latestTitle:"",latestBody:"当面の間、fortとsancの報酬は、兵力を犠牲にして移民してきた方々を中心に分配する予定です。\n既存のKOR連盟メンバーの皆様には、何卒ご理解をお願いいたします。",schedule:"⚔️ 聖剣争奪 · 23:00 (UTC 14:00)\n🛡️ バイキング · 23:00 (UTC 14:00)\n🐻 ベアトラップ1 · 23:00 (UTC 14:00)\n🐻 ベアトラップ2 · 09:10 (UTC 00:10)",welcome:"コミュニケーション・協力・成長・KVKの組織力を大切に、一緒に活動しています。"},
+ zh:{latestTitle:"",latestBody:"暂时，fort和sanc的奖励将主要分配给那些牺牲兵力前来移民的成员。\n也恳请KOR现有联盟成员谅解。",schedule:"⚔️ 圣剑争夺 · 23:00 (UTC 14:00)\n🛡️ 维京 · 23:00 (UTC 14:00)\n🐻 熊陷阱1 · 23:00 (UTC 14:00)\n🐻 熊陷阱2 · 09:10 (UTC 00:10)",welcome:"我们以沟通、合作、成长以及KVK组织力为核心，一起努力。"},
+ de:{latestTitle:"",latestBody:"Vorerst sollen die Belohnungen von fort und sanc hauptsächlich an Einwanderer verteilt werden, die unter Einsatz eigener Truppen zu uns gekommen sind.\nWir bitten die bestehenden KOR-Allianzmitglieder höflich um Verständnis.",schedule:"⚔️ Heiliges Schwertduell · 23:00 (UTC 14:00)\n🛡️ Wikinger · 23:00 (UTC 14:00)\n🐻 Bärenfalle 1 · 23:00 (UTC 14:00)\n🐻 Bärenfalle 2 · 09:10 (UTC 00:10)",welcome:"Wir setzen gemeinsam auf Kommunikation, Zusammenarbeit, Wachstum und starke KVK-Organisation."},
+ it:{latestTitle:"",latestBody:"Per il momento, le ricompense di fort e sanc saranno distribuite principalmente agli immigrati che sono arrivati sacrificando le proprie truppe.\nChiediamo gentilmente la comprensione dei membri esistenti dell'alleanza KOR.",schedule:"⚔️ Duello della Spada Sacra · 23:00 (UTC 14:00)\n🛡️ Vichinghi · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 1 · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 2 · 09:10 (UTC 00:10)",welcome:"Lavoriamo insieme puntando su comunicazione, collaborazione, crescita e organizzazione KVK."},
+ es:{latestTitle:"",latestBody:"Por el momento, las recompensas de fort y sanc se distribuirán principalmente entre los inmigrantes que llegaron sacrificando tropas.\nPedimos amablemente la comprensión de los miembros actuales de la alianza KOR.",schedule:"⚔️ Duelo de la Espada Sagrada · 23:00 (UTC 14:00)\n🛡️ Vikingos · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 1 · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 2 · 09:10 (UTC 00:10)",welcome:"Trabajamos juntos basándonos en la comunicación, la cooperación, el crecimiento y la organización del KVK."}
+};
+function normalizeHomeData(d){
+ const base=d&&typeof d==="object"?{...d}:{};
+ const translations={...(base.translations&&typeof base.translations==="object"?base.translations:{})};
+ if(!translations.ko && (base.latestTitle!==undefined||base.latestBody!==undefined||base.schedule!==undefined||base.welcome!==undefined)){
+   translations.ko={latestTitle:base.latestTitle||"",latestBody:base.latestBody||"",schedule:base.schedule||"",welcome:base.welcome||""};
+ }
+ for(const lang of HOME_LANGS){
+   if(!translations[lang]){
+     translations[lang]={...HOME_DEFAULT_TRANSLATIONS[lang]};
+   }else{
+     translations[lang]={...HOME_DEFAULT_TRANSLATIONS[lang],...translations[lang]};
+   }
+ }
+ return {...base,translations};
+}
+function getHomeLangData(lang=readLocal("kor1816_lang","ko")){
+ const normalized=normalizeHomeData(homeData);
+ homeData=normalized;
+ const data=normalized.translations?.[lang];
+ return data||normalized.translations.ko||HOME_DEFAULT_TRANSLATIONS.ko;
+}
 function renderHome(d){
- homeData=d||homeData;
+ homeData=normalizeHomeData(d||homeData);
+ const data=getHomeLangData();
  const title=document.getElementById("homeLatestTitle"),body=document.getElementById("homeLatest"),sch=document.getElementById("homeSchedule"),wel=document.getElementById("homeWelcome");
- if(title)title.textContent="📢 "+(homeData.latestTitle||"공지");
- if(body)body.innerHTML=lines(safe(homeData.latestBody));
- if(sch)sch.innerHTML=lines(safe(homeData.schedule));
- if(wel)wel.textContent=homeData.welcome||"";
+ if(title)title.textContent="📢 "+(data.latestTitle||"공지");
+ if(body)body.innerHTML=lines(safe(data.latestBody));
+ if(sch)sch.innerHTML=lines(safe(data.schedule));
+ if(wel)wel.textContent=data.welcome||"";
  const a=document.getElementById("homeLatestInput"),b=document.getElementById("homeLatestBody"),s=document.getElementById("homeScheduleInput"),w=document.getElementById("homeWelcomeInput");
- if(a)a.value=homeData.latestTitle||"";if(b)b.value=homeData.latestBody||"";if(s)s.value=homeData.schedule||"";if(w)w.value=homeData.welcome||"";
+ if(a)a.value=data.latestTitle||"";if(b)b.value=data.latestBody||"";if(s)s.value=data.schedule||"";if(w)w.value=data.welcome||"";
 }
 async function loadHome(){
- homeData=readLocal(HOME_KEY,homeData);renderHome(homeData);
+ homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);
  if(!homeDoc)return;
  try{const s=await Promise.race([getDoc(homeDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){homeData={...homeData,...s.data()};writeLocal(HOME_KEY,homeData);renderHome(homeData);setMsg("homeMsg","최신 홈 내용을 불러왔습니다.");}
+   if(s.exists()){homeData=normalizeHomeData({...homeData,...s.data()});writeLocal(HOME_KEY,homeData);renderHome(homeData);setMsg("homeMsg","최신 홈 내용을 불러왔습니다.");}
  }catch(e){console.warn("home read",e);}
 }
 async function saveHome(){
- homeData={latestTitle:document.getElementById("homeLatestInput")?.value.trim()||"",latestBody:document.getElementById("homeLatestBody")?.value||"",schedule:document.getElementById("homeScheduleInput")?.value||"",welcome:document.getElementById("homeWelcomeInput")?.value||""};
+ const lang=readLocal("kor1816_lang","ko");
+ homeData=normalizeHomeData(homeData);
+ homeData.translations[lang]={
+   latestTitle:document.getElementById("homeLatestInput")?.value.trim()||"",
+   latestBody:document.getElementById("homeLatestBody")?.value||"",
+   schedule:document.getElementById("homeScheduleInput")?.value||"",
+   welcome:document.getElementById("homeWelcomeInput")?.value||""
+ };
+ if(lang==="ko"){
+   homeData.latestTitle=homeData.translations.ko.latestTitle;
+   homeData.latestBody=homeData.translations.ko.latestBody;
+   homeData.schedule=homeData.translations.ko.schedule;
+   homeData.welcome=homeData.translations.ko.welcome;
+ }
  writeLocal(HOME_KEY,homeData);renderHome(homeData);
  try{if(homeDoc)await setDoc(homeDoc,homeData);setMsg("homeMsg","홈 저장 완료!");}catch(e){console.error(e);setMsg("homeMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
 }
@@ -391,6 +436,7 @@ function setLanguage(lang){
  const vals=NAV[lang]||NAV.ko;document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  document.documentElement.lang=lang==="zh"?"zh-CN":lang;
  translatePage(lang);
+ if(typeof homeData!=="undefined")renderHome(homeData);
 }
 async function initFirebase(){
  try{
@@ -403,7 +449,7 @@ async function initFirebase(){
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",()=>{
  const lang=document.getElementById("languageSelect");setLanguage(readLocal("kor1816_lang","ko"));if(lang){lang.value=readLocal("kor1816_lang","ko");lang.addEventListener("change",e=>setLanguage(e.target.value));}
- renderHome(readLocal(HOME_KEY,homeData));renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();restorePage();
+ homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
