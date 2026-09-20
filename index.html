@@ -230,28 +230,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 
 
 
-<script>
-(function(){
-  function activatePage(id){
-    var valid={home:1,teams:1,alliance:1,seating:1};
-    if(!valid[id]) id='home';
-    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
-    var el=document.getElementById(id);
-    if(el) el.classList.add('active');
-  }
-  window.show=function(id){
-    activatePage(id);
-    try{localStorage.setItem('kor1816_current_page_v2',id);}catch(e){}
-    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
-    window.scrollTo(0,0);
-  };
-  document.addEventListener('DOMContentLoaded',function(){
-    var id=location.hash.slice(1);
-    if(!id){try{id=localStorage.getItem('kor1816_current_page_v2')||'home';}catch(e){id='home';}}
-    activatePage(id);
-  });
-})();
-</script><script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -389,8 +368,7 @@ async function initFirebase(){
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
    db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating");firebaseReady=true;
-   if(document.getElementById("teams")?.classList.contains("active"))loadTeams();else loadTeams();
-   loadAlliance();loadHome();loadSeating();
+   loadTeams();loadAlliance();loadHome();loadSeating();
  }catch(e){console.error("Firebase init",e);}
 }
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
