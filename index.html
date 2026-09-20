@@ -394,8 +394,7 @@ function renderHome(data){
     ((latestTitle&&latestBody)?'<br><br>':'')+
     escapeHome(latestBody).replace(/
 /g,'<br>');
-  if(scheduleEl)scheduleEl.innerHTML=escapeHome(schedule).split('
-').filter(Boolean).map(x=>'<p>'+x+'</p>').join('');
+  if(scheduleEl)scheduleEl.innerHTML=escapeHome(schedule).split('\n').filter(Boolean).map(x=>'<p>'+x+'</p>').join('');
   if(welcomeEl)welcomeEl.textContent=welcome;
 
   const a=document.getElementById('homeLatestInput');
@@ -528,18 +527,10 @@ let RULES_DOC=null;
 const CASTLE_DEFAULT={
   titles:['⚔️ 집결장 공격','🛡️ 수성','👥 집결원 공격','👥 집결원 수성'],
   texts:[
-    '아마데 / 페라 / 로사
-비율: 505 / 55.5.40 / 514 / 415 / 406',
-    '알카 / 마르고 / 살로
-상대가 강하면 예거 고려
-연습: 집결장 631 · 집결원 640',
-    '1열: 2첸코 / 2아마
-2열: 2첸코 / 아마네 / 파드
-3열: 2살로 / 첸코 / 아마네
-4열: 2힐데 / 살로 / 첸코',
-    '1열: 2힐데 / 살로 / 첸코
-2열: 4힐데
-3열: 2힐데 / 살로 / 고든'
+    '아마데 / 페라 / 로사\n비율: 505 / 55.5.40 / 514 / 415 / 406',
+    '알카 / 마르고 / 살로\n상대가 강하면 예거 고려\n연습: 집결장 631 · 집결원 640',
+    '1열: 2첸코 / 2아마\n2열: 2첸코 / 아마네 / 파드\n3열: 2살로 / 첸코 / 아마네\n4열: 2힐데 / 살로 / 첸코',
+    '1열: 2힐데 / 살로 / 첸코\n2열: 4힐데\n3열: 2힐데 / 살로 / 고든'
   ]
 };
 function castleDataLocal(){try{return JSON.parse(localStorage.getItem('kor1816_castle_v1')||'null')||CASTLE_DEFAULT}catch(e){return CASTLE_DEFAULT}}
