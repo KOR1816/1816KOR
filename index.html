@@ -861,8 +861,9 @@ async function initFirebase(){
     setVikingAdminMode();
     setAllianceAdminMode();
     firebaseReady=true;
-    // Never hold the page on the shared-data request.
+    // Restore shared server data for every major editable section.
     loadSharedTeams(true).catch(e=>console.warn('Background team sync failed:',e));
+    loadAlliance().catch(e=>console.warn('Background alliance sync failed:',e));
   }catch(e){
     console.warn('Firebase unavailable; using browser backup:',e);
     const m=document.getElementById('teamMsg');
