@@ -36,7 +36,7 @@ const clone=x=>JSON.parse(JSON.stringify(x));
 function tr(k){return (I18N[lang]&&I18N[lang][k])||I18N.ko[k]||k}
 function localGet(k){try{return JSON.parse(localStorage.getItem("kor1816_"+k))||clone(defaults[k])}catch(e){return clone(defaults[k])}}
 function localPut(k,v){localStorage.setItem("kor1816_"+k,JSON.stringify(v))}
-function cleanDbUrl(){return SHARED_DB_URL.replace(/\\/$/,"")}
+function cleanDbUrl(){return SHARED_DB_URL.replace(/\/$/,"")}
 async function cloudGet(k){
 if(!SHARED_DB_URL)return null;
 try{const r=await fetch(cleanDbUrl()+"/kor1816/"+k+".json",{cache:"no-store"});if(!r.ok)return null;return await r.json()}catch(e){return null}
