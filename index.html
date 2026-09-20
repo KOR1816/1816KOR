@@ -804,7 +804,10 @@ async function initFirebase(){
     // 현재 Firestore 보안 규칙이 허용하는 경우 로그인 없이도 읽기/쓰기를 시도합니다.
     try{
       const auth=authMod.getAuth(firebaseApp);
-      await authMod.signInAnonymously(auth);
+      await Promise.race([
+        authMod.signInAnonymously(auth),
+        new Promise((_,reject)=>setTimeout(()=>reject(new Error('Anonymous auth timeout')),3000))
+      ]);
     }catch(authError){
       console.error('Anonymous auth failed:',authError);
       const authCode=authError?.code||'unknown';
@@ -832,7 +835,8 @@ async function initFirebase(){
     setVikingAdminMode();
     setAllianceAdminMode();
     firebaseReady=true;
-    await loadSharedTeams(true);
+    // Never hold the page on the shared-data request.
+    loadSharedTeams(true).catch(e=>console.warn('Background team sync failed:',e));
   }catch(e){
     console.warn('Firebase unavailable; using browser backup:',e);
     const m=document.getElementById('teamMsg');
@@ -949,7 +953,7 @@ document.addEventListener('DOMContentLoaded',function(){
       if(!firebaseInitPromise){
         firebaseInitPromise=initFirebase().catch(e=>console.error('Firebase init failed:',e));
       }
-    },0);
+    },800);
   });
 });
 </script><script id="full-i18n">
