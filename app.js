@@ -96,7 +96,7 @@ const edit=localStorage.getItem("kor1816_bear_edit")==="1";return (edit?'<div cl
 }
 function seat(data){
 const edit=localStorage.getItem("kor1816_seating_edit")==="1",rows=data.map((g,gi)=>'<tr class="seat-group"><th colspan="3">'+g.row.replace("Row",tr("row"))+'</th></tr>'+g.names.map((n,i)=>'<tr><td>'+g.row.replace("Row",tr("row"))+'</td><td>'+(n?i+1:"")+'</td><td>'+(edit?'<input class="seat-input" data-r="'+gi+'" data-i="'+i+'" value="'+esc(n)+'">':esc(n))+'</td></tr>').join("")).join("");
-let map='<div class="seating-map"><div class="map-title">🐻 '+tr("bear")+'</div><img class="seat-map-image" src="./seating-map.png" alt="KOR1816 자리배치 이미지" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><div class="map-missing" style="display:none">자리배치 이미지가 아직 업로드되지 않았습니다.</div></div>';
+let map='<div class="seating-map"><div class="map-title">🐻 '+tr("bear")+'</div><img class="seat-map-image" src="./seating-map.png" alt="KOR1816 자리배치 이미지" onerror="this.style.display=\"none\";this.nextElementSibling.style.display=\"block\""><div class="map-missing" style="display:none">자리배치 이미지가 아직 업로드되지 않았습니다.</div></div>';
 return map+(edit?'<div class="page-actions">'+btn("pSave","💾 "+tr("save"),"primary")+btn("pClose",tr("close"))+btn("pReset",tr("reset"),"danger")+'</div>':'<div class="page-actions">'+btn("seatingEdit","🔐 "+tr("edit"))+'</div>')+'<div class="table-wrap"><table class="seat-table"><thead><tr><th>'+tr("row")+'</th><th>'+tr("no")+'</th><th>'+tr("member")+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function rules(d){
