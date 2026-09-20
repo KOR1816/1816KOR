@@ -298,7 +298,7 @@ function toggleTeamsAdmin(){
  if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}
  teamsAdmin=true;setTeamsInputsEnabled(true);document.getElementById("teamsSaveBtn").style.display="inline-block";document.getElementById("teamsAdminBtn").textContent="🔒 수정 종료";
 }
-function saveAllTeams(){
+async function saveAllTeams(){
  if(!teamsAdmin)return;
  teamData=collectTeams();writeLocal(TEAM_KEY,teamData);renderTeams();setTeamsInputsEnabled(true);
  try{if(teamDoc)await setDoc(teamDoc,teamData);setMsg("teamMsg","성검쟁탈 전체 저장 완료!");}
