@@ -1150,7 +1150,15 @@ document.addEventListener('DOMContentLoaded',function(){
     const nav=document.getElementById('mainNav');
     if(!nav)return;
     const bs=nav.querySelectorAll('button');
-    labels.forEach((label,i)=>{if(bs[i])bs[i].textContent=label});
+    const lang=localStorage.getItem('kor1816_lang')||'ko';
+    const translated={
+      ko:labels,
+      en:['🏠 Home','⚔️ Holy Sword Clash','⚔️ Three Alliances War','🪑 Seating'],
+      ja:['🏠 ホーム','⚔️ 聖剣争奪','⚔️ 3大連盟戦','🪑 席配置'],
+      zh:['🏠 首页','⚔️ 圣剑争夺','⚔️ 三大联盟战','🪑 座位安排'],
+      de:['🏠 Startseite','⚔️ Heiliges Schwertduell','⚔️ Krieg der drei Allianzen','🪑 Sitzplan']
+    }[lang]||labels;
+    translated.forEach((label,i)=>{if(bs[i])bs[i].textContent=label});
     while(bs.length>4){
       const b=bs[bs.length-1];
       if(b)b.remove();
