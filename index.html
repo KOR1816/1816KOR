@@ -175,11 +175,11 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 <style id="teams-mobile-responsive-fix">
 /* 모바일에서도 성검쟁탈 6열 구조를 유지하고, 가로 스크롤로 압축을 방지 */
 #teams .team-columns-wrap{overflow-x:auto!important;overflow-y:visible!important;width:100%!important;-webkit-overflow-scrolling:touch!important}
-#teams .team-columns{grid-template-columns:repeat(6,minmax(118px,1fr))!important;min-width:760px!important;width:100%!important;gap:8px!important}
-#teams .team-column{min-width:118px!important;padding:8px!important}
-#teams .slot{gap:4px!important}
+#teams .team-columns{grid-template-columns:repeat(6,150px)!important;min-width:940px!important;width:max-content!important;gap:8px!important}
+#teams .team-column{width:150px!important;min-width:150px!important;padding:8px!important}
+#teams .slot{gap:4px!important;min-width:0!important}
 #teams .slot span{flex:0 0 20px!important;width:20px!important}
-#teams .slot input{min-width:0!important;width:100%!important;padding:9px 5px!important;font-size:12px!important}
+#teams .slot input{min-width:0!important;width:calc(100% - 24px)!important;padding:9px 5px!important;font-size:12px!important;box-sizing:border-box!important}
 #teams .team-title{font-size:15px!important;padding:10px 3px!important;white-space:nowrap!important}
 @media(min-width:901px){
   #teams .team-columns-wrap{overflow-x:hidden!important}
