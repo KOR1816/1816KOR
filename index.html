@@ -450,7 +450,7 @@ async function show(id,updateHash=true){
  translatePage(currentLang);
  window.scrollTo({top:0,behavior:"instant"});
 }
-function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");show(["home","teams","alliance","seating"].includes(h)?h:(["home","teams","alliance","seating"].includes(saved)?saved:"home"),false);}
+async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating"].includes(h)?h:(["home","teams","alliance","seating"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","⚔️ 성검쟁탈","⚔️ 3대연맹전","🪑 자리배치"],en:["🏠 Home","⚔️ Holy Sword Clash","⚔️ Three Alliances War","🪑 Seating"],ja:["🏠 ホーム","⚔️ 聖剣争奪","⚔️ 3大連盟戦","🪑 席配置"],zh:["🏠 首页","⚔️ 圣剑争夺","⚔️ 三大联盟战","🪑 座位安排"],de:["🏠 Startseite","⚔️ Heiliges Schwertduell","⚔️ Krieg der drei Allianzen","🪑 Sitzplan"],it:["🏠 Home","⚔️ Duello della Spada Sacra","⚔️ Guerra delle Tre Alleanze","🪑 Posti"],es:["🏠 Inicio","⚔️ Duelo de la Espada Sagrada","⚔️ Guerra de las Tres Alianzas","🪑 Distribución"]};
 const I18N={
 ko:{
@@ -537,7 +537,7 @@ async function translateDynamicText(text,lang){
  }
  return text;
 }
-let currentLang="ko";
+let currentLang=readLocal("kor1816_lang","ko");
 let languageVersion=0;
 async function translateHomeDynamic(lang,version=languageVersion){
  if(lang==="ko"){renderHome(homeData);translatePage(lang);return;}
@@ -584,17 +584,18 @@ async function initFirebase(){
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
    db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating");firebaseReady=true;
-   loadTeams();loadAlliance();loadHome();loadSeating();
+   const active=document.querySelector(".page.active")?.id||"home";
+   await show(active,false);
  }catch(e){console.error("Firebase init",e);}
 }
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async()=>{
  const lang=document.getElementById("languageSelect");
  const savedLang=readLocal("kor1816_lang","ko");
- homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();
+ homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
- restorePage();
+ await restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
