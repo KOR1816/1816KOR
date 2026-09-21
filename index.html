@@ -473,6 +473,13 @@ function translatePage(lang){
    const key=e.getAttribute("data-i18n");
    if(key&&target[key]!==undefined)e.textContent=target[key];
  });
+ const explicit={
+   "#teams h2":{"ko":"⚔️ 성검쟁탈","en":"⚔️ Holy Sword Clash","ja":"⚔️ 聖剣争奪","zh":"⚔️ 圣剑争夺","de":"⚔️ Heiliges Schwertduell","it":"⚔️ Duello della Spada Sacra","es":"⚔️ Duelo de la Espada Sagrada"},
+   "#alliance h2":{"ko":"⚔️ 3대연맹전","en":"⚔️ Three Alliances War","ja":"⚔️ 3大連盟戦","zh":"⚔️ 三大联盟战","de":"⚔️ Krieg der drei Allianzen","it":"⚔️ Guerra delle Tre Alleanze","es":"⚔️ Guerra de las Tres Alianzas"},
+   "#seating h2":{"ko":"🪑 자리배치","en":"🪑 Seating","ja":"🪑 席配置","zh":"🪑 座位安排","de":"🪑 Sitzplan","it":"🪑 Posti","es":"🪑 Distribución"},
+   "#seating .seating-list-wrap h3":{"ko":"📋 자리배치 목록","en":"📋 Seating List","ja":"📋 席配置一覧","zh":"📋 座位列表","de":"📋 Sitzplatzliste","it":"📋 Elenco posti","es":"📋 Lista de asientos"}
+ };
+ for(const [selector,map] of Object.entries(explicit)){const e=document.querySelector(selector);if(e&&map[lang])e.textContent=map[lang];}
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  let n;while(n=walker.nextNode()){
    const p=n.parentElement;
@@ -526,13 +533,15 @@ async function translateHomeDynamic(lang,version=languageVersion){
  const current=getHomeLangData(lang);
  renderHome(homeData);
  translatePage(lang);
+ const defaults=HOME_DEFAULT_TRANSLATIONS[lang]||{};
  const fields=["latestTitle","latestBody","schedule","welcome"];
  const missing=fields.filter(f=>{
    const v=String(current?.[f]??"");
    const b=String(base?.[f]??"");
-   return !v || (b && v===b);
+   const def=String(defaults?.[f]??"");
+   return !v || (b && v===b) || (v===def && b!==def);
  });
- if(!missing.length)return;
+ if(!missing.length){translatePage(lang);return;}
  const out={...(homeData.translations[lang]||{})};
  for(const f of missing){
    const translated=await translateDynamicText(base?.[f]||"",lang);
