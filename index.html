@@ -271,7 +271,7 @@ let homeData={latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병
 function clone(x){return JSON.parse(JSON.stringify(x));}
 function readLocal(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||"null");return v??fallback;}catch{return fallback;}}
 function writeLocal(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{}}
-function setMsg(id,msg){const e=document.getElementById(id);if(e)e.textContent=translateString(msg,readLocal("kor1816_lang","ko"));}
+function setMsg(id,msg){const e=document.getElementById(id);if(e)e.textContent=translateString(msg,currentLang);}
 function lines(text){return String(text||"").split("\n").map(s=>s.trimEnd()).join("<br>");}
 function safe(text){return String(text??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function normalizeTeams(d){
@@ -285,7 +285,7 @@ function normalizeSeating(d){if(!Array.isArray(d)||d.length!==3)return seatingDa
 function renderSeating(){const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;wrap.innerHTML=seatingData.map((col,ci)=>'<div class="seating-column"><div class="seating-column-title">'+col.row+'</div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'+col.names.map((name,ni)=>'<div class="seating-row"><span>'+(ci===2?ni+2:ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>').join("");}
 function renderSeatingAdmin(){const e=document.getElementById("seatingEditGrid");if(!e)return;e.className="seating-edit-grid";e.innerHTML=seatingData.map((col,ci)=>'<div class="seating-edit-column"><div class="seating-edit-title">'+col.row+'</div>'+col.names.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ci===2?ni+2:ni+1)+'</span><input id="seating-edit-'+ci+'-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>').join("");}
 function collectSeating(){return seatingData.map((col,ci)=>({row:col.row,names:col.names.map((_,ni)=>document.getElementById("seating-edit-"+ci+"-"+ni)?.value||"")}));}
-async function loadSeating(){seatingData=normalizeSeating(readLocal(SEATING_KEY,seatingData));renderSeating();renderSeatingAdmin();translatePage(readLocal("kor1816_lang","ko"));if(!seatingDoc)return;try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(readLocal("kor1816_lang","ko"));}}catch(e){console.warn("seating read",e);}}
+async function loadSeating(){seatingData=normalizeSeating(readLocal(SEATING_KEY,seatingData));renderSeating();renderSeatingAdmin();translatePage(currentLang);if(!seatingDoc)return;try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}}catch(e){console.warn("seating read",e);}}
 async function saveSeating(){seatingData=collectSeating();writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();try{if(seatingDoc)await setDoc(seatingDoc,{columns:seatingData});setMsg("seatingMsg","자리배치 저장 완료!");}catch(e){console.error(e);setMsg("seatingMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}}
 let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
@@ -301,11 +301,11 @@ function collectTeams(){
  return d;
 }
 async function loadTeams(){
- teamData=normalizeTeams(readLocal(TEAM_KEY,teamData)); renderTeams(); translatePage(readLocal("kor1816_lang","ko"));
+ teamData=normalizeTeams(readLocal(TEAM_KEY,teamData)); renderTeams(); translatePage(currentLang);
  if(!teamDoc)return;
  try{const s=await Promise.race([getDoc(teamDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(readLocal("kor1816_lang","ko"));setMsg("teamMsg","최신 성검쟁탈 팀편성을 불러왔습니다.");}
- }catch(e){console.warn("teams read",e);translatePage(readLocal("kor1816_lang","ko"));setMsg("teamMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
+   if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 팀편성을 불러왔습니다.");}
+ }catch(e){console.warn("teams read",e);translatePage(currentLang);setMsg("teamMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
 }
 let teamsAdmin=false;
 function setTeamsInputsEnabled(enabled){document.querySelectorAll("#teams input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});}
@@ -330,11 +330,11 @@ function collectAlliance(){
  return d;
 }
 async function loadAlliance(){
- allianceData=readLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(readLocal("kor1816_lang","ko"));
+ allianceData=readLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);
  if(!allianceDoc)return;
  try{const s=await Promise.race([getDoc(allianceDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(readLocal("kor1816_lang","ko"));setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
- }catch(e){console.warn("alliance read",e);translatePage(readLocal("kor1816_lang","ko"));setMsg("allianceMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
+   if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
+ }catch(e){console.warn("alliance read",e);translatePage(currentLang);setMsg("allianceMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
 }
 async function saveAlliance(){
  allianceData=collectAlliance();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();
@@ -366,7 +366,7 @@ function normalizeHomeData(d){
  }
  return {...base,translations};
 }
-function getHomeLangData(lang=readLocal("kor1816_lang","ko")){
+function getHomeLangData(lang=currentLang){
  const normalized=normalizeHomeData(homeData);
  homeData=normalized;
  const data=normalized.translations?.[lang];
@@ -374,7 +374,7 @@ function getHomeLangData(lang=readLocal("kor1816_lang","ko")){
 }
 function renderHome(d){
  homeData=normalizeHomeData(d||homeData);
- const lang=readLocal("kor1816_lang","ko");
+ const lang=currentLang;
  const data=getHomeLangData(lang);
  const title=document.getElementById("homeLatestTitle"),body=document.getElementById("homeLatest"),sch=document.getElementById("homeSchedule"),wel=document.getElementById("homeWelcome");
  const noticeFallback={ko:"공지",en:"Notice",ja:"お知らせ",zh:"公告",de:"Hinweis",it:"Avviso",es:"Aviso"};
@@ -389,7 +389,7 @@ async function loadHome(){
  homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));
  renderHome(homeData);
  if(!homeDoc){
-   if(readLocal("kor1816_lang","ko")!=="ko")await translateHomeDynamic(readLocal("kor1816_lang","ko"));
+   if(currentLang!=="ko")await translateHomeDynamic(currentLang);
    return;
  }
  try{
@@ -398,21 +398,21 @@ async function loadHome(){
      homeData=normalizeHomeData({...homeData,...s.data()});
      writeLocal(HOME_KEY,homeData);
      renderHome(homeData);
-     const lang=readLocal("kor1816_lang","ko");
+     const lang=currentLang;
      if(lang!=="ko")await translateHomeDynamic(lang);
      setMsg("homeMsg","최신 홈 내용을 불러왔습니다.");
    }else{
-     const lang=readLocal("kor1816_lang","ko");
+     const lang=currentLang;
      if(lang!=="ko")await translateHomeDynamic(lang);
    }
  }catch(e){
    console.warn("home read",e);
-   const lang=readLocal("kor1816_lang","ko");
+   const lang=currentLang;
    if(lang!=="ko")await translateHomeDynamic(lang);
  }
 }
 async function saveHome(){
- const lang=readLocal("kor1816_lang","ko");
+ const lang=currentLang;
  homeData=normalizeHomeData(homeData);
  homeData.translations[lang]={
    latestTitle:document.getElementById("homeLatestInput")?.value.trim()||"",
@@ -433,18 +433,22 @@ let homeAdmin=false,allianceAdmin=false;
 function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 let pageLoadVersion=0;
+async let pageLoadVersion=0;
 async function show(id,updateHash=true){
  const valid=["home","teams","alliance","seating"];if(!valid.includes(id))id="home";
  const version=++pageLoadVersion;
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id)?.classList.add("active");
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id)?.classList.add("active");
  try{localStorage.setItem(PAGE_KEY,id);}catch{}
  if(updateHash&&location.hash!=="#"+id)history.replaceState(null,"","#"+id);
  if(id==="home")await loadHome();
- if(id==="teams")await loadTeams();
- if(id==="alliance")await loadAlliance();
- if(id==="seating")await loadSeating();
+ else if(id==="teams")await loadTeams();
+ else if(id==="alliance")await loadAlliance();
+ else if(id==="seating")await loadSeating();
  if(version!==pageLoadVersion)return;
- translatePage(readLocal("kor1816_lang","ko"));
+ setLanguage(currentLang);
+ if(version!==pageLoadVersion)return;
+ translatePage(currentLang);
  window.scrollTo({top:0,behavior:"instant"});
 }
 function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");show(["home","teams","alliance","seating"].includes(h)?h:(["home","teams","alliance","seating"].includes(saved)?saved:"home"),false);}
@@ -534,6 +538,7 @@ async function translateDynamicText(text,lang){
  }
  return text;
 }
+let currentLang="ko";
 let languageVersion=0;
 async function translateHomeDynamic(lang,version=languageVersion){
  if(lang==="ko"){renderHome(homeData);translatePage(lang);return;}
@@ -553,7 +558,7 @@ async function translateHomeDynamic(lang,version=languageVersion){
  const out={...(homeData.translations[lang]||{})};
  for(const f of missing){
    const translated=await translateDynamicText(base?.[f]||"",lang);
-   if(version!==languageVersion || readLocal("kor1816_lang","ko")!==lang)return;
+   if(version!==languageVersion || currentLang!==lang)return;
    out[f]=translated;
    homeData.translations[lang]=out;
    renderHome(homeData);
@@ -562,6 +567,7 @@ async function translateHomeDynamic(lang,version=languageVersion){
 }
 function setLanguage(lang){
  lang=I18N[lang]?lang:"ko";
+ currentLang=lang;
  const version=++languageVersion;
  try{localStorage.setItem("kor1816_lang",lang);}catch{}
  const vals=NAV[lang]||NAV.ko;
@@ -585,7 +591,7 @@ async function initFirebase(){
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",()=>{
  const lang=document.getElementById("languageSelect");
- const savedLang=readLocal("kor1816_lang","ko");
+ const savedLang=currentLang;
  homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
