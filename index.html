@@ -432,12 +432,20 @@ async function saveHome(){
 let homeAdmin=false,allianceAdmin=false;
 function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
-function show(id,updateHash=true){
+let pageLoadVersion=0;
+async function show(id,updateHash=true){
  const valid=["home","teams","alliance","seating"];if(!valid.includes(id))id="home";
+ const version=++pageLoadVersion;
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id)?.classList.add("active");
  try{localStorage.setItem(PAGE_KEY,id);}catch{}
  if(updateHash&&location.hash!=="#"+id)history.replaceState(null,"","#"+id);
- if(id==="home")loadHome();if(id==="teams")loadTeams();if(id==="alliance")loadAlliance();if(id==="seating")loadSeating();window.scrollTo({top:0,behavior:"instant"});
+ if(id==="home")await loadHome();
+ if(id==="teams")await loadTeams();
+ if(id==="alliance")await loadAlliance();
+ if(id==="seating")await loadSeating();
+ if(version!==pageLoadVersion)return;
+ translatePage(readLocal("kor1816_lang","ko"));
+ window.scrollTo({top:0,behavior:"instant"});
 }
 function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");show(["home","teams","alliance","seating"].includes(h)?h:(["home","teams","alliance","seating"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","⚔️ 성검쟁탈","⚔️ 3대연맹전","🪑 자리배치"],en:["🏠 Home","⚔️ Holy Sword Clash","⚔️ Three Alliances War","🪑 Seating"],ja:["🏠 ホーム","⚔️ 聖剣争奪","⚔️ 3大連盟戦","🪑 席配置"],zh:["🏠 首页","⚔️ 圣剑争夺","⚔️ 三大联盟战","🪑 座位安排"],de:["🏠 Startseite","⚔️ Heiliges Schwertduell","⚔️ Krieg der drei Allianzen","🪑 Sitzplan"],it:["🏠 Home","⚔️ Duello della Spada Sacra","⚔️ Guerra delle Tre Alleanze","🪑 Posti"],es:["🏠 Inicio","⚔️ Duelo de la Espada Sagrada","⚔️ Guerra de las Tres Alianzas","🪑 Distribución"]};
