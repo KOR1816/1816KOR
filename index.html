@@ -519,29 +519,43 @@ async function translateDynamicText(text,lang){
  }
  return text;
 }
-async function translateHomeDynamic(lang){
- if(lang==="ko"){renderHome(homeData);return;}
- const d=getHomeLangData("ko");
- const fields=["latestTitle","latestBody","schedule","welcome"];
- const out={};
- for(const f of fields)out[f]=await translateDynamicText(d?.[f]||"",lang);
- homeData.translations[lang]={...(homeData.translations[lang]||{}),...out};
+let languageVersion=0;
+async function translateHomeDynamic(lang,version=languageVersion){
+ if(lang==="ko"){renderHome(homeData);translatePage(lang);return;}
+ const base=getHomeLangData("ko");
+ const current=getHomeLangData(lang);
  renderHome(homeData);
  translatePage(lang);
+ const fields=["latestTitle","latestBody","schedule","welcome"];
+ const missing=fields.filter(f=>{
+   const v=String(current?.[f]??"");
+   const b=String(base?.[f]??"");
+   return !v || (b && v===b);
+ });
+ if(!missing.length)return;
+ const out={...(homeData.translations[lang]||{})};
+ for(const f of missing){
+   const translated=await translateDynamicText(base?.[f]||"",lang);
+   if(version!==languageVersion || readLocal("kor1816_lang","ko")!==lang)return;
+   out[f]=translated;
+   homeData.translations[lang]=out;
+   renderHome(homeData);
+   translatePage(lang);
+ }
 }
-
-async function setLanguage(lang){
+function setLanguage(lang){
  lang=I18N[lang]?lang:"ko";
+ const version=++languageVersion;
  try{localStorage.setItem("kor1816_lang",lang);}catch{}
  const vals=NAV[lang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  document.documentElement.lang=lang==="zh"?"zh-CN":lang;
  translatePage(lang);
  if(typeof homeData!=="undefined"){
-   if(lang==="ko") renderHome(homeData);
-   else await translateHomeDynamic(lang);
+   renderHome(homeData);
+   translatePage(lang);
+   void translateHomeDynamic(lang,version);
  }
- translatePage(lang);
 }
 async function initFirebase(){
  try{
@@ -553,8 +567,12 @@ async function initFirebase(){
 }
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",()=>{
- const lang=document.getElementById("languageSelect");setLanguage(readLocal("kor1816_lang","ko"));if(lang){lang.value=readLocal("kor1816_lang","ko");lang.addEventListener("change",e=>setLanguage(e.target.value));}
- homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();restorePage();
+ const lang=document.getElementById("languageSelect");
+ const savedLang=readLocal("kor1816_lang","ko");
+ homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();
+ if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
+ setLanguage(savedLang);
+ restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
