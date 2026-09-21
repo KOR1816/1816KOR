@@ -590,7 +590,7 @@ async function initFirebase(){
 window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",()=>{
  const lang=document.getElementById("languageSelect");
- const savedLang=currentLang;
+ const savedLang=readLocal("kor1816_lang","ko");
  homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderTeams();setTeamsInputsEnabled(false);renderAlliance();loadSeating();
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
