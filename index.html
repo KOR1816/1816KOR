@@ -527,17 +527,21 @@ async function translateHomeDynamic(lang){
  for(const f of fields)out[f]=await translateDynamicText(d?.[f]||"",lang);
  homeData.translations[lang]={...(homeData.translations[lang]||{}),...out};
  renderHome(homeData);
+ translatePage(lang);
 }
 
-function setLanguage(lang){
+async function setLanguage(lang){
  lang=I18N[lang]?lang:"ko";
  try{localStorage.setItem("kor1816_lang",lang);}catch{}
  const vals=NAV[lang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  document.documentElement.lang=lang==="zh"?"zh-CN":lang;
  translatePage(lang);
- if(typeof homeData!=="undefined")renderHome(homeData);
- if(typeof homeData!=="undefined")translateHomeDynamic(lang);
+ if(typeof homeData!=="undefined"){
+   if(lang==="ko") renderHome(homeData);
+   else await translateHomeDynamic(lang);
+ }
+ translatePage(lang);
 }
 async function initFirebase(){
  try{
