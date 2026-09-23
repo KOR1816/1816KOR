@@ -324,18 +324,18 @@ function renderSeating(){
  wrap.innerHTML=seatingData.map((row,ri)=>'<div class="seating-row-group" style="border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px;">'
  +'<div class="seating-column-title" style="margin-bottom:12px;">'+row.row+'</div>'
  +'<div class="seating-split-pair">'
- +'<div class="seating-split-card bear2-card"><div class="seating-split-title">Bear2</div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'
- +row.left.map((name,ni)=>'<div class="seating-row"><span>'+(ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>'
  +'<div class="seating-split-card bear1-card"><div class="seating-split-title">Bear1</div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'
  +row.right.map((name,ni)=>'<div class="seating-row"><span>'+(ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>'
+ +'<div class="seating-split-card bear2-card"><div class="seating-split-title">Bear2</div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'
+ +row.left.map((name,ni)=>'<div class="seating-row"><span>'+(ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>'
  +'</div></div>').join("");
 }
 function renderSeatingAdmin(){
  const e=document.getElementById("seatingEditGrid");if(!e)return;e.className="seating-edit-grid";
  e.innerHTML=seatingData.map((row,ri)=>'<div class="seating-edit-column" style="grid-column:1/-1;"><div class="seating-edit-title">'+row.row+'</div>'
  +'<div class="seating-edit-split">'
- +'<div class="seating-edit-card"><div class="seating-split-title">Bear2</div>'+row.left.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-0-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
- +'<div class="seating-edit-card"><div class="seating-split-title">Bear1</div>'+row.right.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-1-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
+ +'<div class="seating-edit-card"><div class="seating-split-title">Bear1</div>'+row.right.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-0-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
+ +'<div class="seating-edit-card"><div class="seating-split-title">Bear2</div>'+row.left.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-1-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
  +'</div></div>').join("");
 }
 function collectSeating(){
