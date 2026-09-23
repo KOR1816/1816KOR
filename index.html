@@ -293,7 +293,7 @@ const SEATING_KEY="kor1816_seating_v1";
 let seatingData=[
  {row:"Row 1",left:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"],right:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","pika","lan","miiiiia","Lekum","bossi","Architect"]},
  {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","HERA","Alucard","jennie","GieZues","Hani","Gideon","DDoRo","","","","","",""],right:["LJ","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean ","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","","",""]},
- {row:"Row 3",left:["Hair loss beam","","","","","","","","","","","","","","",""],right:["Agares","","","","","","","","","","","","","","",""] }
+ {row:"Row 3",left:["Hair loss beam","","","","","","","","","","","","","","",""],right:["Agares","","","","","","","","","","","","","","","","","","","","","","","","","","",""] }
 ];
 
 let teamData={A:["","","","","","",""],B:["","","","","","",""],C:["","","","","","",""],D:["","","","","","",""],extra:["",""],subs:Array(10).fill("")};
@@ -716,4 +716,20 @@ document.addEventListener("DOMContentLoaded",async()=>{
   #seating .seating-3col-wrap{gap:18px!important}
   #seating .seating-split-pair{grid-template-columns:1fr!important;gap:18px!important}
 }
+</style><style id="seating-color-unify-v4">
+#seating .seating-split-card{background:#101a31!important;border-width:2px!important}
+#seating .seating-split-card .seating-column-head{background:#18233e!important;color:#dce8ff!important}
+#seating .seating-split-card .seating-row{background:#101a31!important;border-bottom-color:#38557f!important}
+#seating .seating-split-card .seating-row:nth-child(even){background:#121e35!important}
+#seating .seating-split-card .seating-row span:first-child{background:rgba(255,255,255,.035)!important;color:#c9d8f5!important}
+#seating .bear2-card{border-color:#3d78b8!important}
+#seating .bear2-card .seating-split-title{background:linear-gradient(180deg,#2868a5,#173f69)!important;color:#e5f4ff!important}
+#seating .bear2-card .seating-column-head{border-bottom-color:#3d78b8!important}
+#seating .bear2-card .seating-row{border-bottom-color:#315f92!important}
+#seating .bear2-card .seating-row span:first-child,#seating .bear2-card .seating-column-head span:first-child{border-right-color:#315f92!important}
+#seating .bear1-card{border-color:#b08b35!important}
+#seating .bear1-card .seating-split-title{background:linear-gradient(180deg,#967522,#604d15)!important;color:#fff3bd!important}
+#seating .bear1-card .seating-column-head{border-bottom-color:#b08b35!important}
+#seating .bear1-card .seating-row{border-bottom-color:#80651f!important}
+#seating .bear1-card .seating-row span:first-child,#seating .bear1-card .seating-column-head span:first-child{border-right-color:#80651f!important}
 </style></body></html>
