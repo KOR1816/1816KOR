@@ -861,4 +861,35 @@ document.addEventListener("DOMContentLoaded",async()=>{
 #seating .seating-row-2.bear2-card .seating-row span:first-child,#seating .seating-row-2.bear2-card .seating-column-head span:first-child{background:#294628!important;color:#f2ffed!important;border-right-color:#83c978!important}
 #seating .seating-row-3.bear1-card .seating-row span:first-child,#seating .seating-row-3.bear1-card .seating-column-head span:first-child{background:#4a2b18!important;color:#fff3e6!important;border-right-color:#d47b35!important}
 #seating .seating-row-3.bear2-card .seating-row span:first-child,#seating .seating-row-3.bear2-card .seating-column-head span:first-child{background:#302147!important;color:#f5edff!important;border-right-color:#8d63c7!important}
+</style>
+<style id="seating-clean-final-v13">
+/* 자리배치 최종 정리: 과한 효과 없이 깔끔한 카드형 */
+#seating .seating-3col-wrap{gap:20px!important}
+#seating .seating-row-group{padding:16px 18px!important;margin:0!important;border:1px solid rgba(148,163,184,.28)!important;border-radius:14px!important;background:rgba(8,14,27,.45)!important;box-shadow:0 8px 24px rgba(0,0,0,.16)!important}
+#seating .seating-column-title{font-size:18px!important;font-weight:800!important;letter-spacing:.5px!important;text-align:left!important;padding:0 4px 10px!important;color:#e8eefc!important}
+#seating .seating-split-pair{gap:20px!important}
+#seating .seating-split-card{border-width:1px!important;border-radius:12px!important;overflow:hidden!important;box-shadow:0 5px 16px rgba(0,0,0,.18)!important}
+#seating .seating-split-title{font-size:17px!important;font-weight:900!important;letter-spacing:.4px!important;padding:10px 12px!important;text-align:center!important}
+#seating .seating-split-card .seating-column-head{grid-template-columns:58px 1fr!important;min-height:38px!important}
+#seating .seating-split-card .seating-row{grid-template-columns:58px 1fr!important;min-height:42px!important}
+#seating .seating-split-card .seating-column-head span{min-height:38px!important;padding:8px 9px!important;font-size:13px!important;font-weight:800!important}
+#seating .seating-split-card .seating-row span{padding:8px 10px!important;font-size:14px!important;line-height:1.25!important}
+#seating .seating-split-card .seating-row span:last-child{padding-left:13px!important;font-size:14px!important;font-weight:700!important;letter-spacing:0!important}
+#seating .seating-row-1.bear1-card .seating-split-title{background:#2f86d8!important}
+#seating .seating-row-1.bear2-card .seating-split-title{background:#6bc9ee!important}
+#seating .seating-row-2.bear1-card .seating-split-title{background:#55b965!important}
+#seating .seating-row-2.bear2-card .seating-split-title{background:#9ad98b!important}
+#seating .seating-row-3.bear1-card .seating-split-title{background:#df8a3c!important}
+#seating .seating-row-3.bear2-card .seating-split-title{background:#956bd0!important}
+#seating .seating-split-card .seating-column-head{font-size:13px!important;font-weight:800!important}
+@media(max-width:700px){
+ #seating .seating-3col-wrap{gap:16px!important}
+ #seating .seating-row-group{padding:12px!important;border-radius:12px!important}
+ #seating .seating-split-pair{gap:14px!important}
+ #seating .seating-split-card .seating-column-head{grid-template-columns:48px 1fr!important}
+ #seating .seating-split-card .seating-row{grid-template-columns:48px 1fr!important;min-height:40px!important}
+ #seating .seating-split-card .seating-column-head span{padding:7px 6px!important;font-size:12px!important}
+ #seating .seating-split-card .seating-row span{padding:7px 7px!important;font-size:13px!important}
+ #seating .seating-split-card .seating-row span:last-child{padding-left:9px!important;font-size:13px!important}
+}
 </style></body></html>
