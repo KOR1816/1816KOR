@@ -666,4 +666,25 @@ document.addEventListener("DOMContentLoaded",async()=>{
  window.addEventListener("hashchange",restorePage);
  initFirebase();
 });
-</script></body></html>
+</script>
+<style id="seating-split-beautify-v2">
+/* 자리배치: 닉네임 칸 확대 + 좌우 여백 강화 */
+.seating-row-group{padding:22px!important;margin-bottom:24px!important}
+.seating-split-pair{gap:34px!important}
+.seating-split-card{border-radius:16px!important}
+.seating-split-title{font-size:21px!important;padding:14px!important}
+.seating-split-card .seating-column-head{grid-template-columns:64px 1fr!important}
+.seating-split-card .seating-row{grid-template-columns:64px 1fr!important;min-height:48px!important}
+.seating-split-card .seating-column-head span{min-height:48px!important;padding:11px!important}
+.seating-split-card .seating-row span{padding:11px 12px!important}
+.seating-split-card .seating-row span:last-child{padding-left:16px!important;font-size:16px!important;font-weight:700!important;letter-spacing:.1px!important;overflow:visible!important;text-overflow:clip!important}
+.seating-edit-split{gap:34px!important}
+.seating-edit-card{padding:16px!important}
+@media(max-width:700px){
+ .seating-row-group{padding:14px!important}
+ .seating-split-pair,.seating-edit-split{gap:18px!important}
+ .seating-split-card .seating-row{min-height:46px!important}
+ .seating-split-card .seating-row span:last-child{font-size:15px!important}
+}
+</style>
+</body></html>
