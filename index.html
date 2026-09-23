@@ -317,7 +317,7 @@ function normalizeSeating(d){
  if(!Array.isArray(d)||d.length!==3)return clone(seatingData);
  const ok=d.every(x=>x&&Array.isArray(x.left)&&Array.isArray(x.right));
  if(!ok)return clone(seatingData);
- return d.map((x,i)=>{const len=i===0?12:i===1?19:16;return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,len).concat(Array(len).fill("")).slice(0,len).map(v=>String(v??"")),right:x.right.slice(0,len).concat(Array(len).fill("")).slice(0,len).map(v=>String(v??""))};});
+ return d.map((x,i)=>{const leftLen=i===0?12:i===1?19:16;const rightLen=i===0?12:i===1?19:27;return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,leftLen).concat(Array(leftLen).fill("")).slice(0,leftLen).map(v=>String(v??"")),right:x.right.slice(0,rightLen).concat(Array(rightLen).fill("")).slice(0,rightLen).map(v=>String(v??""))};});
 }
 function renderSeating(){
  const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;
