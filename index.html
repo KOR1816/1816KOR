@@ -290,7 +290,7 @@ function normalizeSeating(d){
 function renderSeating(){
  const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;
  wrap.innerHTML=seatingData.map((row,ri)=>'<div class="seating-row-group" style="border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px;overflow-x:auto;">'
- +'<div class="seating-column-title" style="margin-bottom:10px;">'+row.row+'</div>'
+ +'<div class="seating-column-title" style="margin-bottom:10px;">'+row.row+' · 좌: Bear2 / 우: Bear1</div>'
  +'<div style="display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:12px;min-width:600px;">'
  +[row.left,row.right].map((names,si)=>'<div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'
  +names.map((name,ni)=>'<div class="seating-row"><span>'+(ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>').join("")
