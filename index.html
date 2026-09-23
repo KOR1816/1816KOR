@@ -204,6 +204,23 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 @media(max-width:700px){
  .seating-split-pair,.seating-edit-split{grid-template-columns:1fr}
 }
+</style><style id="seating-split-beautify">
+.seating-row-group{padding:18px!important;margin-bottom:20px!important;background:linear-gradient(145deg,rgba(20,31,53,.72),rgba(9,15,28,.72))!important;border:1px solid #30496f!important;border-radius:16px!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important}
+.seating-row-group>.seating-column-title{font-size:22px!important;font-weight:900!important;padding:12px!important;margin-bottom:16px!important;background:linear-gradient(180deg,#263d64,#182b4a)!important;border:1px solid #3d5d8d!important;border-radius:10px!important;color:#f7d77a!important}
+.seating-split-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:24px!important}
+.seating-split-card{border-radius:14px!important;box-shadow:0 6px 18px rgba(0,0,0,.25)!important}
+.seating-split-title{font-size:20px!important;padding:12px!important}
+.seating-split-card .seating-column-head{grid-template-columns:70px 1fr!important}
+.seating-split-card .seating-row{grid-template-columns:70px 1fr!important;min-height:42px!important}
+.seating-split-card .seating-column-head span{min-height:42px!important;padding:9px!important}
+.seating-split-card .seating-row span{padding:9px!important}
+.seating-split-card .seating-row span:last-child{padding-left:14px!important;font-size:15px!important}
+.seating-edit-split{gap:24px!important}
+.seating-edit-card{padding:14px!important;border-radius:14px!important}
+@media(max-width:700px){
+ .seating-row-group{padding:12px!important}
+ .seating-split-pair,.seating-edit-split{grid-template-columns:1fr!important;gap:16px!important}
+}
 </style></head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
@@ -305,7 +322,7 @@ function normalizeSeating(d){
 function renderSeating(){
  const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;
  wrap.innerHTML=seatingData.map((row,ri)=>'<div class="seating-row-group" style="border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px;">'
- +'<div class="seating-column-title" style="margin-bottom:12px;">'+row.row+' · 좌: Bear2 / 우: Bear1</div>'
+ +'<div class="seating-column-title" style="margin-bottom:12px;">'+row.row+'</div>'
  +'<div class="seating-split-pair">'
  +'<div class="seating-split-card bear2-card"><div class="seating-split-title">Bear2</div><div class="seating-column-head"><span>번호</span><span>닉네임</span></div>'
  +row.left.map((name,ni)=>'<div class="seating-row"><span>'+(ni+1)+'</span><span>'+safe(name)+'</span></div>').join("")+'</div>'
@@ -315,7 +332,7 @@ function renderSeating(){
 }
 function renderSeatingAdmin(){
  const e=document.getElementById("seatingEditGrid");if(!e)return;e.className="seating-edit-grid";
- e.innerHTML=seatingData.map((row,ri)=>'<div class="seating-edit-column" style="grid-column:1/-1;"><div class="seating-edit-title">'+row.row+' · 좌: Bear2 / 우: Bear1</div>'
+ e.innerHTML=seatingData.map((row,ri)=>'<div class="seating-edit-column" style="grid-column:1/-1;"><div class="seating-edit-title">'+row.row+'</div>'
  +'<div class="seating-edit-split">'
  +'<div class="seating-edit-card"><div class="seating-split-title">Bear2</div>'+row.left.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-0-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
  +'<div class="seating-edit-card"><div class="seating-split-title">Bear1</div>'+row.right.map((name,ni)=>'<div class="seating-edit-row"><span>'+(ni+1)+'</span><input id="seating-edit-'+ri+'-1-'+ni+'" value="'+safe(name)+'" placeholder="닉네임"></div>').join("")+'</div>'
