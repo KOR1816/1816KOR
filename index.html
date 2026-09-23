@@ -298,7 +298,7 @@ let seatingData=[
 
 let teamData={A:["","","","","","",""],B:["","","","","","",""],C:["","","","","","",""],D:["","","","","","",""],extra:["",""],subs:Array(10).fill("")};
 let allianceData={names:{1:{g1:["","","","","","","",""],g2:["","","","","","","",""]},2:{g1:["","","","","","","",""],g2:["","","","","","","",""]},3:{g1:["","","","","","","",""]},4:{g1:["","","","","","","",""]}}};
-let homeData={latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.",schedule:"⚔️ 성검쟁탈 · 23:00 (UTC 14:00)\n🛡️ 바이킹 · 23:00 (UTC 14:00)\n🐻 곰 1트랩 · 23:00 (UTC 14:00)\n🐻 곰 2트랩 · 09:10 (UTC 00:10)",welcome:"소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다."};
+let homeData={latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.",schedule:"⚔️ 성검쟁탈 · 23:00 (UTC 14:00)\n🛡️ 바이킹 · 23:00 (UTC 14:00)\n🐻 곰 1트랩 · 23:00 (UTC 14:00)\n🐻 곰 2트랩 · 21:00 (UTC 12:00)",welcome:"소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다."};
 
 function clone(x){return JSON.parse(JSON.stringify(x));}
 function readLocal(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||"null");return v??fallback;}catch{return fallback;}}
@@ -408,13 +408,13 @@ async function saveAlliance(){
 }
 const HOME_LANGS=["ko","en","ja","zh","de","it","es"];
 const HOME_DEFAULT_TRANSLATIONS={
- ko:{latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.",schedule:"⚔️ 성검쟁탈 · 23:00 (UTC 14:00)\n🛡️ 바이킹 · 23:00 (UTC 14:00)\n🐻 곰 1트랩 · 23:00 (UTC 14:00)\n🐻 곰 2트랩 · 09:10 (UTC 00:10)",welcome:"소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다."},
- en:{latestTitle:"",latestBody:"For the time being, rewards from fort and sanc will mainly be distributed to immigrants who came at the cost of sacrificing troops.\nWe respectfully ask for the understanding of existing KOR alliance members.",schedule:"⚔️ Holy Sword Clash · 23:00 (UTC 14:00)\n🛡️ Viking · 23:00 (UTC 14:00)\n🐻 Bear Trap 1 · 23:00 (UTC 14:00)\n🐻 Bear Trap 2 · 09:10 (UTC 00:10)",welcome:"We are working together around communication, cooperation, growth, and KVK organization."},
- ja:{latestTitle:"",latestBody:"当面の間、fortとsancの報酬は、兵力を犠牲にして移民してきた方々を中心に分配する予定です。\n既存のKOR連盟メンバーの皆様には、何卒ご理解をお願いいたします。",schedule:"⚔️ 聖剣争奪 · 23:00 (UTC 14:00)\n🛡️ バイキング · 23:00 (UTC 14:00)\n🐻 ベアトラップ1 · 23:00 (UTC 14:00)\n🐻 ベアトラップ2 · 09:10 (UTC 00:10)",welcome:"コミュニケーション・協力・成長・KVKの組織力を大切に、一緒に活動しています。"},
- zh:{latestTitle:"",latestBody:"暂时，fort和sanc的奖励将主要分配给那些牺牲兵力前来移民的成员。\n也恳请KOR现有联盟成员谅解。",schedule:"⚔️ 圣剑争夺 · 23:00 (UTC 14:00)\n🛡️ 维京 · 23:00 (UTC 14:00)\n🐻 熊陷阱1 · 23:00 (UTC 14:00)\n🐻 熊陷阱2 · 09:10 (UTC 00:10)",welcome:"我们以沟通、合作、成长以及KVK组织力为核心，一起努力。"},
- de:{latestTitle:"",latestBody:"Vorerst sollen die Belohnungen von fort und sanc hauptsächlich an Einwanderer verteilt werden, die unter Einsatz eigener Truppen zu uns gekommen sind.\nWir bitten die bestehenden KOR-Allianzmitglieder höflich um Verständnis.",schedule:"⚔️ Heiliges Schwertduell · 23:00 (UTC 14:00)\n🛡️ Wikinger · 23:00 (UTC 14:00)\n🐻 Bärenfalle 1 · 23:00 (UTC 14:00)\n🐻 Bärenfalle 2 · 09:10 (UTC 00:10)",welcome:"Wir setzen gemeinsam auf Kommunikation, Zusammenarbeit, Wachstum und starke KVK-Organisation."},
- it:{latestTitle:"",latestBody:"Per il momento, le ricompense di fort e sanc saranno distribuite principalmente agli immigrati che sono arrivati sacrificando le proprie truppe.\nChiediamo gentilmente la comprensione dei membri esistenti dell'alleanza KOR.",schedule:"⚔️ Duello della Spada Sacra · 23:00 (UTC 14:00)\n🛡️ Vichinghi · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 1 · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 2 · 09:10 (UTC 00:10)",welcome:"Lavoriamo insieme puntando su comunicazione, collaborazione, crescita e organizzazione KVK."},
- es:{latestTitle:"",latestBody:"Por el momento, las recompensas de fort y sanc se distribuirán principalmente entre los inmigrantes que llegaron sacrificando tropas.\nPedimos amablemente la comprensión de los miembros actuales de la alianza KOR.",schedule:"⚔️ Duelo de la Espada Sagrada · 23:00 (UTC 14:00)\n🛡️ Vikingos · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 1 · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 2 · 09:10 (UTC 00:10)",welcome:"Trabajamos juntos basándonos en la comunicación, la cooperación, el crecimiento y la organización del KVK."}
+ ko:{latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병력을 희생하고 오신 이민자들 위주로 분배할 계획입니다.\n기존의 KOR연맹원 분들에게 정중한 양해를 구합니다.",schedule:"⚔️ 성검쟁탈 · 23:00 (UTC 14:00)\n🛡️ 바이킹 · 23:00 (UTC 14:00)\n🐻 곰 1트랩 · 23:00 (UTC 14:00)\n🐻 곰 2트랩 · 21:00 (UTC 12:00)",welcome:"소통 · 협력 · 성장 · KVK 조직력을 중심으로 함께합니다."},
+ en:{latestTitle:"",latestBody:"For the time being, rewards from fort and sanc will mainly be distributed to immigrants who came at the cost of sacrificing troops.\nWe respectfully ask for the understanding of existing KOR alliance members.",schedule:"⚔️ Holy Sword Clash · 23:00 (UTC 14:00)\n🛡️ Viking · 23:00 (UTC 14:00)\n🐻 Bear Trap 1 · 23:00 (UTC 14:00)\n🐻 Bear Trap 2 · 21:00 (UTC 12:00)",welcome:"We are working together around communication, cooperation, growth, and KVK organization."},
+ ja:{latestTitle:"",latestBody:"当面の間、fortとsancの報酬は、兵力を犠牲にして移民してきた方々を中心に分配する予定です。\n既存のKOR連盟メンバーの皆様には、何卒ご理解をお願いいたします。",schedule:"⚔️ 聖剣争奪 · 23:00 (UTC 14:00)\n🛡️ バイキング · 23:00 (UTC 14:00)\n🐻 ベアトラップ1 · 23:00 (UTC 14:00)\n🐻 ベアトラップ2 · 21:00 (UTC 12:00)",welcome:"コミュニケーション・協力・成長・KVKの組織力を大切に、一緒に活動しています。"},
+ zh:{latestTitle:"",latestBody:"暂时，fort和sanc的奖励将主要分配给那些牺牲兵力前来移民的成员。\n也恳请KOR现有联盟成员谅解。",schedule:"⚔️ 圣剑争夺 · 23:00 (UTC 14:00)\n🛡️ 维京 · 23:00 (UTC 14:00)\n🐻 熊陷阱1 · 23:00 (UTC 14:00)\n🐻 熊陷阱2 · 21:00 (UTC 12:00)",welcome:"我们以沟通、合作、成长以及KVK组织力为核心，一起努力。"},
+ de:{latestTitle:"",latestBody:"Vorerst sollen die Belohnungen von fort und sanc hauptsächlich an Einwanderer verteilt werden, die unter Einsatz eigener Truppen zu uns gekommen sind.\nWir bitten die bestehenden KOR-Allianzmitglieder höflich um Verständnis.",schedule:"⚔️ Heiliges Schwertduell · 23:00 (UTC 14:00)\n🛡️ Wikinger · 23:00 (UTC 14:00)\n🐻 Bärenfalle 1 · 23:00 (UTC 14:00)\n🐻 Bärenfalle 2 · 21:00 (UTC 12:00)",welcome:"Wir setzen gemeinsam auf Kommunikation, Zusammenarbeit, Wachstum und starke KVK-Organisation."},
+ it:{latestTitle:"",latestBody:"Per il momento, le ricompense di fort e sanc saranno distribuite principalmente agli immigrati che sono arrivati sacrificando le proprie truppe.\nChiediamo gentilmente la comprensione dei membri esistenti dell'alleanza KOR.",schedule:"⚔️ Duello della Spada Sacra · 23:00 (UTC 14:00)\n🛡️ Vichinghi · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 1 · 23:00 (UTC 14:00)\n🐻 Trappola dell'Orso 2 · 21:00 (UTC 12:00)",welcome:"Lavoriamo insieme puntando su comunicazione, collaborazione, crescita e organizzazione KVK."},
+ es:{latestTitle:"",latestBody:"Por el momento, las recompensas de fort y sanc se distribuirán principalmente entre los inmigrantes que llegaron sacrificando tropas.\nPedimos amablemente la comprensión de los miembros actuales de la alianza KOR.",schedule:"⚔️ Duelo de la Espada Sagrada · 23:00 (UTC 14:00)\n🛡️ Vikingos · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 1 · 23:00 (UTC 14:00)\n🐻 Trampa del Oso 2 · 21:00 (UTC 12:00)",welcome:"Trabajamos juntos basándonos en la comunicación, la cooperación, el crecimiento y la organización del KVK."}
 };
 function normalizeHomeData(d){
  const base=d&&typeof d==="object"?{...d}:{};
@@ -429,6 +429,20 @@ function normalizeHomeData(d){
      translations[lang]={...HOME_DEFAULT_TRANSLATIONS[lang],...translations[lang]};
    }
  }
+ // 홈 이벤트 일정의 곰 2트랩 시간 변경을 기존 저장 데이터에도 적용
+ const bear2Times={
+   ko:["🐻 곰 2트랩 · 21:00 (UTC 12:00)","🐻 곰 2트랩 · 21:00 (UTC 12:00)"],
+   en:["🐻 Bear Trap 2 · 21:00 (UTC 12:00)","🐻 Bear Trap 2 · 21:00 (UTC 12:00)"],
+   ja:["🐻 ベアトラップ2 · 21:00 (UTC 12:00)","🐻 ベアトラップ2 · 21:00 (UTC 12:00)"],
+   zh:["🐻 熊陷阱2 · 21:00 (UTC 12:00)","🐻 熊陷阱2 · 21:00 (UTC 12:00)"],
+   de:["🐻 Bärenfalle 2 · 21:00 (UTC 12:00)","🐻 Bärenfalle 2 · 21:00 (UTC 12:00)"],
+   it:["🐻 Trappola dell'Orso 2 · 21:00 (UTC 12:00)","🐻 Trappola dell'Orso 2 · 21:00 (UTC 12:00)"],
+   es:["🐻 Trampa del Oso 2 · 21:00 (UTC 12:00)","🐻 Trampa del Oso 2 · 21:00 (UTC 12:00)"]
+ };
+ for(const lang of Object.keys(bear2Times)){
+   const d=translations[lang];if(d?.schedule)d.schedule=d.schedule.replace(bear2Times[lang][0],bear2Times[lang][1]);
+ }
+ if(base.schedule)base.schedule=String(base.schedule).replace("🐻 곰 2트랩 · 21:00 (UTC 12:00)","🐻 곰 2트랩 · 21:00 (UTC 12:00)");
  return {...base,translations};
 }
 function getHomeLangData(lang=currentLang){
