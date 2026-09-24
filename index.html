@@ -221,19 +221,20 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  .seating-row-group{padding:12px!important}
  .seating-split-pair,.seating-edit-split{grid-template-columns:1fr!important;gap:16px!important}
 }
-</style><style id="seating-content-fit-v14">
-/* 자리배치 이름 칸 정리: 긴 닉네임도 칸 밖으로 튀어나가지 않게 */
+</style><style id="seating-content-fit-v15">
+/* 자리배치 최종 정렬: 번호/닉네임 칸 폭을 고정하고 모든 행을 정확히 맞춤 */
 #seating .seating-split-pair{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:16px!important;align-items:start!important}
-#seating .seating-split-card{min-width:0!important;width:100%!important;overflow:hidden!important}
-#seating .seating-column-head,#seating .seating-row{display:grid!important;grid-template-columns:54px minmax(0,1fr)!important;width:100%!important;min-width:0!important}
-#seating .seating-column-head span,#seating .seating-row span{min-width:0!important;overflow:hidden!important;box-sizing:border-box!important}
-#seating .seating-row span:last-child{white-space:nowrap!important;text-overflow:clip!important;overflow:hidden!important;padding-left:10px!important}
-#seating .seating-row span:first-child,#seating .seating-column-head span:first-child{overflow:hidden!important}
+#seating .seating-split-card{min-width:0!important;width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+#seating .seating-column-head,#seating .seating-row{display:grid!important;grid-template-columns:52px minmax(0,1fr)!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#seating .seating-column-head span,#seating .seating-row span{min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+#seating .seating-column-head span:first-child,#seating .seating-row span:first-child{border-right:1px solid currentColor!important;text-align:center!important}
+#seating .seating-column-head span:last-child,#seating .seating-row span:last-child{text-align:left!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;padding-left:10px!important}
 #seating .seating-row{min-height:40px!important}
+#seating .seating-row-group{box-sizing:border-box!important}
 @media(max-width:700px){
- #seating .seating-split-pair{grid-template-columns:1fr 1fr!important;gap:10px!important}
- #seating .seating-column-head,#seating .seating-row{grid-template-columns:44px minmax(0,1fr)!important}
- #seating .seating-row span{padding:7px 6px!important;font-size:12px!important}
+ #seating .seating-split-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important}
+ #seating .seating-column-head,#seating .seating-row{grid-template-columns:42px minmax(0,1fr)!important}
+ #seating .seating-row span{padding:7px 5px!important}
  #seating .seating-row span:last-child{padding-left:7px!important}
 }
 </style></head><body>
