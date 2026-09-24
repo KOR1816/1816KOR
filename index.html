@@ -289,7 +289,7 @@ const ADMIN_PASSWORD="0001";
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
 let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseReady=false;
-const SEATING_KEY="kor1816_seating_v1";
+const SEATING_KEY="kor1816_seating_v2";
 let seatingData=[
  {row:"Row 1",left:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"],right:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","pika","lan","miiiiia","Lekum","bossi","Architect"]},
  {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","HERA","Alucard","jennie","GieZues","Hani","Gideon","DDoRo","","","","","",""],right:["LJ","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean ","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","","",""]},
@@ -662,7 +662,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating");firebaseReady=true;
+   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v2");firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
