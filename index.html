@@ -221,6 +221,21 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  .seating-row-group{padding:12px!important}
  .seating-split-pair,.seating-edit-split{grid-template-columns:1fr!important;gap:16px!important}
 }
+</style><style id="seating-content-fit-v14">
+/* 자리배치 이름 칸 정리: 긴 닉네임도 칸 밖으로 튀어나가지 않게 */
+#seating .seating-split-pair{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:16px!important;align-items:start!important}
+#seating .seating-split-card{min-width:0!important;width:100%!important;overflow:hidden!important}
+#seating .seating-column-head,#seating .seating-row{display:grid!important;grid-template-columns:54px minmax(0,1fr)!important;width:100%!important;min-width:0!important}
+#seating .seating-column-head span,#seating .seating-row span{min-width:0!important;overflow:hidden!important;box-sizing:border-box!important}
+#seating .seating-row span:last-child{white-space:nowrap!important;text-overflow:clip!important;overflow:hidden!important;padding-left:10px!important}
+#seating .seating-row span:first-child,#seating .seating-column-head span:first-child{overflow:hidden!important}
+#seating .seating-row{min-height:40px!important}
+@media(max-width:700px){
+ #seating .seating-split-pair{grid-template-columns:1fr 1fr!important;gap:10px!important}
+ #seating .seating-column-head,#seating .seating-row{grid-template-columns:44px minmax(0,1fr)!important}
+ #seating .seating-row span{padding:7px 6px!important;font-size:12px!important}
+ #seating .seating-row span:last-child{padding-left:7px!important}
+}
 </style></head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
@@ -292,8 +307,8 @@ let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseR
 const SEATING_KEY="kor1816_seating_v2";
 let seatingData=[
  {row:"Row 1",left:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"],right:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","DAWN","pika","lan","miiiiia","Lekum","bossi"]},
- {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","Gideon","DDoRo","Alucard","Rarara","vik","KOR","hun",""],right:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean ","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","SUMMER","스타리아"]},
- {row:"Row 3",left:["Hair loss beam","M","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk","x","x","x"],right:["Agares","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Eduardo","Mushi","Sylvanas","Bilal","themis1994","Daddy "+String.fromCharCode(69,112,115,116,101,105,110),"","gozeromin","Solace","Remember","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME"] }
+ {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","Gideon","DDoRo","Alucard","Rarara","vik","KOR","hun",""],right:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","SUMMER","스타리아"]},
+ {row:"Row 3",left:["Hair loss beam","M","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk","x","x","x"],right:["Agares","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Eduardo","Mushi","Sylvanas","Bilal","themis1994","Daddy Epstein","gozeromin","Solace","Remember","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME","KOOK"] }
 ];
 
 let teamData={A:["","","","","","",""],B:["","","","","","",""],C:["","","","","","",""],D:["","","","","","",""],extra:["",""],subs:Array(10).fill("")};
