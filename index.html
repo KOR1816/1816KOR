@@ -308,8 +308,8 @@ let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseR
 const SEATING_KEY="kor1816_seating_v2";
 let seatingData=[
  {row:"Row 1",left:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"],right:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","DAWN","pika","lan","miiiiia","Lekum","bossi"]},
- {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","Gideon","DDoRo","Alucard","Rarara","vik","KOR","hun","M"],right:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","SUMMER","스타리아"]},
- {row:"Row 3",left:["Hair loss beam","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk"],right:["Agares","스타리아","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Eduardo","Mushi","Sylvanas","Remember","Bilal","themis1994","Daddy Epstein","gozeromin","Solace","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME","KOOK"] }
+ {row:"Row 2",left:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","Gideon","DDoRo","Alucard","Rarara","vik","KOR","hun","M"],right:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","SUMMER",""]},
+ {row:"Row 3",left:["Hair loss beam","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk"],right:["Agares","스타리아","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Eduardo","Mushi","Sylvanas","Bilal","themis1994","Daddy Epstein","gozeromin","Solace","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME","KOOK"] }
 ];
 
 let teamData={A:["","","","","","",""],B:["","","","","","",""],C:["","","","","","",""],D:["","","","","","",""],extra:["",""],subs:Array(10).fill("")};
@@ -333,7 +333,7 @@ function normalizeSeating(d){
  if(!Array.isArray(d)||d.length!==3)return clone(seatingData);
  const ok=d.every(x=>x&&Array.isArray(x.left)&&Array.isArray(x.right));
  if(!ok)return clone(seatingData);
- return d.map((x,i)=>{const leftLen=i===0?12:i===1?19:12;const rightLen=i===0?12:i===1?19:27;return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,leftLen).concat(Array(leftLen).fill("")).slice(0,leftLen).map(v=>String(v??"")),right:x.right.slice(0,rightLen).concat(Array(rightLen).fill("")).slice(0,rightLen).map(v=>String(v??""))};});
+ return d.map((x,i)=>{const leftLen=i===0?12:i===1?19:12;const rightLen=i===0?12:i===1?19:26;return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,leftLen).concat(Array(leftLen).fill("")).slice(0,leftLen).map(v=>String(v??"")),right:x.right.slice(0,rightLen).concat(Array(rightLen).fill("")).slice(0,rightLen).map(v=>String(v??""))};});
 }
 function renderSeating(){
  const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;
