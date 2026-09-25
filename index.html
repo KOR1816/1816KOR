@@ -206,7 +206,18 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  #mainNav{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
  #mainNav button{display:block!important;width:100%!important;white-space:nowrap!important;font-size:13px!important;padding:9px 5px!important}
 }
-</style></head><body>
+<style id="seating-cell-borders">
+#seating .seating-column-head,#seating .seating-row{border-left:1px solid #5270ad!important;border-right:1px solid #5270ad!important}
+#seating .seating-column-head span,#seating .seating-row span{border-bottom:1px solid #5270ad!important;border-right:1px solid #5270ad!important}
+#seating .seating-column-head span:last-child,#seating .seating-row span:last-child{border-right:0!important}
+#seating .seating-column-head{border-top:1px solid #5270ad!important}
+#seating .seating-row:last-child span{border-bottom:0!important}
+#seating .seating-row{background:rgba(8,14,27,.22)!important}
+#seating .seating-edit-row{display:grid!important;grid-template-columns:44px minmax(0,1fr)!important;align-items:stretch!important}
+#seating .seating-edit-row span,#seating .seating-edit-row input{min-width:0!important;box-sizing:border-box!important;border:1px solid #38557f!important;border-radius:0!important;margin:0!important}
+#seating .seating-edit-row span{display:flex!important;align-items:center!important;justify-content:center!important}
+#seating .seating-edit-row input{width:100%!important}
+</style></style></head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
 <main class="wrap">
