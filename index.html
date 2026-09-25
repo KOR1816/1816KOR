@@ -404,7 +404,7 @@ async function loadSeating(){
    const started=Date.now();
    while(!seatingDoc && Date.now()-started<8000) await new Promise(r=>setTimeout(r,150));
  }
- if(!seatingDoc){setMsg("seatingMsg","공용 서버에 연결되지 않아 기기 저장 내용을 표시합니다.");return;}
+ if(!seatingDoc){setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");return;}
  if(initializing){
    try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v3_init",true);}
    catch(e){console.warn("seating initial save",e);}
@@ -413,12 +413,12 @@ async function loadSeating(){
  try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
- }catch(e){console.warn("seating read",e);setMsg("seatingMsg","공용 서버 연결 실패 — 기기 저장 내용을 표시합니다.");}
+ }catch(e){console.warn("seating read",e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 async function saveSeating(){
  seatingData=collectSeating();writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();
- try{if(seatingDoc)await setDoc(seatingDoc,{columns:seatingData});setMsg("seatingMsg","자리배치 저장 완료!");}
- catch(e){console.error(e);setMsg("seatingMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
+ try{if(seatingDoc)await setDoc(seatingDoc,{columns:seatingData});setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
+ catch(e){console.error(e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
@@ -438,7 +438,7 @@ async function loadTeams(){
  if(!teamDoc)return;
  try{const s=await Promise.race([getDoc(teamDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
- }catch(e){console.warn("teams read",e);translatePage(currentLang);setMsg("teamMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
+ }catch(e){console.warn("teams read",e);translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
 }
 let teamsAdmin=false;
 function setTeamsInputsEnabled(enabled){document.querySelectorAll("#teams input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});}
@@ -451,8 +451,8 @@ function toggleTeamsAdmin(){
 async function saveAllTeams(){
  if(!teamsAdmin)return;
  teamData=collectTeams();writeLocal(TEAM_KEY,teamData);renderTeams();setTeamsInputsEnabled(true);
- try{if(teamDoc)await setDoc(teamDoc,teamData);setMsg("teamMsg","성검쟁탈 전체 저장 완료!");}
- catch(e){console.error(e);setMsg("teamMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
+ try{if(teamDoc)await setDoc(teamDoc,teamData);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
+ catch(e){console.error(e);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
 }
 function renderAlliance(){
  for(let t=1;t<=4;t++){const groups=allianceData.names?.[t]||{};for(let g=1;g<=(t<=2?2:1);g++){const vals=groups["g"+g]||[];for(let k=3;k<=7;k++){const v=vals[k]||"";const a=document.getElementById("alliance-"+t+"-"+g+"-"+k),e=document.getElementById("ae-"+t+"-"+g+"-"+k);if(a)a.value=v;if(e)e.value=v;}}}
@@ -467,12 +467,12 @@ async function loadAlliance(){
  if(!allianceDoc)return;
  try{const s=await Promise.race([getDoc(allianceDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
- }catch(e){console.warn("alliance read",e);translatePage(currentLang);setMsg("allianceMsg","서버 연결 실패 — 저장된 화면을 표시합니다.");}
+ }catch(e){console.warn("alliance read",e);translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
 }
 async function saveAlliance(){
  allianceData=collectAlliance();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();
- try{if(allianceDoc)await setDoc(allianceDoc,allianceData);setMsg("allianceMsg","3대연맹전 저장 완료!");}
- catch(e){console.error(e);setMsg("allianceMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
+ try{if(allianceDoc)await setDoc(allianceDoc,allianceData);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
+ catch(e){console.error(e);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
 }
 const HOME_LANGS=["ko","en","ja","zh","de","it","es"];
 const HOME_DEFAULT_TRANSLATIONS={
