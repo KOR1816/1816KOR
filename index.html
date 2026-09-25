@@ -328,17 +328,18 @@ function collectSeating(){
 }
 async function loadSeating(){
  const saved=readLocal(SEATING_KEY,null);
- if(saved){
-   seatingData=normalizeSeating(saved);
- }else{
-   seatingData=clone(seatingData);
-   writeLocal(SEATING_KEY,seatingData);
-   if(seatingDoc){try{await setDoc(seatingDoc,{columns:seatingData});}catch(e){console.warn("seating initial save",e);}}
- }
+ let initializing=!saved || readLocal("kor1816_seating_v3_init",false);
+ if(saved)seatingData=normalizeSeating(saved);
+ else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
  if(!seatingDoc)return;
+ if(initializing){
+   try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v3_init",true);}
+   catch(e){console.warn("seating initial save",e);}
+   return;
+ }
  try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists() && saved){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
+   if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
  }catch(e){console.warn("seating read",e);}
 }
 async function saveSeating(){
