@@ -217,7 +217,39 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 #seating .seating-edit-row span,#seating .seating-edit-row input{min-width:0!important;box-sizing:border-box!important;border:1px solid #38557f!important;border-radius:0!important;margin:0!important}
 #seating .seating-edit-row span{display:flex!important;align-items:center!important;justify-content:center!important}
 #seating .seating-edit-row input{width:100%!important}
-</style></style></head><body>
+</style></style><style id="seating-beautify-v1">
+/* 자리배치 미관 정리 - 데이터/번호/xxx는 변경하지 않음 */
+#seating .seating-list-wrap{margin-top:18px}
+#seating .seating-3col-wrap{gap:20px!important}
+#seating .seating-row-group{background:linear-gradient(145deg,rgba(18,31,55,.92),rgba(10,18,33,.96));border:1px solid #314a73;border-radius:16px;padding:14px;box-shadow:0 8px 22px rgba(0,0,0,.22)}
+#seating .seating-row-title{text-align:center;font-weight:900;font-size:18px;color:#f5d77a;margin:0 0 12px}
+#seating .seating-row-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#seating .seating-column{min-width:0;border-radius:12px;overflow:hidden;border:1px solid #38557f;background:rgba(8,15,29,.72)}
+#seating .seating-column-head{display:grid!important;grid-template-columns:44px minmax(0,1fr)!important;min-height:38px!important;background:linear-gradient(180deg,#263d65,#1a2c4c)!important;color:#fff!important;font-weight:800!important}
+#seating .seating-column-head span{display:flex!important;align-items:center;justify-content:center;padding:7px 5px!important}
+#seating .seating-row{display:grid!important;grid-template-columns:44px minmax(0,1fr)!important;min-height:36px!important;background:rgba(9,17,31,.62)!important}
+#seating .seating-row span{display:flex!important;align-items:center;justify-content:center;padding:6px 7px!important;color:#eef4ff!important;line-height:1.25!important;word-break:break-word!important}
+#seating .seating-row span:first-child{font-weight:800!important;color:#9fb8e5!important;background:rgba(38,61,101,.16)!important}
+#seating .seating-row:nth-child(even){background:rgba(255,255,255,.025)!important}
+#seating .seating-column:first-child .seating-column-head{border-top:2px solid #4d76b2!important}
+#seating .seating-column:last-child .seating-column-head{border-top:2px solid #9a6a39!important}
+#seating .seating-row-group:nth-child(1) .seating-row-pair .seating-column:first-child .seating-column-head{background:linear-gradient(180deg,#254f91,#193762)!important}
+#seating .seating-row-group:nth-child(1) .seating-row-pair .seating-column:last-child .seating-column-head{background:linear-gradient(180deg,#76502d,#4d341e)!important}
+#seating .seating-row-group:nth-child(2) .seating-row-pair .seating-column:first-child .seating-column-head{background:linear-gradient(180deg,#27619b,#19456f)!important}
+#seating .seating-row-group:nth-child(2) .seating-row-pair .seating-column:last-child .seating-column-head{background:linear-gradient(180deg,#80552f,#54391f)!important}
+#seating .seating-row-group:nth-child(3) .seating-row-pair .seating-column:first-child .seating-column-head{background:linear-gradient(180deg,#2f6c5c,#204a40)!important}
+#seating .seating-row-group:nth-child(3) .seating-row-pair .seating-column:last-child .seating-column-head{background:linear-gradient(180deg,#79523a,#4e3626)!important}
+#seating .seating-edit-row{margin:0!important}
+#seating .seating-admin-actions{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:700px){
+  #seating .seating-row-group{padding:10px;border-radius:13px}
+  #seating .seating-row-pair{grid-template-columns:1fr;gap:10px}
+  #seating .seating-row-title{font-size:17px;margin-bottom:9px}
+  #seating .seating-column-head,#seating .seating-row{grid-template-columns:40px minmax(0,1fr)!important}
+  #seating .seating-row span{padding:7px 6px!important}
+}
+</style>
+</head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
 <main class="wrap">
