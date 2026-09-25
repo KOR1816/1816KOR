@@ -375,7 +375,12 @@ async function loadSeating(){
  if(saved)seatingData=normalizeSeating(saved);
  else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
- if(!seatingDoc)return;
+ // Firebase가 아직 초기화되지 않은 휴대폰에서도 새로고침 버튼이 동작하도록 잠시 기다린다.
+ if(!seatingDoc){
+   const started=Date.now();
+   while(!seatingDoc && Date.now()-started<8000) await new Promise(r=>setTimeout(r,150));
+ }
+ if(!seatingDoc){setMsg("seatingMsg","공용 서버에 연결되지 않아 기기 저장 내용을 표시합니다.");return;}
  if(initializing){
    try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v3_init",true);}
    catch(e){console.warn("seating initial save",e);}
@@ -383,7 +388,8 @@ async function loadSeating(){
  }
  try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
- }catch(e){console.warn("seating read",e);}
+   setMsg("seatingMsg","자리배치 새로고침 완료!");
+ }catch(e){console.warn("seating read",e);setMsg("seatingMsg","공용 서버 연결 실패 — 기기 저장 내용을 표시합니다.");}
 }
 async function saveSeating(){
  seatingData=collectSeating();writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();
