@@ -294,7 +294,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 </div>
 </section>
 
-<section id="seating" class="page"><div class="card"><h2>🪑 자리배치</h2><div class="sword-image-wrap seating-map-wrap"><img src="./123123.jpg" alt="자리배치도" class="sword-image seating-map-image"></div><div class="seating-list-wrap"><h3>📋 자리배치 목록</h3><div id="seatingLatestMsg" class="msg seating-latest-msg">최신 자리배치 내용을 불러왔습니다.</div><div class="seating-3col-wrap" style="display:flex;flex-direction:column;gap:18px;"></div><div class="seating-admin-panel" id="seatingEdit" style="display:none"><h3>✏️ 자리배치 닉네임 수정</h3><div id="seatingEditGrid"></div><button class="admin-btn" onclick="saveSeating()">💾 자리배치 저장</button></div><div class="seating-admin-actions"><button class="admin-btn" onclick="loadSeating()">🔄 새로고침</button><button class="admin-btn" id="seatingAdminBtn" onclick="toggleSeatingAdmin()">🔐 관리자 수정</button><span id="seatingMsg" class="msg"></span></div>
+<section id="seating" class="page"><div class="card"><h2>🪑 자리배치</h2><div class="sword-image-wrap seating-map-wrap"><img src="./e.jpg" alt="자리배치도" class="sword-image seating-map-image"></div><div class="seating-list-wrap"><h3>📋 자리배치 목록</h3><div id="seatingLatestMsg" class="msg seating-latest-msg">최신 자리배치 내용을 불러왔습니다.</div><div class="seating-3col-wrap" style="display:flex;flex-direction:column;gap:18px;"></div><div class="seating-admin-panel" id="seatingEdit" style="display:none"><h3>✏️ 자리배치 닉네임 수정</h3><div id="seatingEditGrid"></div><button class="admin-btn" onclick="saveSeating()">💾 자리배치 저장</button></div><div class="seating-admin-actions"><button class="admin-btn" onclick="loadSeating()">🔄 새로고침</button><button class="admin-btn" id="seatingAdminBtn" onclick="toggleSeatingAdmin()">🔐 관리자 수정</button><span id="seatingMsg" class="msg"></span></div>
 </div></div>
 </section>
 <section id="alliance" class="page"><div class="card"><h2>⚔️ 3대연맹전</h2><div class="sword-image-wrap"><img src="333333.png" alt="3대연맹전" class="sword-image"></div>
@@ -341,11 +341,11 @@ const ADMIN_PASSWORD="0001";
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
 let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseReady=false;
-const SEATING_KEY="kor1816_seating_v3";
+const SEATING_KEY="kor1816_seating_v4";
 let seatingData=[
  {row:"Row 1",left:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","DAWN","pika","lan","miiiiia","Lekum","bossi"],right:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"]},
- {row:"Row 2",left:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong","SUMMER"],right:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","imNotKorean","DDoRo","Gideon","Alucard","Rarara","vik","KOR","hun"]},
- {row:"Row 3",left:["Agares","스타리아","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Mushi","Sylvanas","Bilal","themis1994","Daddy Epstein","gozeromin","Solace","Remember","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME","KOOK"],right:["Hair loss beam","M","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk","x","x","x"] }
+ {row:"Row 2",left:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong"],right:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","DDoRo","Gideon","imNotKorean","Alucard","Rarara","vik","KOR"]},
+ {row:"Row 3",left:["Agares","SUMMER","스타리아","ADIPTI","Zidf@","hajae","S ssh","Dark Knight","Lady Gypsum","FlexMan","Citukan","Mushi","Sylvanas","Bilal","themis1994","Daddy Epstein","Solace","Remember","Benson627","The Warrior","Jshan","Ojr","Mahecha","SpongeBob","MG PRIME","KOOK"],right:["Hair loss beam","hun","M","RACRuze","SAGAMI","Rayan","Vista","WonYoung","backki","Adanali ibo","KK Master","lolkilmeplz67","Eduardo","pamuk","gozeromin","x"] }
 ];
 
 let teamData={A:["","","","","","",""],B:["","","","","","",""],C:["","","","","","",""],D:["","","","","","",""],extra:["",""],subs:Array(10).fill("")};
@@ -369,7 +369,7 @@ function normalizeSeating(d){
  if(!Array.isArray(d)||d.length!==3)return clone(seatingData);
  const ok=d.every(x=>x&&Array.isArray(x.left)&&Array.isArray(x.right));
  if(!ok)return clone(seatingData);
- const leftLens=[12,18,26],rightLens=[12,19,16];
+ const leftLens=[12,17,26],rightLens=[12,18,16];
  return d.map((x,i)=>{const ll=leftLens[i],rl=rightLens[i];return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,ll).concat(Array(ll).fill("")).slice(0,ll).map(v=>String(v??"")),right:x.right.slice(0,rl).concat(Array(rl).fill("")).slice(0,rl).map(v=>String(v??""))};});
 }
 function renderSeating(){
@@ -395,7 +395,7 @@ function collectSeating(){
 }
 async function loadSeating(){
  const saved=readLocal(SEATING_KEY,null);
- let initializing=!saved || readLocal("kor1816_seating_v3_init",false);
+ let initializing=!saved || readLocal("kor1816_seating_v4_init",false);
  if(saved)seatingData=normalizeSeating(saved);
  else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
