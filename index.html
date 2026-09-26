@@ -341,7 +341,7 @@ const ADMIN_PASSWORD="0001";
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
 let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseReady=false;
-const SEATING_KEY="kor1816_seating_v6";
+const SEATING_KEY="kor1816_seating_v7";
 let seatingData=[
  {row:"Row 1",left:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","DAWN","pika","lan","miiiiia","Lekum","bossi"],right:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"]},
  {row:"Row 2",left:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong"],right:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","Gideon","DDoRo","imNotKorean","Alucard","Rarara","vik","KOR"]},
@@ -370,7 +370,7 @@ function normalizeSeating(d){
  const ok=d.every(x=>x&&Array.isArray(x.left)&&Array.isArray(x.right));
  if(!ok)return clone(seatingData);
  const leftLens=[12,17,26],rightLens=[12,18,16];
- return d.map((x,i)=>{const ll=leftLens[i],rl=rightLens[i];let right=x.right.slice(0,rl).concat(Array(rl).fill("")).slice(0,rl).map(v=>String(v??""));if(i===2&&!right.includes("hun")&&right[1]==="M"&&right[2]==="RACRuze"){right.splice(1,0,"hun");right=right.slice(0,rl);}return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,ll).concat(Array(ll).fill("")).slice(0,ll).map(v=>String(v??"")),right};});
+ return d.map((x,i)=>{const ll=leftLens[i],rl=rightLens[i];const right=x.right.slice(0,rl).concat(Array(rl).fill("")).slice(0,rl).map(v=>String(v??""));return {row:i===0?"Row 1":i===1?"Row 2":"Row 3",left:x.left.slice(0,ll).concat(Array(ll).fill("")).slice(0,ll).map(v=>String(v??"")),right};});
 }
 function renderSeating(){
  const wrap=document.querySelector(".seating-3col-wrap");if(!wrap)return;
@@ -394,19 +394,24 @@ function collectSeating(){
  return seatingData.map((row,ri)=>({row:row.row,left:row.left.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-0-"+ni)?.value||""),right:row.right.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-1-"+ni)?.value||"")}));
 }
 async function loadSeating(){
+ try{
+   localStorage.removeItem("kor1816_seating_v5");
+   localStorage.removeItem("kor1816_seating_v6");
+   localStorage.removeItem("kor1816_seating_v5_init");
+   localStorage.removeItem("kor1816_seating_v6_init");
+ }catch{}
  const saved=readLocal(SEATING_KEY,null);
- let initializing=!saved || readLocal("kor1816_seating_v5_init",false);
+ let initializing=!saved;
  if(saved)seatingData=normalizeSeating(saved);
  else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
- // Firebase가 아직 초기화되지 않은 휴대폰에서도 새로고침 버튼이 동작하도록 잠시 기다린다.
  if(!seatingDoc){
    const started=Date.now();
    while(!seatingDoc && Date.now()-started<8000) await new Promise(r=>setTimeout(r,150));
  }
  if(!seatingDoc){setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");return;}
  if(initializing){
-   try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v5_init",true);}
+   try{await setDoc(seatingDoc,{columns:seatingData,version:1});writeLocal(SEATING_KEY,seatingData);}
    catch(e){console.warn("seating initial save",e);}
    return;
  }
@@ -730,7 +735,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v2");firebaseReady=true;
+   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v3");firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
