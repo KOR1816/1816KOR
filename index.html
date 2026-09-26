@@ -341,7 +341,7 @@ const ADMIN_PASSWORD="0001";
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
 let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,firebaseReady=false;
-const SEATING_KEY="kor1816_seating_v4";
+const SEATING_KEY="kor1816_seating_v5";
 let seatingData=[
  {row:"Row 1",left:["Leo li","jinno","Nemesis","bebe","GGGz","Chan Dam Bom","DAWN","pika","lan","miiiiia","Lekum","bossi"],right:["샌디에이고","SsungBi","yongi","moon","jiwon","KOREAN MON","Veggie","hhHa","ROKA","JackeyLove","EGOIST","VIVIAN"]},
  {row:"Row 2",left:["LJ","Architect","Lager","YL","coculim","Wilk","Eagle","KrungKrung","Aimee","HiGH FiVE","Korean","Dajjal","Nyctifer_v","AVA","OMEGA","Libby","Dingdong"],right:["Sant Jordi","Pham","LSJ","Zombie","El Elegido","T","Constant","HERA","jennie","GieZues","Hani","DDoRo","Gideon","imNotKorean","Alucard","Rarara","vik","KOR"]},
@@ -395,7 +395,7 @@ function collectSeating(){
 }
 async function loadSeating(){
  const saved=readLocal(SEATING_KEY,null);
- let initializing=!saved || readLocal("kor1816_seating_v4_init",false);
+ let initializing=!saved || readLocal("kor1816_seating_v5_init",false);
  if(saved)seatingData=normalizeSeating(saved);
  else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
@@ -406,7 +406,7 @@ async function loadSeating(){
  }
  if(!seatingDoc){setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");return;}
  if(initializing){
-   try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v3_init",true);}
+   try{await setDoc(seatingDoc,{columns:seatingData});writeLocal("kor1816_seating_v5_init",true);}
    catch(e){console.warn("seating initial save",e);}
    return;
  }
