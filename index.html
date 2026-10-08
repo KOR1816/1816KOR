@@ -876,7 +876,8 @@ const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=
 "공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 약하면 예거\n(비율 : 640)",
 "공격 : 1~4열 고정\n2첸코 / 2아마\n2첸코 / 아마네 / 파드\n2살로 / 첸코 / 아마네\n2힐데 / 살로 / 첸코",
 "1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
-];function setCastleWarInputsEnabled(enabled){
+];let castleWarLoadToken=0,castleWarSaving=false;
+function setCastleWarInputsEnabled(enabled){
  document.querySelectorAll("#castlewar input,#castlewar textarea").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});
 }
 function normalizeCastleWarPlan(value){
@@ -918,6 +919,7 @@ function renderCastleWar(){
  setCastleWarInputsEnabled(castleWarAdmin);
 }
 function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}const extra=[];for(let n=1;n<=3;n++)extra.push(document.getElementById("castlewar-extra-"+n)?.value||"");return {slots:d,plan:p,extra};}async function loadCastleWar(){
+ const token=++castleWarLoadToken;
  const localRaw=readLocal(CASTLEWAR_KEY,null);
  const localSlots=localRaw&&Array.isArray(localRaw.slots)?localRaw.slots.slice(0,50):Array(50).fill("");
  while(localSlots.length<50)localSlots.push("");
@@ -930,9 +932,10 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
  renderCastleWar();
  setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  await waitForDocRef(()=>castleWarDoc);
- if(!castleWarDoc)return;
+ if(!castleWarDoc||token!==castleWarLoadToken||castleWarSaving)return;
  try{
    const s=await Promise.race([getDocFromServer(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(token!==castleWarLoadToken||castleWarSaving||castleWarAdmin)return;
    if(s.exists()){
      const cloud=s.data()||{};
      const cloudSlots=Array.isArray(cloud.slots)?cloud.slots.slice(0,50):Array(50).fill("");
@@ -941,7 +944,6 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
      const cloudExtra=Array.isArray(cloud.extra)?cloud.extra.slice(0,3):castleWarExtra.slice(0,3);
      while(cloudExtra.length<3)cloudExtra.push("");
      const cloudUpdatedAt=Number(cloud.updatedAt)||0;
-     // Castle War uses Firebase as the single shared source of truth across PC and mobile.
      castleWarData=cloudSlots;
      castleWarPlan=cloudPlan;
      castleWarExtra=cloudExtra;
@@ -951,28 +953,45 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
    console.warn("castlewar read",e);
-   // If the server cannot be reached, keep the local cached data visible.
-   setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
+   if(token===castleWarLoadToken&&!castleWarSaving)setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }
 }
 async function saveCastleWar(){
- if(!castleWarAdmin)return;
+ if(!castleWarAdmin||castleWarSaving)return;
+ castleWarSaving=true;
+ const token=++castleWarLoadToken;
  const collected=collectCastleWar();
- castleWarData=collected.slots;
- castleWarPlan=collected.plan;
- castleWarExtra=Array.isArray(collected.extra)?collected.extra.slice(0,3):castleWarExtra.slice(0,3);
- while(castleWarExtra.length<3)castleWarExtra.push("");
+ const saveSlots=collected.slots;
+ const savePlan=collected.plan;
+ const saveExtra=Array.isArray(collected.extra)?collected.extra.slice(0,3):castleWarExtra.slice(0,3);
+ while(saveExtra.length<3)saveExtra.push("");
  const updatedAt=Date.now();
- writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:updatedAt});
- renderCastleWar();
+ const saveBtn=document.getElementById("castlewarSaveBtn");
+ if(saveBtn)saveBtn.disabled=true;
  try{
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
-   await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,updatedAt});
+   await setDoc(castleWarDoc,{slots:saveSlots,plan:savePlan,extra:saveExtra,updatedAt});
+   const verified=await Promise.race([getDocFromServer(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("verify timeout")),7000))]);
+   if(!verified.exists())throw Error("castlewar save verification failed");
+   const saved=verified.data()||{};
+   if(Number(saved.updatedAt)!==updatedAt)throw Error("castlewar timestamp verification failed");
+   if(JSON.stringify(saved.slots||[])!==JSON.stringify(saveSlots))throw Error("castlewar slots verification failed");
+   if(JSON.stringify(saved.plan||{})!==JSON.stringify(savePlan))throw Error("castlewar plan verification failed");
+   if(JSON.stringify(saved.extra||[])!==JSON.stringify(saveExtra))throw Error("castlewar extra verification failed");
+   if(token!==castleWarLoadToken)throw Error("castlewar save superseded");
+   castleWarData=saveSlots;
+   castleWarPlan=savePlan;
+   castleWarExtra=saveExtra;
+   writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:updatedAt});
+   renderCastleWar();
    setMsg("castlewarMsg","캐슬전이 저장되었습니다.");
  }catch(e){
    console.error("castlewar save",e);
-   setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
+   setMsg("castlewarMsg","서버 저장 확인에 실패했습니다. 변경 내용은 저장되지 않았습니다.");
+ }finally{
+   castleWarSaving=false;
+   if(saveBtn)saveBtn.disabled=false;
  }
 }
 function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
