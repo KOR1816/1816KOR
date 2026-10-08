@@ -69,6 +69,9 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 #homeView .notice,#homeView #homeSchedule,#homeView #homeWelcome{min-height:105px!important;white-space:pre-wrap;line-height:1.7;overflow:visible!important}
 .page-admin{position:static!important;justify-content:flex-end!important;margin:10px 0 0!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:0!important}.page-admin+.admin-note{display:none!important}@media(max-width:600px){.page-admin{margin-top:8px!important}}</style>
 
+<style id="castle-layout">
+#castle .castle-card{overflow:hidden!important}#castle .castle-map-wrap{margin:12px auto 18px!important;padding:10px!important;background:linear-gradient(145deg,#172846,#0d1525)!important;border:1px solid #3c5b88!important;border-radius:14px!important}#castle .castle-map-image{display:block!important;max-width:100%!important;width:auto!important;height:auto!important;margin:0 auto!important;border-radius:10px!important}#castle .castle-image-notice{padding:12px;border:1px dashed #5873a0;border-radius:10px;background:#0b1426;color:#cbd5e1!important}#castle .castle-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:16px}#castle .castle-info-card{padding:16px!important;background:#101a2e!important;border:1px solid #365783!important;border-radius:14px!important}#castle .castle-info-card h3{text-align:center;margin-top:0!important;color:#f7d77a!important}#castle .castle-info-card p{margin-bottom:0;line-height:1.7;text-align:center;color:#dbe7ff}#castle .castle-note{margin-top:16px;padding:12px 14px;text-align:center;border:1px solid #3b557f;border-radius:10px;background:#0c1628;color:#cbd5e1}@media(max-width:700px){#castle .castle-info-grid{grid-template-columns:1fr}}
+</style>
 <style id="alliance-layout-fix">
 .alliance-teams{column-gap:28px!important;row-gap:28px!important}
 .alliance-team{padding:16px!important;background:#111a30!important;border:2px solid #283f70!important;border-radius:16px!important}.alliance-team:nth-child(1){border-color:#ef4444!important}.alliance-team:nth-child(1) .alliance-team-title{background:#b91c1c!important;color:#fff!important}.alliance-team:nth-child(2){border-color:#3b82f6!important}.alliance-team:nth-child(2) .alliance-team-title{background:#1d4ed8!important;color:#fff!important}.alliance-team:nth-child(3){border-color:#22c55e!important}.alliance-team:nth-child(3) .alliance-team-title{background:#15803d!important;color:#fff!important}.alliance-team:nth-child(4){border-color:#a855f7!important}.alliance-team:nth-child(4) .alliance-team-title{background:#7e22ce!important;color:#fff!important}
@@ -275,7 +278,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 </style>
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
-<nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button></nav>
+<nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('castle')">🏰 캐슬배치</button></nav>
 <main class="wrap">
 <section id="home" class="page active">
 <div class="sword-image-wrap home-main-image"><img src="1816.jpg" alt="1816" class="sword-image"></div>
@@ -297,6 +300,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 <section id="seating" class="page"><div class="card"><h2>🪑 자리배치</h2><div class="sword-image-wrap seating-map-wrap"><img src="./eee.jpg" alt="자리배치도" class="sword-image seating-map-image"></div><div class="seating-list-wrap"><h3>📋 자리배치 목록</h3><div id="seatingLatestMsg" class="msg seating-latest-msg">최신 자리배치 내용을 불러왔습니다.</div><div class="seating-3col-wrap" style="display:flex;flex-direction:column;gap:18px;"></div><div class="seating-admin-panel" id="seatingEdit" style="display:none"><h3>✏️ 자리배치 닉네임 수정</h3><div id="seatingEditGrid"></div><button class="admin-btn" onclick="saveSeating()">💾 자리배치 저장</button></div><div class="seating-admin-actions"><button class="admin-btn" onclick="loadSeating()">🔄 새로고침</button><button class="admin-btn" id="seatingAdminBtn" onclick="toggleSeatingAdmin()">🔐 관리자 수정</button><span id="seatingMsg" class="msg"></span></div>
 </div></div>
 </section>
+<section id="castle" class="page"><div class="card castle-card"><h2>🏰 캐슬배치</h2><div class="sword-image-wrap castle-map-wrap"><img src="./castle-map.png" alt="캐슬 자리배치도" class="sword-image castle-map-image" onerror="this.style.display='none';document.getElementById('castleImageNotice').style.display='block';"></div><div id="castleImageNotice" class="msg castle-image-notice" style="display:none;">캐슬 배치도 이미지를 GitHub에 <b>castle-map.png</b> 이름으로 업로드하면 여기에 표시됩니다.</div><div class="castle-info-grid"><div class="card castle-info-card"><h3>🗼 북측탑 기준</h3><p>북측탑을 기준으로 칸수를 표시한 캐슬 배치입니다.</p></div><div class="card castle-info-card"><h3>🗼 서측탑 기준</h3><p>서측탑을 기준으로 칸수를 표시한 캐슬 배치입니다.</p></div></div><div class="castle-note">📌 칸 안의 숫자는 배치 위치를 구분하기 위한 번호입니다.</div></div></section>
 <section id="alliance" class="page"><div class="card"><h2>⚔️ 3대연맹전</h2><div class="sword-image-wrap"><img src="333333.png" alt="3대연맹전" class="sword-image"></div>
 
 <div id="allianceMsg" class="msg"></div>
@@ -586,7 +590,7 @@ function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("�
 function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 let pageLoadVersion=0;
 async function show(id,updateHash=true){
- const valid=["home","teams","alliance","seating"];if(!valid.includes(id))id="home";
+ const valid=["home","teams","alliance","seating","castle"];if(!valid.includes(id))id="home";
  const version=++pageLoadVersion;
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(id)?.classList.add("active");
@@ -596,14 +600,15 @@ async function show(id,updateHash=true){
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
  else if(id==="seating")await loadSeating();
+ else if(id==="castle"){}
  if(version!==pageLoadVersion)return;
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  translatePage(currentLang);
  window.scrollTo({top:0,behavior:"instant"});
 }
-async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating"].includes(h)?h:(["home","teams","alliance","seating"].includes(saved)?saved:"home"),false);}
-const NAV={ko:["🏠 홈","⚔️ 성검쟁탈","⚔️ 3대연맹전","🪑 자리배치"],en:["🏠 Home","⚔️ Holy Sword Clash","⚔️ Three Alliances War","🪑 Seating"],ja:["🏠 ホーム","⚔️ 聖剣争奪","⚔️ 3大連盟戦","🪑 席配置"],zh:["🏠 首页","⚔️ 圣剑争夺","⚔️ 三大联盟战","🪑 座位安排"],de:["🏠 Startseite","⚔️ Heiliges Schwertduell","⚔️ Krieg der drei Allianzen","🪑 Sitzplan"],it:["🏠 Home","⚔️ Duello della Spada Sacra","⚔️ Guerra delle Tre Alleanze","🪑 Posti"],es:["🏠 Inicio","⚔️ Duelo de la Espada Sagrada","⚔️ Guerra de las Tres Alianzas","🪑 Distribución"],tr:["🏠 Ana Sayfa","⚔️ Kutsal Kılıç Savaşı","⚔️ Üç İttifak Savaşı","🪑 Oturma Düzeni"]};
+async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle"].includes(h)?h:(["home","teams","alliance","seating","castle"].includes(saved)?saved:"home"),false);}
+const NAV={ko:["🏠 홈","⚔️ 성검쟁탈","⚔️ 3대연맹전","🪑 자리배치","🏰 캐슬배치"],en:["🏠 Home","⚔️ Holy Sword Clash","⚔️ Three Alliances War","🪑 Seating","🏰 Castle Layout"],ja:["🏠 ホーム","⚔️ 聖剣争奪","⚔️ 3大連盟戦","🪑 席配置","🏰 キャッスル配置"],zh:["🏠 首页","⚔️ 圣剑争夺","⚔️ 三大联盟战","🪑 座位安排","🏰 城堡布局"],de:["🏠 Startseite","⚔️ Heiliges Schwertduell","⚔️ Krieg der drei Allianzen","🪑 Sitzplan","🏰 Burgaufstellung"],it:["🏠 Home","⚔️ Duello della Spada Sacra","⚔️ Guerra delle Tre Alleanze","🪑 Posti","🏰 Disposizione del Castello"],es:["🏠 Inicio","⚔️ Duelo de la Espada Sagrada","⚔️ Guerra de las Tres Alianzas","🪑 Distribución","🏰 Distribución del Castillo"],tr:["🏠 Ana Sayfa","⚔️ Kutsal Kılıç Savaşı","⚔️ Üç İttifak Savaşı","🪑 Oturma Düzeni","🏰 Kale Yerleşimi"]};
 const I18N={
 ko:{
 "언어":"언어","🏠 홈":"🏠 홈","⚔️ 성검쟁탈":"⚔️ 성검쟁탈","⚔️ 3대연맹전":"⚔️ 3대연맹전","🪑 자리배치":"🪑 자리배치","📢 공지":"📢 공지","📅 이벤트 일정":"📅 이벤트 일정","🌍 Kingdom 1816":"🌍 Kingdom 1816","🔄 새로고침":"🔄 새로고침","🔐 관리자 수정":"🔐 관리자 수정","📢 최신 공지":"📢 최신 공지","제목":"제목","내용":"내용","📅 주요 일정":"📅 주요 일정","💾 홈 저장":"💾 홈 저장","📋 자리배치 목록":"📋 자리배치 목록","번호":"번호","닉네임":"닉네임","✏️ 자리배치 닉네임 수정":"✏️ 자리배치 닉네임 수정","💾 자리배치 저장":"💾 자리배치 저장","1팀":"1팀","2팀":"2팀","3팀":"3팀","4팀":"4팀","💾 3대연맹전 저장":"💾 3대연맹전 저장","💥 개돌조":"💥 개돌조","🔄 대체자":"🔄 대체자","💾 전체 저장":"💾 전체 저장","관리자 비밀번호를 입력하세요.":"관리자 비밀번호를 입력하세요.","비밀번호가 올바르지 않습니다.":"비밀번호가 올바르지 않습니다.","최신 성검쟁탈 내용을 불러왔습니다.":"최신 성검쟁탈 내용을 불러왔습니다.","서버 연결 실패 — 저장된 화면을 표시합니다.":"서버 연결 실패 — 저장된 화면을 표시합니다.","성검쟁탈 전체 저장 완료!":"성검쟁탈 전체 저장 완료!","최신 3대연맹전 내용을 불러왔습니다.":"최신 3대연맹전 내용을 불러왔습니다.","3대연맹전 저장 완료!":"3대연맹전 저장 완료!","자리배치 저장 완료!":"자리배치 저장 완료!","홈 저장 완료!":"홈 저장 완료!","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.":"기기에는 저장됐지만 공용 서버 저장에 실패했습니다.","Player ID":"Player ID","닉네임":"닉네임"},
@@ -640,7 +645,8 @@ function translatePage(lang){
    "#teams h2":{"ko":"⚔️ 성검쟁탈","en":"⚔️ Holy Sword Clash","ja":"⚔️ 聖剣争奪","zh":"⚔️ 圣剑争夺","de":"⚔️ Heiliges Schwertduell","it":"⚔️ Duello della Spada Sacra","es":"⚔️ Duelo de la Espada Sagrada","tr":"⚔️ Kutsal Kılıç Savaşı"},
    "#alliance h2":{"ko":"⚔️ 3대연맹전","en":"⚔️ Three Alliances War","ja":"⚔️ 3大連盟戦","zh":"⚔️ 三大联盟战","de":"⚔️ Krieg der drei Allianzen","it":"⚔️ Guerra delle Tre Alleanze","es":"⚔️ Guerra de las Tres Alianzas","tr":"⚔️ Üç İttifak Savaşı"},
    "#seating h2":{"ko":"🪑 자리배치","en":"🪑 Seating","ja":"🪑 席配置","zh":"🪑 座位安排","de":"🪑 Sitzplan","it":"🪑 Posti","es":"🪑 Distribución","tr":"🪑 Oturma Düzeni"},
-   "#seating .seating-list-wrap h3":{"ko":"📋 자리배치 목록","en":"📋 Seating List","ja":"📋 席配置一覧","zh":"📋 座位列表","de":"📋 Sitzplatzliste","it":"📋 Elenco posti","es":"📋 Lista de asientos","tr":"📋 Oturma Listesi"}
+   "#seating .seating-list-wrap h3":{"ko":"📋 자리배치 목록","en":"📋 Seating List","ja":"📋 席配置一覧","zh":"📋 座位列表","de":"📋 Sitzplatzliste","it":"📋 Elenco posti","es":"📋 Lista de asientos","tr":"📋 Oturma Listesi"},
+   "#castle h2":{"ko":"🏰 캐슬배치","en":"🏰 Castle Layout","ja":"🏰 キャッスル配置","zh":"🏰 城堡布局","de":"🏰 Burgaufstellung","it":"🏰 Disposizione del Castello","es":"🏰 Distribución del Castillo","tr":"🏰 Kale Yerleşimi"}
  };
  for(const [selector,map] of Object.entries(explicit)){const e=document.querySelector(selector);if(e&&map[lang])e.textContent=map[lang];}
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
