@@ -447,6 +447,18 @@ async function loadSeating(){
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  }
 }
+async function saveSeating(){
+ seatingData=collectSeating();
+ const updatedAt=Date.now();
+ writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:updatedAt});
+ renderSeating();renderSeatingAdmin();
+ try{
+   await waitForDocRef(()=>seatingDoc,8000);
+   if(!seatingDoc)throw Error("seating document is not ready");
+   await setDoc(seatingDoc,{columns:seatingData,updatedAt});
+   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
+ }catch(e){console.error(e);setMsg("seatingMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}
+}
 let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
  ["A","B","C","D"].forEach(t=>{for(let n=1;n<=7;n++){const e=document.getElementById("team-"+t+"-"+n);if(e)e.value=teamData[t][n-1]||"";}});
@@ -944,6 +956,22 @@ async function loadCastle(){
  }catch(e){
    console.warn("castle read",e);
    setMsg("castleMsg","최신 캐슬배치 내용을 불러왔습니다.");
+ }
+}
+async function saveCastle(){
+ const collected=collectCastle();
+ castleData=collected;
+ const updatedAt=Date.now();
+ writeLocal(CASTLE_KEY,{slots:castleData,updatedAt});
+ renderCastle();
+ try{
+   await waitForCastleDoc();
+   if(!castleDoc)throw Error("castle document is not ready");
+   await setDoc(castleDoc,{slots:castleData,updatedAt});
+   setMsg("castleMsg","캐슬배치가 저장되었습니다.");
+ }catch(e){
+   console.error(e);
+   setMsg("castleMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
  }
 }
 function toggleCastleAdmin(){
