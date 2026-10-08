@@ -597,7 +597,7 @@ function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("�
 function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 let pageLoadVersion=0;
 async function show(id,updateHash=true){
- const valid=["home","teams","alliance","seating","castle"];if(!valid.includes(id))id="home";
+ const valid=["home","teams","alliance","seating","castle","castlewar"];if(!valid.includes(id))id="home";
  const version=++pageLoadVersion;
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(id)?.classList.add("active");
@@ -607,14 +607,14 @@ async function show(id,updateHash=true){
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
  else if(id==="seating")await loadSeating();
- else if(id==="castle")await loadCastle();
+ else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();
  if(version!==pageLoadVersion)return;
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  translatePage(currentLang);
  window.scrollTo({top:0,behavior:"instant"});
 }
-async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle"].includes(h)?h:(["home","teams","alliance","seating","castle"].includes(saved)?saved:"home"),false);}
+async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","⚔️ 성검쟁탈","⚔️ 3대연맹전","🪑 자리배치","🏰 캐슬배치"],en:["🏠 Home","⚔️ Holy Sword Clash","⚔️ Three Alliances War","🪑 Seating","🏰 Castle Layout"],ja:["🏠 ホーム","⚔️ 聖剣争奪","⚔️ 3大連盟戦","🪑 席配置","🏰 キャッスル配置"],zh:["🏠 首页","⚔️ 圣剑争夺","⚔️ 三大联盟战","🪑 座位安排","🏰 城堡布局"],de:["🏠 Startseite","⚔️ Heiliges Schwertduell","⚔️ Krieg der drei Allianzen","🪑 Sitzplan","🏰 Burgaufstellung"],it:["🏠 Home","⚔️ Duello della Spada Sacra","⚔️ Guerra delle Tre Alleanze","🪑 Posti","🏰 Disposizione del Castello"],es:["🏠 Inicio","⚔️ Duelo de la Espada Sagrada","⚔️ Guerra de las Tres Alianzas","🪑 Distribución","🏰 Distribución del Castillo"],tr:["🏠 Ana Sayfa","⚔️ Kutsal Kılıç Savaşı","⚔️ Üç İttifak Savaşı","🪑 Oturma Düzeni","🏰 Kale Yerleşimi"]};
 const I18N={
 ko:{
@@ -744,7 +744,7 @@ function setLanguage(lang){
    void translateHomeDynamic(lang,version);
  }
 }
-function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
+const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill("");function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());return d;}async function loadCastleWar(){castleWarData=Array.isArray(readLocal(CASTLEWAR_KEY,castleWarData))?readLocal(CASTLEWAR_KEY,castleWarData):Array(50).fill("");renderCastleWar();if(castleWarDoc){try{const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()&&Array.isArray(s.data()?.slots)){castleWarData=s.data().slots.slice(0,50);while(castleWarData.length<50)castleWarData.push("");writeLocal(CASTLEWAR_KEY,castleWarData);renderCastleWar();}}catch(e){console.warn("castlewar read",e);}}setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");}async function saveCastleWar(){castleWarData=collectCastleWar();writeLocal(CASTLEWAR_KEY,castleWarData);renderCastleWar();try{if(castleWarDoc)await setDoc(castleWarDoc,{slots:castleWarData});setMsg("castlewarMsg","캐슬전이 저장되었습니다.");}catch(e){setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}}function toggleCastleWarAdmin(){if(castleWarAdmin){castleWarAdmin=false}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return}castleWarAdmin=true}renderCastleWar();document.getElementById("castlewarAdminBtn").textContent=castleWarAdmin?"🔒 수정 종료":"🔐 관리자 수정";document.getElementById("castlewarSaveBtn").style.display=castleWarAdmin?"inline-flex":"none"}function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
 function collectCastle(){const d=[];for(let n=1;n<=28;n++)d.push((document.getElementById("castle-slot-"+n)?.value||"").trim());return d;}
 async function loadCastle(){
  castleData=Array.isArray(readLocal(CASTLE_KEY,castleData))?readLocal(CASTLE_KEY,castleData):Array(28).fill("");
@@ -765,12 +765,12 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");castleDoc=doc(db,"siteData","castle_v1");firebaseReady=true;
+   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=doc(db,"siteData","castlewar_v1");firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
 }
-window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
+window.show=show;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",async()=>{
  const lang=document.getElementById("languageSelect");
  const savedLang=readLocal("kor1816_lang","ko");
