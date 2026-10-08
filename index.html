@@ -360,7 +360,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocFromServer, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
@@ -932,7 +932,7 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
  await waitForDocRef(()=>castleWarDoc);
  if(!castleWarDoc)return;
  try{
-   const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   const s=await Promise.race([getDocFromServer(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){
      const cloud=s.data()||{};
      const cloudSlots=Array.isArray(cloud.slots)?cloud.slots.slice(0,50):Array(50).fill("");
