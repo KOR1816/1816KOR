@@ -416,34 +416,22 @@ function collectSeating(){
  return seatingData.map((row,ri)=>({row:row.row,left:row.left.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-0-"+ni)?.value||""),right:row.right.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-1-"+ni)?.value||"")}));
 }
 async function loadSeating(){
- try{
-   localStorage.removeItem("kor1816_seating_v5");
-   localStorage.removeItem("kor1816_seating_v6");
-   localStorage.removeItem("kor1816_seating_v5_init");
-   localStorage.removeItem("kor1816_seating_v6_init");
- }catch{}
  const localRaw=readLocal(SEATING_KEY,null);
- const legacy=Array.isArray(localRaw);
- const localData=legacy?normalizeSeating(localRaw):normalizeSeating(localRaw?.columns||null);
+ const localData=Array.isArray(localRaw)?normalizeSeating(localRaw):normalizeSeating(localRaw?.columns||null);
  const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
- let initializing=!localRaw;
  seatingData=localData;
- if(!localRaw)writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:0});
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
  setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
  setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  await waitForDocRef(()=>seatingDoc,8000);
- if(!seatingDoc){return;}
+ if(!seatingDoc)return;
  try{
    const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(!s.exists()){
-     if(initializing){
-       try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt:localUpdatedAt});}catch(e){console.warn("seating initial save",e);}
-     }
-   }else{
+   if(s.exists()){
      const cloud=s.data()||{};
      const cloudUpdatedAt=Number(cloud.updatedAt)||0;
      if(localUpdatedAt>cloudUpdatedAt){
+       seatingData=localData;
        try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt:localUpdatedAt});}catch(e){console.warn("seating sync",e);}
      }else{
        seatingData=normalizeSeating(cloud.columns);
@@ -458,18 +446,6 @@ async function loadSeating(){
    setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  }
-}
-async function saveSeating(){
- seatingData=collectSeating();
- const updatedAt=Date.now();
- writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:updatedAt});
- renderSeating();renderSeatingAdmin();
- try{
-   await waitForDocRef(()=>seatingDoc,8000);
-   if(!seatingDoc)throw Error("seating document is not ready");
-   await setDoc(seatingDoc,{columns:seatingData,updatedAt});
-   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
- }catch(e){console.error(e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
@@ -940,48 +916,34 @@ async function waitForCastleDoc(timeout=5000){
  return !!castleDoc;
 }
 async function loadCastle(){
- const local=normalizeCastleLocal(readLocal(CASTLE_KEY,null));
+ const localRaw=readLocal(CASTLE_KEY,null);
+ const local=normalizeCastleLocal(localRaw);
+ const localUpdatedAt=local.updatedAt;
  castleData=local.slots.slice(0,28);
  renderCastle();
- await waitForCastleDoc();
- if(castleDoc){
-   try{
-     const s=await Promise.race([getDoc(castleDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-     if(s.exists()&&Array.isArray(s.data()?.slots)){
-       const cloud=s.data()||{};
-       const cloudSlots=cloud.slots.slice(0,28);
-       while(cloudSlots.length<28)cloudSlots.push("");
-       const cloudUpdatedAt=Number(cloud.updatedAt)||0;
-       if(local.updatedAt>cloudUpdatedAt){
-         // Local data was changed more recently, so never overwrite it with stale cloud data.
-         castleData=local.slots.slice(0,28);
-         try{
-           await setDoc(castleDoc,{slots:castleData,updatedAt:local.updatedAt});
-         }catch(e){console.warn("castle sync",e);}
-       }else{
-         castleData=cloudSlots;
-         writeLocal(CASTLE_KEY,{slots:castleData,updatedAt:cloudUpdatedAt});
-       }
-       renderCastle();
-     }
-   }catch(e){console.warn("castle read",e);}
- }
  setMsg("castleMsg","최신 캐슬배치 내용을 불러왔습니다.");
-}
-async function saveCastle(){
- const collected=collectCastle();
- castleData=collected;
- const updatedAt=Date.now();
- writeLocal(CASTLE_KEY,{slots:castleData,updatedAt});
- renderCastle();
+ await waitForCastleDoc();
+ if(!castleDoc)return;
  try{
-   await waitForCastleDoc();
-   if(!castleDoc)throw Error("castle document is not ready");
-   await setDoc(castleDoc,{slots:castleData,updatedAt});
-   setMsg("castleMsg","캐슬배치가 저장되었습니다.");
+   const s=await Promise.race([getDoc(castleDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(s.exists()){
+     const cloud=s.data()||{};
+     const cloudSlots=Array.isArray(cloud.slots)?cloud.slots.slice(0,28):Array(28).fill("");
+     while(cloudSlots.length<28)cloudSlots.push("");
+     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+     if(localUpdatedAt>cloudUpdatedAt){
+       castleData=local.slots.slice(0,28);
+       try{await setDoc(castleDoc,{slots:castleData,updatedAt:localUpdatedAt});}catch(e){console.warn("castle sync",e);}
+     }else{
+       castleData=cloudSlots;
+       writeLocal(CASTLE_KEY,{slots:castleData,updatedAt:cloudUpdatedAt});
+     }
+     renderCastle();
+   }
+   setMsg("castleMsg","최신 캐슬배치 내용을 불러왔습니다.");
  }catch(e){
-   console.error(e);
-   setMsg("castleMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
+   console.warn("castle read",e);
+   setMsg("castleMsg","최신 캐슬배치 내용을 불러왔습니다.");
  }
 }
 function toggleCastleAdmin(){
