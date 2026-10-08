@@ -667,7 +667,12 @@ function translatePage(lang){
    "#alliance h2":{"ko":"⚔️ 3대연맹전","en":"⚔️ Three Alliances War","ja":"⚔️ 3大連盟戦","zh":"⚔️ 三大联盟战","de":"⚔️ Krieg der drei Allianzen","it":"⚔️ Guerra delle Tre Alleanze","es":"⚔️ Guerra de las Tres Alianzas","tr":"⚔️ Üç İttifak Savaşı"},
    "#seating h2":{"ko":"🪑 자리배치","en":"🪑 Seating","ja":"🪑 席配置","zh":"🪑 座位安排","de":"🪑 Sitzplan","it":"🪑 Posti","es":"🪑 Distribución","tr":"🪑 Oturma Düzeni"},
    "#seating .seating-list-wrap h3":{"ko":"📋 자리배치 목록","en":"📋 Seating List","ja":"📋 席配置一覧","zh":"📋 座位列表","de":"📋 Sitzplatzliste","it":"📋 Elenco posti","es":"📋 Lista de asientos","tr":"📋 Oturma Listesi"},
-   "#castle h2":{"ko":"🏰 캐슬배치","en":"🏰 Castle Layout","ja":"🏰 キャッスル配置","zh":"🏰 城堡布局","de":"🏰 Burgaufstellung","it":"🏰 Disposizione del Castello","es":"🏰 Distribución del Castillo","tr":"🏰 Kale Yerleşimi"}
+   "#castle h2":{"ko":"🏰 캐슬배치","en":"🏰 Castle Layout","ja":"🏰 キャッスル配置","zh":"🏰 城堡布局","de":"🏰 Burgaufstellung","it":"🏰 Disposizione del Castello","es":"🏰 Distribución del Castillo","tr":"🏰 Kale Yerleşimi"},
+   "#castlewar .castlewar-column:nth-child(1) .castlewar-title":{"ko":"돌격조","en":"Assault Squad","ja":"突撃隊","zh":"突击队","de":"Sturmtrupp","it":"Squadra d'assalto","es":"Escuadrón de asalto","tr":"Saldırı Ekibi"},
+   "#castlewar .castlewar-column:nth-child(2) .castlewar-title":{"ko":"개돌조","en":"Rush Squad","ja":"突入隊","zh":"冲锋队","de":"Angriffstrupp","it":"Squadra d'attacco","es":"Escuadrón de asalto","tr":"Hücum Ekibi"},
+   "#castlewar .castlewar-column:nth-child(3) .castlewar-title":{"ko":"마무리조","en":"Finishing Squad","ja":"仕上げ隊","zh":"收尾队","de":"Abschlusstrupp","it":"Squadra finale","es":"Escuadrón final","tr":"Bitirici Ekip"},
+   "#castlewar .castlewar-column:nth-child(4) .castlewar-title":{"ko":"북측포탑","en":"North Turret","ja":"北側砲塔","zh":"北侧炮塔","de":"Nordturm","it":"Torretta nord","es":"Torreta norte","tr":"Kuzey Kulesi"},
+   "#castlewar .castlewar-column:nth-child(5) .castlewar-title":{"ko":"서측포탑","en":"West Turret","ja":"西側砲塔","zh":"西侧炮塔","de":"Westturm","it":"Torretta ovest","es":"Torreta oeste","tr":"Batı Kulesi"}
  };
  for(const [selector,map] of Object.entries(explicit)){const e=document.querySelector(selector);if(e&&map[lang])e.textContent=map[lang];}
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
