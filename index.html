@@ -934,7 +934,7 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
  while(extra.length<3)extra.push("");
  return {slots,plan,extra};
 }
-let castleWarLoadSeq=0;
+let castleWarLoadToken=0;
 async function loadCastleWar(){
  const token=++castleWarLoadToken;
  const localRaw=readLocal(CASTLEWAR_KEY,null);
