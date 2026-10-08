@@ -924,7 +924,6 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
  const localPlan=localRaw&&localRaw.plan?localRaw.plan:castleWarPlan;
  const localExtra=localRaw&&Array.isArray(localRaw.extra)?localRaw.extra.slice(0,3):castleWarExtra.slice(0,3);
  while(localExtra.length<3)localExtra.push("");
- const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
  castleWarData=localSlots;
  castleWarPlan=localPlan;
  castleWarExtra=localExtra;
@@ -942,22 +941,17 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
      const cloudExtra=Array.isArray(cloud.extra)?cloud.extra.slice(0,3):castleWarExtra.slice(0,3);
      while(cloudExtra.length<3)cloudExtra.push("");
      const cloudUpdatedAt=Number(cloud.updatedAt)||0;
-     if(localUpdatedAt>cloudUpdatedAt){
-       castleWarData=localSlots;
-       castleWarPlan=localPlan;
-       castleWarExtra=localExtra;
-       try{await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,updatedAt:localUpdatedAt});}catch(e){console.warn("castlewar sync",e);}
-     }else{
-       castleWarData=cloudSlots;
-       castleWarPlan=cloudPlan;
-       castleWarExtra=cloudExtra;
-       writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:cloudUpdatedAt});
-     }
+     // Castle War uses Firebase as the single shared source of truth across PC and mobile.
+     castleWarData=cloudSlots;
+     castleWarPlan=cloudPlan;
+     castleWarExtra=cloudExtra;
+     writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:cloudUpdatedAt});
      renderCastleWar();
    }
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
    console.warn("castlewar read",e);
+   // If the server cannot be reached, keep the local cached data visible.
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }
 }
