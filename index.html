@@ -346,7 +346,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocFromServer, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
@@ -870,13 +870,15 @@ function setLanguage(lang){
    void translateHomeDynamic(lang,version);
  }
 }
-const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){
+const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarSaveVersion=0;castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){
+ const loadVersion=castleWarSaveVersion;
  // 캐슬전은 모든 기기에서 Firebase를 단일 기준으로 사용한다.
- // 휴대폰/PC의 오래된 localStorage가 서버 데이터를 덮어쓰지 않도록 한다.
  await waitForDocRef(()=>castleWarDoc);
  if(castleWarDoc){
    try{
-     const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+     const s=await Promise.race([getDocFromServer(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+     // 저장이 진행된 뒤 시작된 오래된 불러오기는 절대로 현재 화면을 덮어쓰지 않는다.
+     if(loadVersion!==castleWarSaveVersion)return;
      if(s.exists()){
        const cloud=s.data()||{};
        if(Array.isArray(cloud.slots)){
@@ -900,6 +902,8 @@ const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=
      }
    }catch(e){
      console.warn("castlewar read",e);
+     // 저장 중이었다면 실패한 읽기로 현재 저장 화면을 덮지 않는다.
+     if(loadVersion!==castleWarSaveVersion)return;
      const local=readLocal(CASTLEWAR_KEY,null);
      if(local&&Array.isArray(local.slots)){
        castleWarData=local.slots.slice(0,50);
@@ -920,6 +924,7 @@ const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=
  setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
 }
 async function saveCastleWar(){
+ const saveVersion=++castleWarSaveVersion;
  const collected=collectCastleWar();
  castleWarData=collected.slots;castleWarPlan=collected.plan;
  const updatedAt=Date.now();
@@ -928,11 +933,19 @@ async function saveCastleWar(){
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
    await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,updatedAt});
+   const verified=await Promise.race([getDocFromServer(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("verify timeout")),7000))]);
+   if(!verified.exists())throw Error("castlewar save verification failed");
+   const saved=verified.data()||{};
+   if(Number(saved.updatedAt)!==updatedAt)throw Error("castlewar save verification mismatch");
+   if(JSON.stringify(saved.slots||[])!==JSON.stringify(castleWarData))throw Error("castlewar slots verification mismatch");
+   if(JSON.stringify(saved.plan||{})!==JSON.stringify(castleWarPlan))throw Error("castlewar plan verification mismatch");
+   if(saveVersion!==castleWarSaveVersion)throw Error("castlewar save superseded");
    writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,_updatedAt:updatedAt});
    setMsg("castlewarMsg","캐슬전이 저장되었습니다.");
  }catch(e){
+   console.error("castlewar save",e);
    writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,_updatedAt:updatedAt});
-   setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
+   setMsg("castlewarMsg","저장 확인에 실패했습니다. 서버 연결을 확인해주세요.");
  }
 }function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
 function collectCastle(){const d=[];for(let n=1;n<=28;n++)d.push((document.getElementById("castle-slot-"+n)?.value||"").trim());return d;}
