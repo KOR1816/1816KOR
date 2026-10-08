@@ -417,20 +417,25 @@ async function loadSeating(){
  if(saved)seatingData=normalizeSeating(saved);
  else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
+ setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
+ setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  if(!seatingDoc){
    const started=Date.now();
    while(!seatingDoc && Date.now()-started<8000) await new Promise(r=>setTimeout(r,150));
  }
- if(!seatingDoc){setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");return;}
+ if(!seatingDoc){return;}
  if(initializing){
    try{await setDoc(seatingDoc,{columns:seatingData,version:1});writeLocal(SEATING_KEY,seatingData);}
    catch(e){console.warn("seating initial save",e);}
+   setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
+   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
    return;
  }
  try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
+   setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
- }catch(e){console.warn("seating read",e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
+ }catch(e){console.warn("seating read",e);setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 async function saveSeating(){
  seatingData=collectSeating();writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();
@@ -452,9 +457,11 @@ function collectTeams(){
 }
 async function loadTeams(){
  teamData=normalizeTeams(readLocal(TEAM_KEY,teamData)); renderTeams(); translatePage(currentLang);
+ setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
  if(!teamDoc)return;
  try{const s=await Promise.race([getDoc(teamDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
+   if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(currentLang);}
+   setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
  }catch(e){console.warn("teams read",e);translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
 }
 let teamsAdmin=false;
@@ -481,9 +488,11 @@ function collectAlliance(){
 }
 async function loadAlliance(){
  allianceData=readLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);
+ setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
  if(!allianceDoc)return;
  try{const s=await Promise.race([getDoc(allianceDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
+   if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);}
+   setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
  }catch(e){console.warn("alliance read",e);translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
 }
 async function saveAlliance(){
