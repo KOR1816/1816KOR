@@ -858,7 +858,44 @@ function setLanguage(lang){
    void translateHomeDynamic(lang,version);
  }
 }
-const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarSaveVersion=0,castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){
+const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarSaveVersion=0,castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function setCastleWarInputsEnabled(enabled){
+ document.querySelectorAll("#castlewar input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});
+}
+function normalizeCastleWarPlan(value){
+ const src=value&&typeof value==="object"?value:{};
+ const attack=Array.isArray(src.attack)?src.attack.slice(0,4):[];
+ while(attack.length<4)attack.push("");
+ const defense=Array.isArray(src.defense)?src.defense.slice(0,4):[];
+ while(defense.length<4)defense.push("");
+ const attackRatios=Array.isArray(src.attackRatios)?src.attackRatios.slice(0,4):[];
+ while(attackRatios.length<4)attackRatios.push([]);
+ attackRatios.forEach(row=>{if(!Array.isArray(row))return;while(row.length<4)row.push("");row.length=4;});
+ while(attackRatios.length<4)attackRatios.push(["","","",""]);
+ const defenseRatios=Array.isArray(src.defenseRatios)?src.defenseRatios.slice(0,4):[];
+ while(defenseRatios.length<4)defenseRatios.push("");
+ return {attack,attackRatios,defense,defenseRatios};
+}
+function renderCastleWar(){
+ castleWarPlan=normalizeCastleWarPlan(castleWarPlan);
+ for(let n=1;n<=50;n++){
+   const e=document.getElementById("castlewar-slot-"+n);
+   if(e)e.value=castleWarData[n-1]||"";
+ }
+ for(let n=1;n<=4;n++){
+   const e=document.getElementById("castlewar-attack-"+n);
+   if(e)e.value=castleWarPlan.attack[n-1]||"";
+   for(let r=1;r<=4;r++){
+     const x=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);
+     if(x)x.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";
+   }
+   const d=document.getElementById("castlewar-defense-"+n);
+   if(d)d.value=castleWarPlan.defense[n-1]||"";
+   const dr=document.getElementById("castlewar-defense-ratio-"+n);
+   if(dr)dr.value=castleWarPlan.defenseRatios[n-1]||"";
+ }
+ setCastleWarInputsEnabled(castleWarAdmin);
+}
+function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){
  const localRaw=readLocal(CASTLEWAR_KEY,null);
  const localSlots=localRaw&&Array.isArray(localRaw.slots)?localRaw.slots.slice(0,50):Array(50).fill("");
  while(localSlots.length<50)localSlots.push("");
@@ -979,8 +1016,19 @@ function toggleCastleAdmin(){
  renderCastle();document.getElementById("castleAdminBtn").textContent=castleAdmin?"🔒 수정 종료":"🔐 관리자 수정";document.getElementById("castleSaveBtn").style.display=castleAdmin?"inline-flex":"none";
 }
 function toggleCastleWarAdmin(){
- if(castleWarAdmin){castleWarAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}castleWarAdmin=true;}
+ if(castleWarAdmin){
+   castleWarAdmin=false;
+ }else{
+   const p=prompt("관리자 비밀번호를 입력하세요.");
+   if(p!==ADMIN_PASSWORD){
+     if(p!==null)alert("비밀번호가 올바르지 않습니다.");
+     return;
+   }
+   castleWarAdmin=true;
+ }
+ setCastleWarInputsEnabled(castleWarAdmin);
  renderCastleWar();
+ setCastleWarInputsEnabled(castleWarAdmin);
  document.getElementById("castlewarAdminBtn").textContent=castleWarAdmin?"🔒 수정 종료":"🔐 관리자 수정";
  document.getElementById("castlewarSaveBtn").style.display=castleWarAdmin?"inline-flex":"none";
 }
