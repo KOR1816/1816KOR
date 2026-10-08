@@ -679,7 +679,7 @@ function translatePage(lang){
    "#seatingLatestMsg":{"ko":"최신 자리배치 내용을 불러왔습니다.","en":"Latest seating information has been loaded.","ja":"最新の座席配置情報を読み込みました。","zh":"已加载最新座位安排信息。","de":"Die neuesten Sitzplatzinformationen wurden geladen.","it":"Le informazioni più recenti sulla disposizione dei posti sono state caricate.","es":"Se ha cargado la información más reciente de los asientos.","tr":"En güncel oturma düzeni bilgileri yüklendi."},
    "#castleMsg":{"ko":"최신 캐슬배치 내용을 불러왔습니다.","en":"Latest castle layout information has been loaded.","ja":"最新の城配置情報を読み込みました。","zh":"已加载最新城堡布局信息。","de":"Die neuesten Burgaufstellungsinformationen wurden geladen.","it":"Le informazioni più recenti sulla disposizione del castello sono state caricate.","es":"Se ha cargado la información más reciente de la distribución del castillo.","tr":"En güncel kale yerleşimi bilgileri yüklendi."},
    "#castlewarMsg":{"ko":"최신 캐슬전 내용을 불러왔습니다.","en":"Latest Castle War information has been loaded.","ja":"最新の城戦情報を読み込みました。","zh":"已加载最新城堡战信息。","de":"Die neuesten Burgkriegsinformationen wurden geladen.","it":"Le informazioni più recenti sulla Guerra del Castello sono state caricate.","es":"Se ha cargado la información más reciente de la Guerra del Castillo.","tr":"En güncel Kale Savaşı bilgileri yüklendi."},
-   "#castle .castle-head span:first-child":{"ko":"자리","en":"Slot","ja":"番号","zh":"位置","de":"Platz","it":"Posto","es":"Posición","tr":"Yer"},
+   "#castle .castle-head span:first-child":{"ko":"번호","en":"No.","ja":"番号","zh":"编号","de":"Nr.","it":"N.","es":"N.º","tr":"No."},
       "#castle .castle-head span:last-child":{"ko":"닉네임","en":"Nickname","ja":"ニックネーム","zh":"昵称","de":"Spitzname","it":"Nickname","es":"Apodo","tr":"Takma Ad"},
       "#seating .seating-admin-panel h3":{"ko":"✏️ 자리배치 닉네임 수정","en":"✏️ Edit Seating Nicknames","ja":"✏️ 席配置ニックネーム編集","zh":"✏️ 编辑座位昵称","de":"✏️ Sitzplatz-Nicknames bearbeiten","it":"✏️ Modifica nickname dei posti","es":"✏️ Editar apodos de los asientos","tr":"✏️ Oturma Düzeni Takma Adlarını Düzenle"},
    "#castlewar .castlewar-column:nth-child(1) .castlewar-title":{"ko":"돌격조","en":"Assault Squad","ja":"突撃隊","zh":"突击队","de":"Sturmtrupp","it":"Squadra d'assalto","es":"Escuadrón de asalto","tr":"Saldırı Ekibi"},
@@ -688,7 +688,9 @@ function translatePage(lang){
    "#castlewar .castlewar-column:nth-child(4) .castlewar-title":{"ko":"북측포탑","en":"North Turret","ja":"北側砲塔","zh":"北侧炮塔","de":"Nordturm","it":"Torretta nord","es":"Torreta norte","tr":"Kuzey Kulesi"},
    "#castlewar .castlewar-column:nth-child(5) .castlewar-title":{"ko":"서측포탑","en":"West Turret","ja":"西側砲塔","zh":"西侧炮塔","de":"Westturm","it":"Torretta ovest","es":"Torreta oeste","tr":"Batı Kulesi"}
  };
- for(const [selector,map] of Object.entries(explicit)){const e=document.querySelector(selector);if(e&&map[lang])e.textContent=map[lang];}
+ for(const [selector,map] of Object.entries(explicit)){
+   document.querySelectorAll(selector).forEach(e=>{if(map[lang])e.textContent=map[lang];});
+ }
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  let n;while(n=walker.nextNode()){
    const p=n.parentElement;
