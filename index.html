@@ -781,20 +781,62 @@ function setLanguage(lang){
 }
 const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){const local=readLocal(CASTLEWAR_KEY,null);if(local&&Array.isArray(local.slots)){castleWarData=local.slots.slice(0,50);while(castleWarData.length<50)castleWarData.push("");castleWarPlan=local.plan||castleWarPlan;}else{castleWarData=Array.isArray(local)?local.slice(0,50):Array(50).fill("");while(castleWarData.length<50)castleWarData.push("");}renderCastleWar();if(castleWarDoc){try{const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()){const data=s.data()||{};if(Array.isArray(data.slots)){castleWarData=data.slots.slice(0,50);while(castleWarData.length<50)castleWarData.push("");}if(data.plan)castleWarPlan=data.plan;writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan});renderCastleWar();}}catch(e){console.warn("castlewar read",e);}}setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");}async function saveCastleWar(){const collected=collectCastleWar();castleWarData=collected.slots;castleWarPlan=collected.plan;writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan});renderCastleWar();try{if(castleWarDoc)await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan});setMsg("castlewarMsg","캐슬전이 저장되었습니다.");}catch(e){setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}}function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
 function collectCastle(){const d=[];for(let n=1;n<=28;n++)d.push((document.getElementById("castle-slot-"+n)?.value||"").trim());return d;}
+function normalizeCastleLocal(value){
+ const slots=Array.isArray(value)?value.slice(0,28):(value&&Array.isArray(value.slots)?value.slots.slice(0,28):Array(28).fill(""));
+ while(slots.length<28)slots.push("");
+ const updatedAt=Number(value&& !Array.isArray(value) ? value.updatedAt : 0)||0;
+ return {slots,updatedAt};
+}
+async function waitForCastleDoc(timeout=5000){
+ if(castleDoc)return true;
+ const started=Date.now();
+ while(!castleDoc&&Date.now()-started<timeout)await new Promise(r=>setTimeout(r,100));
+ return !!castleDoc;
+}
 async function loadCastle(){
- castleData=Array.isArray(readLocal(CASTLE_KEY,castleData))?readLocal(CASTLE_KEY,castleData):Array(28).fill("");
+ const local=normalizeCastleLocal(readLocal(CASTLE_KEY,null));
+ castleData=local.slots.slice(0,28);
  renderCastle();
- if(!castleDoc){
-   const started=Date.now();
-   while(!castleDoc&&Date.now()-started<5000)await new Promise(r=>setTimeout(r,100));
+ await waitForCastleDoc();
+ if(castleDoc){
+   try{
+     const s=await Promise.race([getDoc(castleDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+     if(s.exists()&&Array.isArray(s.data()?.slots)){
+       const cloud=s.data()||{};
+       const cloudSlots=cloud.slots.slice(0,28);
+       while(cloudSlots.length<28)cloudSlots.push("");
+       const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+       if(local.updatedAt>cloudUpdatedAt){
+         // Local data was changed more recently, so never overwrite it with stale cloud data.
+         castleData=local.slots.slice(0,28);
+         try{
+           await setDoc(castleDoc,{slots:castleData,updatedAt:local.updatedAt});
+         }catch(e){console.warn("castle sync",e);}
+       }else{
+         castleData=cloudSlots;
+         writeLocal(CASTLE_KEY,{slots:castleData,updatedAt:cloudUpdatedAt});
+       }
+       renderCastle();
+     }
+   }catch(e){console.warn("castle read",e);}
  }
- if(castleDoc){try{const s=await Promise.race([getDoc(castleDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()&&Array.isArray(s.data()?.slots)){castleData=s.data().slots.slice(0,28);while(castleData.length<28)castleData.push("");writeLocal(CASTLE_KEY,castleData);renderCastle();}}catch(e){console.warn("castle read",e);}}
  setMsg("castleMsg","최신 캐슬배치 내용을 불러왔습니다.");
 }
 async function saveCastle(){
- castleData=collectCastle();writeLocal(CASTLE_KEY,castleData);renderCastle();
- try{if(castleDoc)await setDoc(castleDoc,{slots:castleData});setMsg("castleMsg","캐슬배치가 저장되었습니다.");}
- catch(e){console.error(e);setMsg("castleMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}
+ const collected=collectCastle();
+ castleData=collected;
+ const updatedAt=Date.now();
+ writeLocal(CASTLE_KEY,{slots:castleData,updatedAt});
+ renderCastle();
+ try{
+   await waitForCastleDoc();
+   if(!castleDoc)throw Error("castle document is not ready");
+   await setDoc(castleDoc,{slots:castleData,updatedAt});
+   setMsg("castleMsg","캐슬배치가 저장되었습니다.");
+ }catch(e){
+   console.error(e);
+   setMsg("castleMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
+ }
 }
 function toggleCastleAdmin(){
  if(castleAdmin){castleAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}castleAdmin=true;}
