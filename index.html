@@ -371,6 +371,12 @@ let homeData={latestTitle:"",latestBody:"당분간 fort와 sanc의 보상은 병
 function clone(x){return JSON.parse(JSON.stringify(x));}
 function readLocal(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||"null");return v??fallback;}catch{return fallback;}}
 function writeLocal(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{}}
+async function waitForDocRef(getter,timeout=5000){
+ if(getter())return getter();
+ const started=Date.now();
+ while(!getter()&&Date.now()-started<timeout)await new Promise(r=>setTimeout(r,100));
+ return getter();
+}
 function setMsg(id,msg){const e=document.getElementById(id);if(e)e.textContent=translateString(msg,currentLang);}
 function lines(text){return String(text||"").split("\n").map(s=>s.trimEnd()).join("<br>");}
 function safe(text){return String(text??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
@@ -416,35 +422,54 @@ async function loadSeating(){
    localStorage.removeItem("kor1816_seating_v5_init");
    localStorage.removeItem("kor1816_seating_v6_init");
  }catch{}
- const saved=readLocal(SEATING_KEY,null);
- let initializing=!saved;
- if(saved)seatingData=normalizeSeating(saved);
- else{seatingData=clone(seatingData);writeLocal(SEATING_KEY,seatingData);initializing=true;}
+ const localRaw=readLocal(SEATING_KEY,null);
+ const legacy=Array.isArray(localRaw);
+ const localData=legacy?normalizeSeating(localRaw):normalizeSeating(localRaw?.columns||null);
+ const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
+ let initializing=!localRaw;
+ seatingData=localData;
+ if(!localRaw)writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:0});
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
  setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
  setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
- if(!seatingDoc){
-   const started=Date.now();
-   while(!seatingDoc && Date.now()-started<8000) await new Promise(r=>setTimeout(r,150));
- }
+ await waitForDocRef(()=>seatingDoc,8000);
  if(!seatingDoc){return;}
- if(initializing){
-   try{await setDoc(seatingDoc,{columns:seatingData,version:1});writeLocal(SEATING_KEY,seatingData);}
-   catch(e){console.warn("seating initial save",e);}
+ try{
+   const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(!s.exists()){
+     if(initializing){
+       try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt:localUpdatedAt});}catch(e){console.warn("seating initial save",e);}
+     }
+   }else{
+     const cloud=s.data()||{};
+     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+     if(localUpdatedAt>cloudUpdatedAt){
+       try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt:localUpdatedAt});}catch(e){console.warn("seating sync",e);}
+     }else{
+       seatingData=normalizeSeating(cloud.columns);
+       writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:cloudUpdatedAt});
+     }
+     renderSeating();renderSeatingAdmin();translatePage(currentLang);
+   }
    setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
-   return;
+ }catch(e){
+   console.warn("seating read",e);
+   setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
+   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  }
- try{const s=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){seatingData=normalizeSeating(s.data().columns);writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();translatePage(currentLang);}
-   setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");
-   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
- }catch(e){console.warn("seating read",e);setMsg("seatingLatestMsg","최신 자리배치 내용을 불러왔습니다.");setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 async function saveSeating(){
- seatingData=collectSeating();writeLocal(SEATING_KEY,seatingData);renderSeating();renderSeatingAdmin();
- try{if(seatingDoc)await setDoc(seatingDoc,{columns:seatingData});setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
- catch(e){console.error(e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
+ seatingData=collectSeating();
+ const updatedAt=Date.now();
+ writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:updatedAt});
+ renderSeating();renderSeatingAdmin();
+ try{
+   await waitForDocRef(()=>seatingDoc,8000);
+   if(!seatingDoc)throw Error("seating document is not ready");
+   await setDoc(seatingDoc,{columns:seatingData,updatedAt});
+   setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
+ }catch(e){console.error(e);setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");}
 }
 let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
@@ -460,11 +485,27 @@ function collectTeams(){
  return d;
 }
 async function loadTeams(){
- teamData=normalizeTeams(readLocal(TEAM_KEY,teamData)); renderTeams(); translatePage(currentLang);
+ const localRaw=readLocal(TEAM_KEY,null);
+ const localData=normalizeTeams(localRaw||teamData);
+ const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
+ teamData=localData; renderTeams(); translatePage(currentLang);
  setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
+ await waitForDocRef(()=>teamDoc);
  if(!teamDoc)return;
- try{const s=await Promise.race([getDoc(teamDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){teamData=normalizeTeams(s.data());writeLocal(TEAM_KEY,teamData);renderTeams();translatePage(currentLang);}
+ try{
+   const s=await Promise.race([getDoc(teamDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(s.exists()){
+     const cloud=s.data()||{};
+     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+     if(localUpdatedAt>cloudUpdatedAt){
+       teamData=localData;
+       try{await setDoc(teamDoc,{...teamData,updatedAt:localUpdatedAt});}catch(e){console.warn("teams sync",e);}
+     }else{
+       teamData=normalizeTeams(cloud);
+       writeLocal(TEAM_KEY,{...teamData,_updatedAt:cloudUpdatedAt});
+     }
+     renderTeams();translatePage(currentLang);
+   }
    setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
  }catch(e){console.warn("teams read",e);translatePage(currentLang);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
 }
@@ -478,9 +519,16 @@ function toggleTeamsAdmin(){
 }
 async function saveAllTeams(){
  if(!teamsAdmin)return;
- teamData=collectTeams();writeLocal(TEAM_KEY,teamData);renderTeams();setTeamsInputsEnabled(true);
- try{if(teamDoc)await setDoc(teamDoc,teamData);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
- catch(e){console.error(e);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
+ teamData=collectTeams();
+ const updatedAt=Date.now();
+ writeLocal(TEAM_KEY,{...teamData,_updatedAt:updatedAt});
+ renderTeams();setTeamsInputsEnabled(true);
+ try{
+   await waitForDocRef(()=>teamDoc);
+   if(!teamDoc)throw Error("team document is not ready");
+   await setDoc(teamDoc,{...teamData,updatedAt});
+   setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
+ }catch(e){console.error(e);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
 }
 function renderAlliance(){
  for(let t=1;t<=4;t++){const groups=allianceData.names?.[t]||{};for(let g=1;g<=(t<=2?2:1);g++){const vals=groups["g"+g]||[];for(let k=3;k<=7;k++){const v=vals[k]||"";const a=document.getElementById("alliance-"+t+"-"+g+"-"+k),e=document.getElementById("ae-"+t+"-"+g+"-"+k);if(a)a.value=v;if(e)e.value=v;}}}
@@ -491,18 +539,40 @@ function collectAlliance(){
  return d;
 }
 async function loadAlliance(){
- allianceData=readLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);
+ const localRaw=readLocal(ALLIANCE_KEY,null);
+ const localData=localRaw&&typeof localRaw==="object"?{...localRaw}:clone(allianceData);
+ const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
+ allianceData=localData;renderAlliance();translatePage(currentLang);
  setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
+ await waitForDocRef(()=>allianceDoc);
  if(!allianceDoc)return;
- try{const s=await Promise.race([getDoc(allianceDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
-   if(s.exists()){allianceData=s.data();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();translatePage(currentLang);}
+ try{
+   const s=await Promise.race([getDoc(allianceDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+   if(s.exists()){
+     const cloud=s.data()||{};
+     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+     if(localUpdatedAt>cloudUpdatedAt){
+       allianceData=localData;
+       try{await setDoc(allianceDoc,{...allianceData,updatedAt:localUpdatedAt});}catch(e){console.warn("alliance sync",e);}
+     }else{
+       allianceData=cloud;
+       writeLocal(ALLIANCE_KEY,{...allianceData,_updatedAt:cloudUpdatedAt});
+     }
+     renderAlliance();translatePage(currentLang);
+   }
    setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
  }catch(e){console.warn("alliance read",e);translatePage(currentLang);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
 }
 async function saveAlliance(){
- allianceData=collectAlliance();writeLocal(ALLIANCE_KEY,allianceData);renderAlliance();
- try{if(allianceDoc)await setDoc(allianceDoc,allianceData);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
- catch(e){console.error(e);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
+ allianceData=collectAlliance();
+ const updatedAt=Date.now();
+ writeLocal(ALLIANCE_KEY,{...allianceData,_updatedAt:updatedAt});renderAlliance();
+ try{
+   await waitForDocRef(()=>allianceDoc);
+   if(!allianceDoc)throw Error("alliance document is not ready");
+   await setDoc(allianceDoc,{...allianceData,updatedAt});
+   setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
+ }catch(e){console.error(e);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
 }
 const HOME_LANGS=["ko","en","ja","zh","de","it","es"];
 const HOME_DEFAULT_TRANSLATIONS={
@@ -563,8 +633,12 @@ function renderHome(d){
  if(a)a.value=data.latestTitle||"";if(b)b.value=data.latestBody||"";if(s)s.value=data.schedule||"";if(w)w.value=data.welcome||"";
 }
 async function loadHome(){
- homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));
+ const localRaw=readLocal(HOME_KEY,null);
+ const localData=normalizeHomeData(localRaw||homeData);
+ const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
+ homeData=localData;
  renderHome(homeData);
+ await waitForDocRef(()=>homeDoc);
  if(!homeDoc){
    if(currentLang!=="ko")await translateHomeDynamic(currentLang);
    return;
@@ -572,8 +646,15 @@ async function loadHome(){
  try{
    const s=await Promise.race([getDoc(homeDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(s.exists()){
-     homeData=normalizeHomeData({...homeData,...s.data()});
-     writeLocal(HOME_KEY,homeData);
+     const cloud=s.data()||{};
+     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+     if(localUpdatedAt>cloudUpdatedAt){
+       homeData=localData;
+       try{await setDoc(homeDoc,{...homeData,updatedAt:localUpdatedAt});}catch(e){console.warn("home sync",e);}
+     }else{
+       homeData=normalizeHomeData(cloud);
+       writeLocal(HOME_KEY,{...homeData,_updatedAt:cloudUpdatedAt});
+     }
      renderHome(homeData);
      const lang=currentLang;
      if(lang!=="ko")await translateHomeDynamic(lang);
@@ -603,8 +684,17 @@ async function saveHome(){
    homeData.schedule=homeData.translations.ko.schedule;
    homeData.welcome=homeData.translations.ko.welcome;
  }
- writeLocal(HOME_KEY,homeData);renderHome(homeData);
- try{if(homeDoc)await setDoc(homeDoc,homeData);setMsg("homeMsg","홈 저장 완료!");}catch(e){console.error(e);setMsg("homeMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");}
+ const updatedAt=Date.now();
+ writeLocal(HOME_KEY,{...homeData,_updatedAt:updatedAt});renderHome(homeData);
+ try{
+   await waitForDocRef(()=>homeDoc);
+   if(!homeDoc)throw Error("home document is not ready");
+   await setDoc(homeDoc,{...homeData,updatedAt});
+   setMsg("homeMsg","홈 저장 완료!");
+ }catch(e){
+   console.error(e);
+   setMsg("homeMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");
+ }
 }
 let homeAdmin=false,allianceAdmin=false;
 function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
@@ -779,7 +869,56 @@ function setLanguage(lang){
    void translateHomeDynamic(lang,version);
  }
 }
-const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){const local=readLocal(CASTLEWAR_KEY,null);if(local&&Array.isArray(local.slots)){castleWarData=local.slots.slice(0,50);while(castleWarData.length<50)castleWarData.push("");castleWarPlan=local.plan||castleWarPlan;}else{castleWarData=Array.isArray(local)?local.slice(0,50):Array(50).fill("");while(castleWarData.length<50)castleWarData.push("");}renderCastleWar();if(castleWarDoc){try{const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);if(s.exists()){const data=s.data()||{};if(Array.isArray(data.slots)){castleWarData=data.slots.slice(0,50);while(castleWarData.length<50)castleWarData.push("");}if(data.plan)castleWarPlan=data.plan;writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan});renderCastleWar();}}catch(e){console.warn("castlewar read",e);}}setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");}async function saveCastleWar(){const collected=collectCastleWar();castleWarData=collected.slots;castleWarPlan=collected.plan;writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan});renderCastleWar();try{if(castleWarDoc)await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan});setMsg("castlewarMsg","캐슬전이 저장되었습니다.");}catch(e){setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}}function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
+const CASTLEWAR_KEY="kor1816_castlewar_v1";let castleWarDoc=null,castleWarAdmin=false,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]};function renderCastleWar(){for(let n=1;n<=50;n++){const e=document.getElementById("castlewar-slot-"+n);if(e){e.value=castleWarData[n-1]||"";e.disabled=!castleWarAdmin;}}for(let n=1;n<=4;n++){const e=document.getElementById("castlewar-attack-"+n);if(e){e.value=castleWarPlan.attack[n-1]||"";e.disabled=!castleWarAdmin;}for(let r=1;r<=4;r++){const e=document.getElementById("castlewar-attack-ratio-"+n+"-"+r);if(e){e.value=(castleWarPlan.attackRatios[n-1]||[])[r-1]||"";e.disabled=!castleWarAdmin;}}const d=document.getElementById("castlewar-defense-"+n);if(d){d.value=castleWarPlan.defense[n-1]||"";d.disabled=!castleWarAdmin;}const dr=document.getElementById("castlewar-defense-ratio-"+n);if(dr){dr.value=castleWarPlan.defenseRatios[n-1]||"";dr.disabled=!castleWarAdmin;}}}function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}return {slots:d,plan:p};}async function loadCastleWar(){
+ const localRaw=readLocal(CASTLEWAR_KEY,null);
+ const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
+ if(localRaw&&Array.isArray(localRaw.slots)){
+   castleWarData=localRaw.slots.slice(0,50);
+   while(castleWarData.length<50)castleWarData.push("");
+   castleWarPlan=localRaw.plan||castleWarPlan;
+ }else if(Array.isArray(localRaw)){
+   castleWarData=localRaw.slice(0,50);
+   while(castleWarData.length<50)castleWarData.push("");
+ }else{
+   castleWarData=Array(50).fill("");
+ }
+ renderCastleWar();
+ await waitForDocRef(()=>castleWarDoc);
+ if(castleWarDoc){
+   try{
+     const s=await Promise.race([getDoc(castleWarDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
+     if(s.exists()){
+       const cloud=s.data()||{};
+       const cloudUpdatedAt=Number(cloud.updatedAt)||0;
+       if(localUpdatedAt>cloudUpdatedAt){
+         try{await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,updatedAt:localUpdatedAt});}catch(e){console.warn("castlewar sync",e);}
+       }else{
+         if(Array.isArray(cloud.slots)){
+           castleWarData=cloud.slots.slice(0,50);
+           while(castleWarData.length<50)castleWarData.push("");
+         }
+         if(cloud.plan)castleWarPlan=cloud.plan;
+         writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,_updatedAt:cloudUpdatedAt});
+       }
+       renderCastleWar();
+     }
+   }catch(e){console.warn("castlewar read",e);}
+ }
+ setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
+}
+async function saveCastleWar(){
+ const collected=collectCastleWar();
+ castleWarData=collected.slots;castleWarPlan=collected.plan;
+ const updatedAt=Date.now();
+ writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,_updatedAt:updatedAt});
+ renderCastleWar();
+ try{
+   await waitForDocRef(()=>castleWarDoc);
+   if(!castleWarDoc)throw Error("castlewar document is not ready");
+   await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,updatedAt});
+   setMsg("castlewarMsg","캐슬전이 저장되었습니다.");
+ }catch(e){setMsg("castlewarMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}
+}function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
 function collectCastle(){const d=[];for(let n=1;n<=28;n++)d.push((document.getElementById("castle-slot-"+n)?.value||"").trim());return d;}
 function normalizeCastleLocal(value){
  const slots=Array.isArray(value)?value.slice(0,28):(value&&Array.isArray(value.slots)?value.slots.slice(0,28):Array(28).fill(""));
