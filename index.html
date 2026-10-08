@@ -935,8 +935,9 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
  return {slots,plan,extra};
 }
 let castleWarLoadSeq=0;
+let castleWarLoadToken=0;
 async function loadCastleWar(){
- const loadToken=++castleWarLoadToken;
+ const token=++castleWarLoadToken;
  const localRaw=readLocal(CASTLEWAR_KEY,null);
  const localData=normalizeCastleWar(localRaw);
  castleWarData=localData.slots;
@@ -945,13 +946,13 @@ async function loadCastleWar(){
  renderCastleWar();
  setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  await waitForDocRef(()=>castleWarDoc);
- if(!castleWarDoc)return;
+ if(!castleWarDoc||token!==castleWarLoadToken)return;
  try{
    const s=await Promise.race([
-     getDoc(castleWarDoc,{source:"server"}),
+     getDoc(castleWarDoc),
      new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))
    ]);
-   if(loadToken!==castleWarLoadToken)return;
+   if(token!==castleWarLoadToken)return;
    if(s.exists()){
      const cloudData=normalizeCastleWar(s.data()||{});
      const cloudUpdatedAt=Number(s.data()?.updatedAt)||0;
@@ -963,7 +964,7 @@ async function loadCastleWar(){
    }
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
-   if(loadToken!==castleWarLoadToken)return;
+   if(token!==castleWarLoadToken)return;
    console.warn("castlewar read",e);
    setMsg("castlewarMsg","공용 서버를 불러오지 못해 현재 기기 저장본을 표시합니다.");
  }
@@ -987,24 +988,10 @@ async function saveCastleWar(){
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
    await setDoc(castleWarDoc,{slots:saveSlots,plan:savePlan,extra:saveExtra,updatedAt});
-   const verify=await Promise.race([
-     getDoc(castleWarDoc,{source:"server"}),
-     new Promise((_,rej)=>setTimeout(()=>rej(Error("verify timeout")),7000))
-   ]);
-   if(!verify.exists())throw Error("server document missing after save");
-   const server=normalizeCastleWar(verify.data()||{});
-   const serverUpdatedAt=Number(verify.data()?.updatedAt)||0;
-   if(serverUpdatedAt!==updatedAt)throw Error("server save timestamp mismatch");
-   castleWarData=server.slots;
-   castleWarPlan=server.plan;
-   castleWarExtra=server.extra;
-   writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:serverUpdatedAt});
-   renderCastleWar();
-   setCastleWarInputsEnabled(true);
    setMsg("castlewarMsg","캐슬전이 공용 서버에 저장되었습니다.");
  }catch(e){
    console.error("castlewar save",e);
-   setMsg("castlewarMsg","기기에는 저장됐지만 공용 서버 저장에 실패했습니다.");
+   setMsg("castlewarMsg","공용 서버 저장에 실패해 현재 기기에만 저장되었습니다.");
  }
 }
 function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
