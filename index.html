@@ -877,7 +877,14 @@ const CASTLEWAR_KEY="kor1816_castlewar_v3";let castleWarDoc=null,castleWarLegacy
 "공격 : 1~4열 고정\n2첸코 / 2아마\n2첸코 / 아마네 / 파드\n2살로 / 첸코 / 아마네\n2힐데 / 살로 / 첸코",
 "1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
 ];function setCastleWarInputsEnabled(enabled){
- document.querySelectorAll("#castlewar input,#castlewar textarea").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});
+ document.querySelectorAll("#castlewar input,#castlewar textarea").forEach(e=>{
+   e.disabled=!enabled;
+   e.style.cursor=enabled?"text":"default";
+   e.style.opacity="1";
+   e.style.background="#0b1426";
+   e.style.color="#fff";
+   e.style.webkitTextFillColor="#fff";
+ });
 }
 function normalizeCastleWarPlan(value){
  const src=value&&typeof value==="object"?value:{};
@@ -929,7 +936,6 @@ function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.ge
 async function loadCastleWar(){
  const localRaw=readLocal(CASTLEWAR_KEY,null);
  const localData=normalizeCastleWar(localRaw);
- const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
  castleWarData=localData.slots;
  castleWarPlan=localData.plan;
  castleWarExtra=localData.extra;
@@ -949,43 +955,39 @@ async function loadCastleWar(){
      }
    }
    if(s.exists()){
-     const cloud=s.data()||{};
-     const cloudData=normalizeCastleWar(cloud);
-     const cloudUpdatedAt=Number(cloud.updatedAt)||0;
-     if(localUpdatedAt>cloudUpdatedAt){
-       castleWarData=localData.slots;
-       castleWarPlan=localData.plan;
-       castleWarExtra=localData.extra;
-       try{await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,updatedAt:localUpdatedAt});}catch(e){console.warn("castlewar sync",e);}
-     }else{
-       castleWarData=cloudData.slots;
-       castleWarPlan=cloudData.plan;
-       castleWarExtra=cloudData.extra;
-       writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:cloudUpdatedAt});
-     }
+     const cloudData=normalizeCastleWar(s.data()||{});
+     const cloudUpdatedAt=Number(s.data()?.updatedAt)||0;
+     castleWarData=cloudData.slots;
+     castleWarPlan=cloudData.plan;
+     castleWarExtra=cloudData.extra;
+     writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:cloudUpdatedAt});
      renderCastleWar();
    }
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
    console.warn("castlewar read",e);
+   // Keep cached local data visible only when the server cannot be read.
    setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }
 }
 async function saveCastleWar(){
  if(!castleWarAdmin)return;
  const collected=collectCastleWar();
- castleWarData=collected.slots;
- castleWarPlan=collected.plan;
- castleWarExtra=Array.isArray(collected.extra)?collected.extra.slice(0,3):castleWarExtra.slice(0,3);
- while(castleWarExtra.length<3)castleWarExtra.push("");
+ const saveSlots=collected.slots;
+ const savePlan=collected.plan;
+ const saveExtra=Array.isArray(collected.extra)?collected.extra.slice(0,3):castleWarExtra.slice(0,3);
+ while(saveExtra.length<3)saveExtra.push("");
  const updatedAt=Date.now();
- writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:updatedAt});
- renderCastleWar();
- setCastleWarInputsEnabled(true);
  try{
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
-   await setDoc(castleWarDoc,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,updatedAt});
+   await setDoc(castleWarDoc,{slots:saveSlots,plan:savePlan,extra:saveExtra,updatedAt});
+   castleWarData=saveSlots;
+   castleWarPlan=savePlan;
+   castleWarExtra=saveExtra;
+   writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,_updatedAt:updatedAt});
+   renderCastleWar();
+   setCastleWarInputsEnabled(true);
    setMsg("castlewarMsg","캐슬전이 저장되었습니다.");
  }catch(e){
    console.error(e);
@@ -1068,8 +1070,6 @@ function toggleCastleWarAdmin(){
    }
    castleWarAdmin=true;
  }
- setCastleWarInputsEnabled(castleWarAdmin);
- renderCastleWar();
  setCastleWarInputsEnabled(castleWarAdmin);
  document.getElementById("castlewarAdminBtn").textContent=castleWarAdmin?"🔒 수정 종료":"🔐 관리자 수정";
  document.getElementById("castlewarSaveBtn").style.display=castleWarAdmin?"inline-flex":"none";
