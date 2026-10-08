@@ -944,8 +944,7 @@ async function saveCastleWar(){
    setMsg("castlewarMsg","캐슬전이 저장되었습니다.");
  }catch(e){
    console.error("castlewar save",e);
-   writeLocal(CASTLEWAR_KEY,{slots:castleWarData,plan:castleWarPlan,_updatedAt:updatedAt});
-   setMsg("castlewarMsg","저장 확인에 실패했습니다. 서버 연결을 확인해주세요.");
+   setMsg("castlewarMsg","서버 저장에 실패했습니다. 변경 내용은 아직 화면에만 있습니다.");
  }
 }function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
 function collectCastle(){const d=[];for(let n=1;n<=28;n++)d.push((document.getElementById("castle-slot-"+n)?.value||"").trim());return d;}
@@ -1019,7 +1018,17 @@ function toggleCastleWarAdmin(){
 async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
-   try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
+   let authOk=false;
+   for(let attempt=0;attempt<2&&!authOk;attempt++){
+     try{
+       await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),15000))]);
+       authOk=true;
+     }catch(e){
+       console.warn("anonymous auth",e);
+       if(attempt===0)await new Promise(r=>setTimeout(r,500));
+     }
+   }
+   if(!authOk)throw Error("Firebase anonymous authentication failed");
    db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=doc(db,"siteData","castlewar_v1");firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
