@@ -904,13 +904,31 @@ function normalizeCastleWarPlan(value){
  while(attack.length<4)attack.push("");
  const defense=Array.isArray(src.defense)?src.defense.slice(0,4):[];
  while(defense.length<4)defense.push("");
- const attackRatios=Array.isArray(src.attackRatios)?src.attackRatios.slice(0,4):[];
- while(attackRatios.length<4)attackRatios.push([]);
- attackRatios.forEach(row=>{if(!Array.isArray(row))return;while(row.length<4)row.push("");row.length=4;});
- while(attackRatios.length<4)attackRatios.push(["","","",""]);
+ let attackRatios=[];
+ if(Array.isArray(src.attackRatiosFlat)){
+   const flat=src.attackRatiosFlat;
+   for(let i=0;i<4;i++)attackRatios.push(Array.from({length:4},(_,j)=>String(flat[i*4+j]??"")));
+ }else{
+   attackRatios=Array.isArray(src.attackRatios)?src.attackRatios.slice(0,4):[];
+   while(attackRatios.length<4)attackRatios.push([]);
+   attackRatios=attackRatios.map(row=>{
+     const values=Array.isArray(row)?row.slice(0,4):[];
+     while(values.length<4)values.push("");
+     return values.map(v=>String(v??""));
+   });
+ }
  const defenseRatios=Array.isArray(src.defenseRatios)?src.defenseRatios.slice(0,4):[];
  while(defenseRatios.length<4)defenseRatios.push("");
  return {attack,attackRatios,defense,defenseRatios};
+}
+function castleWarFirestorePlan(value){
+ const plan=normalizeCastleWarPlan(value);
+ return {
+   attack:plan.attack.slice(0,4),
+   attackRatiosFlat:plan.attackRatios.flatMap(row=>row.slice(0,4)),
+   defense:plan.defense.slice(0,4),
+   defenseRatios:plan.defenseRatios.slice(0,4)
+ };
 }
 function renderCastleWar(){
  castleWarPlan=normalizeCastleWarPlan(castleWarPlan);
@@ -1002,7 +1020,7 @@ async function loadCastleWar(){
        try{
          await setDoc(castleWarDoc,{
            slots:castleWarData,
-           plan:castleWarPlan,
+           plan:castleWarFirestorePlan(castleWarPlan),
            extra:castleWarExtra,
            updatedAt:chosenUpdatedAt
          });
@@ -1051,7 +1069,7 @@ async function saveCastleWar(){
    if(!castleWarDoc)throw Error("castlewar document is not ready");
    // Same top-level save pattern as Holy Sword Clash and Three Alliances War.
    await setDoc(castleWarDoc,{
-     slots:saveSlots,plan:savePlan,extra:saveExtra,updatedAt
+     slots:saveSlots,plan:castleWarFirestorePlan(savePlan),extra:saveExtra,updatedAt
    });
    setMsg("castlewarMsg","캐슬전 공용 서버 저장 완료!");
  }catch(e){
