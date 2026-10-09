@@ -796,45 +796,69 @@ function translateString(value,lang){
 }
 
 const FIXED_CASTLEWAR_EXTRA_KO=[
-"공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 약하면 예거\n(비율 : 640)",
+"공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 강하면 예거\n(비율 : 640)",
 "공격 : 1~4열 고정\n2첸코 / 2아마\n2첸코 / 아마네 / 파드\n2살로 / 첸코 / 아마네\n2힐데 / 살로 / 첸코",
-"1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
+"수비 : 1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
+];
+const FIXED_CASTLEWAR_EXTRA_ALIASES=[
+[
+"공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 약하면 예거\n(비율 : 640)",
+"Attack: Amade / Fera / Rosa\n(Ratio: 505 / 514 / 415 / 406)\n\nDefense: Alka / Margo / Salo, or Jaeger if the opponent is weaker\n(Ratio: 640)",
+"攻撃：Amade / Fera / Rosa\n（比率：505 / 514 / 415 / 406）\n\n防衛：Alka / Margo / Salo、相手が弱い場合はJaeger\n（比率：640）",
+"进攻：Amade / Fera / Rosa\n（比例：505 / 514 / 415 / 406）\n\n防守：Alka / Margo / Salo；如果对手较弱则使用 Jaeger\n（比例：640）",
+"Angriff: Amade / Fera / Rosa\n(Verhältnis: 505 / 514 / 415 / 406)\n\nVerteidigung: Alka / Margo / Salo oder Jaeger, wenn der Gegner schwächer ist\n(Verhältnis: 640)",
+"Attacco: Amade / Fera / Rosa\n(Rapporto: 505 / 514 / 415 / 406)\n\nDifesa: Alka / Margo / Salo, oppure Jaeger se l'avversario è più debole\n(Rapporto: 640)",
+"Ataque: Amade / Fera / Rosa\n(Proporción: 505 / 514 / 415 / 406)\n\nDefensa: Alka / Margo / Salo, o Jaeger si el rival es más débil\n(Proporción: 640)",
+"Saldırı: Amade / Fera / Rosa\n(Oran: 505 / 514 / 415 / 406)\n\nSavunma: Alka / Margo / Salo; rakip daha zayıfsa Jaeger\n(Oran: 640)"
+],
+[],
+[
+"1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카",
+"Fixed for rows 1–4\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"1～4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"第1–4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"Reihen 1–4 fest\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"Righe 1–4 fisse\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"Filas 1–4 fijas\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka",
+"1–4. sıralar sabit\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"
+]
 ];
 const FIXED_TRANSLATIONS={
 ko:{community:"COMMUNITY",discord:"공식 디스코드 서버에 입장하세요.",titles:["집결장","집결원 공격","집결원 수비"],texts:FIXED_CASTLEWAR_EXTRA_KO},
 en:{community:"COMMUNITY",discord:"Join the official Discord server.",titles:["Rally Leader","Rally Member Attack","Rally Member Defense"],texts:[
-"Attack: Amade / Fera / Rosa\n(Ratio: 505 / 514 / 415 / 406)\n\nDefense: Alka / Margo / Salo, or Jaeger if the opponent is weaker\n(Ratio: 640)",
+"Attack: Amade / Fera / Rosa\n(Ratio: 505 / 514 / 415 / 406)\n\nDefense: Alka / Margo / Salo, or Jaeger if the opponent is stronger\n(Ratio: 640)",
 "Attack: Fixed for rows 1–4\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"Fixed for rows 1–4\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"Defense: Fixed for rows 1–4\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 ja:{community:"コミュニティ",discord:"公式Discordサーバーに参加してください。",titles:["集結リーダー","集結メンバー攻撃","集結メンバー防衛"],texts:[
-"攻撃：Amade / Fera / Rosa\n（比率：505 / 514 / 415 / 406）\n\n防衛：Alka / Margo / Salo、相手が弱い場合はJaeger\n（比率：640）",
+"攻撃：Amade / Fera / Rosa\n（比率：505 / 514 / 415 / 406）\n\n防衛：Alka / Margo / Salo、相手が強い場合はJaegerを使用\n（比率：640）",
 "攻撃：1～4列固定\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"1～4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"防衛：1～4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 zh:{community:"社区",discord:"加入官方 Discord 服务器。",titles:["集结队长","集结成员进攻","集结成员防守"],texts:[
-"进攻：Amade / Fera / Rosa\n（比例：505 / 514 / 415 / 406）\n\n防守：Alka / Margo / Salo；如果对手较弱则使用 Jaeger\n（比例：640）",
+"进攻：Amade / Fera / Rosa\n（比例：505 / 514 / 415 / 406）\n\n防守：Alka / Margo / Salo；如果对手更强则使用 Jaeger\n（比例：640）",
 "进攻：第1–4列固定\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"第1–4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"防守：第1–4列固定\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 de:{community:"COMMUNITY",discord:"Tritt dem offiziellen Discord-Server bei.",titles:["Rally-Leiter","Angriff der Rally-Mitglieder","Verteidigung der Rally-Mitglieder"],texts:[
-"Angriff: Amade / Fera / Rosa\n(Verhältnis: 505 / 514 / 415 / 406)\n\nVerteidigung: Alka / Margo / Salo oder Jaeger, wenn der Gegner schwächer ist\n(Verhältnis: 640)",
+"Angriff: Amade / Fera / Rosa\n(Verhältnis: 505 / 514 / 415 / 406)\n\nVerteidigung: Alka / Margo / Salo oder Jaeger, wenn der Gegner stärker ist\n(Verhältnis: 640)",
 "Angriff: Reihen 1–4 fest\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"Reihen 1–4 fest\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"Verteidigung: Reihen 1–4 fest\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 it:{community:"COMUNITÀ",discord:"Entra nel server Discord ufficiale.",titles:["Capo della spedizione","Attacco dei partecipanti alla spedizione","Difesa dei partecipanti alla spedizione"],texts:[
-"Attacco: Amade / Fera / Rosa\n(Rapporto: 505 / 514 / 415 / 406)\n\nDifesa: Alka / Margo / Salo, oppure Jaeger se l'avversario è più debole\n(Rapporto: 640)",
+"Attacco: Amade / Fera / Rosa\n(Rapporto: 505 / 514 / 415 / 406)\n\nDifesa: Alka / Margo / Salo, oppure Jaeger se l'avversario è più forte\n(Rapporto: 640)",
 "Attacco: righe 1–4 fisse\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"Righe 1–4 fisse\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"Difesa: righe 1–4 fisse\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 es:{community:"COMUNIDAD",discord:"Únete al servidor oficial de Discord.",titles:["Líder de rally","Ataque de los miembros del rally","Defensa de los miembros del rally"],texts:[
-"Ataque: Amade / Fera / Rosa\n(Proporción: 505 / 514 / 415 / 406)\n\nDefensa: Alka / Margo / Salo, o Jaeger si el rival es más débil\n(Proporción: 640)",
+"Ataque: Amade / Fera / Rosa\n(Proporción: 505 / 514 / 415 / 406)\n\nDefensa: Alka / Margo / Salo, o Jaeger si el rival es más fuerte\n(Proporción: 640)",
 "Ataque: filas 1–4 fijas\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"Filas 1–4 fijas\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
+"Defensa: filas 1–4 fijas\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]},
 tr:{community:"TOPLULUK",discord:"Resmî Discord sunucusuna katılın.",titles:["Sefer Lideri","Sefer Katılımcıları Saldırı","Sefer Katılımcıları Savunma"],texts:[
-"Saldırı: Amade / Fera / Rosa\n(Oran: 505 / 514 / 415 / 406)\n\nSavunma: Alka / Margo / Salo; rakip daha zayıfsa Jaeger\n(Oran: 640)",
+"Saldırı: Amade / Fera / Rosa\n(Oran: 505 / 514 / 415 / 406)\n\nSavunma: Alka / Margo / Salo; rakip daha güçlüyse Jaeger\n(Oran: 640)",
 "1–4. sıralar sabit\n2 Chenko / 2 Ama\n2 Chenko / Amane / Fard\n2 Salo / Chenko / Amane\n2 Hilde / Salo / Chenko",
-"1–4. sıralar sabit\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]}
+"Savunma: 1–4. sıralar sabit\n2 Hilde / Salo / Chenko\n4 Hilde\n2 Hilde / Salo / Gordon\n2 Salo / 1 Hilde / Alka"]}
 };
 function normalizeFixedText(value){return String(value??"").replace(/\r\n/g,"\n").trim();}
 function isKnownCastleWarExtra(index,value){
  const candidate=normalizeFixedText(value);
  if(candidate===normalizeFixedText(FIXED_CASTLEWAR_EXTRA_KO[index]))return true;
+ if((FIXED_CASTLEWAR_EXTRA_ALIASES[index]||[]).some(alias=>normalizeFixedText(alias)===candidate))return true;
  return Object.values(FIXED_TRANSLATIONS).some(bundle=>normalizeFixedText(bundle.texts[index])===candidate);
 }
 function canonicalizeCastleWarExtra(index,value){
@@ -976,9 +1000,9 @@ function setLanguage(lang){
  }
 }
 const CASTLEWAR_KEY="kor1816_castlewar_shared_v1";let castleWarDoc=null,castleWarLegacyDoc=null,castleWarAdmin=false,castleWarLoadToken=0,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]},castleWarExtra=[
-"공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 약하면 예거\n(비율 : 640)",
+"공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 강하면 예거\n(비율 : 640)",
 "공격 : 1~4열 고정\n2첸코 / 2아마\n2첸코 / 아마네 / 파드\n2살로 / 첸코 / 아마네\n2힐데 / 살로 / 첸코",
-"1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
+"수비 : 1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
 ];let castleWarLeaders={assault:"",rush:"",finishing:"",northTurret:"",westTurret:""};function setCastleWarInputsEnabled(enabled){
  document.querySelectorAll("#castlewar input,#castlewar textarea").forEach(e=>{
    e.disabled=!enabled;
