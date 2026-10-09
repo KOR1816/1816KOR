@@ -319,6 +319,12 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 <style id="castlewar-autofill-fix">
 #castlewar input:-webkit-autofill,#castlewar input:-webkit-autofill:hover,#castlewar input:-webkit-autofill:focus,#castlewar textarea:-webkit-autofill{box-shadow:0 0 0 1000px #0b1426 inset!important;-webkit-box-shadow:0 0 0 1000px #0b1426 inset!important;-webkit-text-fill-color:#fff!important;color:#fff!important;caret-color:#fff!important;transition:background-color 9999s ease-out 0s!important;}
 </style>
+<style id="home-discord-card">
+.home-discord-card{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px}
+.home-discord-card p{margin:0;line-height:1.6;color:#dbe7ff}
+.home-discord-link{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(180deg,#5865f2,#4752c4);border:1px solid #7c85ff;border-radius:10px;color:#fff!important;text-decoration:none!important;font-weight:800;overflow-wrap:anywhere}
+.home-discord-link:hover{filter:brightness(1.12);transform:translateY(-1px)}
+</style>
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">⚔️ 캐슬전</button></nav>
@@ -330,6 +336,12 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   <div class="card"><span class="tag">LATEST</span><h2 id="homeLatestTitle">📢 공지</h2><div class="notice" id="homeLatest"></div></div>
   <div class="card"><span class="tag">SCHEDULE</span><h2 id="homeScheduleTitle">📅 이벤트 일정</h2><div id="homeSchedule"></div></div>
   <div class="card"><span class="tag">WELCOME</span><h2 id="homeWelcomeTitle">🌍 Kingdom 1816</h2><p id="homeWelcome"></p></div>
+  <div class="card home-discord-card">
+    <span class="tag" data-no-translate="1">COMMUNITY</span>
+    <h2 data-no-translate="1">💬 Discord</h2>
+    <p>공식 디스코드 서버에 입장하세요.</p>
+    <a class="home-discord-link" href="https://discord.gg/XssRBBKR9" target="_blank" rel="noopener noreferrer" data-no-translate="1">discord.gg/XssRBBKR9 ↗</a>
+  </div>
 </div>
 <div class="home-controls"><div class="admin-bar home-welcome-admin"><button class="admin-btn" onclick="loadHome()">🔄 새로고침</button><button class="admin-btn" id="homeAdminBtn" onclick="toggleHomeAdmin()">🔐 관리자 수정</button></div></div>
 <div id="homeEdit" class="grid" style="display:none">
