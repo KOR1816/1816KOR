@@ -1057,6 +1057,34 @@ async function loadCastleWar(){
    if(remote){
      const cloud=normalizeCastleWar(remote);
      const cloudUpdatedAt=Number(remote.updatedAt)||0;
+
+     // Match the working sections: if this device has a newer saved version, sync it first.
+     if(localRaw&&localUpdatedAt>cloudUpdatedAt){
+       await setDoc(castleWarDoc,{
+         castleWarSharedV1:{
+           slots:localData.slots,
+           plan:castleWarFirestorePlan(localData.plan),
+           extra:localData.extra,
+           leaders:localData.leaders,
+           westTurretLeader:localData.leaders.westTurret,
+           updatedAt:localUpdatedAt
+         }
+       },{merge:true});
+       if(token!==castleWarLoadToken)return;
+       castleWarData=localData.slots;
+       castleWarPlan=localData.plan;
+       castleWarExtra=localData.extra;
+       castleWarLeaders=localData.leaders;
+       writeLocal(CASTLEWAR_KEY,{
+         slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,
+         leaders:castleWarLeaders,westTurretLeader:castleWarLeaders.westTurret,_updatedAt:localUpdatedAt
+       });
+       renderCastleWar();
+       translatePage(currentLang);
+       setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
+       return;
+     }
+
      castleWarData=cloud.slots;
      castleWarPlan=cloud.plan;
      castleWarExtra=cloud.extra;
