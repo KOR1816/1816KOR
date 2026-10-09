@@ -965,16 +965,18 @@ async function loadCastleWar(){
    if(token!==castleWarLoadToken)return;
    let cloudRaw=s.exists()?(s.data()||{}):null;
    let needsMigration=false;
-   // One-time recovery: older code put Castle War in castle_v1.castleWar.
-   // Read it only when the dedicated castlewar_v2 document has no usable save.
-   if((!cloudRaw||!Array.isArray(cloudRaw.slots))&&castleWarLegacyDoc){
+   // Recover newer data from the previous shared castle_v1 document if present.
+   // Compare timestamps so a stale legacy copy never overwrites a newer dedicated save.
+   if(castleWarLegacyDoc){
      try{
        const legacy=await Promise.race([
          getDoc(castleWarLegacyDoc),
          new Promise((_,rej)=>setTimeout(()=>rej(Error("legacy timeout")),5000))
        ]);
        const nested=legacy.exists()?(legacy.data()||{}).castleWar:null;
-       if(nested&&typeof nested==="object"){
+       const nestedUpdatedAt=Number(nested&&nested.updatedAt)||0;
+       const directUpdatedAt=Number(cloudRaw&&cloudRaw.updatedAt)||0;
+       if(nested&&typeof nested==="object"&&nestedUpdatedAt>directUpdatedAt){
          cloudRaw=nested;
          needsMigration=true;
        }
