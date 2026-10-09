@@ -193,6 +193,19 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  #castlewar .castlewar-extra-columns{overflow-x:auto;overflow-y:hidden;display:grid;grid-template-columns:repeat(3,260px);width:100%;padding-bottom:6px;-webkit-overflow-scrolling:touch}
  #castlewar .castlewar-extra-card{min-width:260px}
 }
+
+/* Keep browser autofill/history suggestions readable in Castle War fields. */
+#castlewar input:-webkit-autofill,
+#castlewar input:-webkit-autofill:hover,
+#castlewar input:-webkit-autofill:focus,
+#castlewar textarea:-webkit-autofill,
+#castlewar textarea:-webkit-autofill:hover,
+#castlewar textarea:-webkit-autofill:focus{
+ -webkit-box-shadow:0 0 0 1000px #0b1426 inset!important;
+ box-shadow:0 0 0 1000px #0b1426 inset!important;
+ -webkit-text-fill-color:#fff!important;
+ caret-color:#fff!important;
+}
 </style><style id="castlewar-mobile-scroll">
 @media(max-width:900px){
  #castlewar .castlewar-columns{overflow-x:auto!important;overflow-y:hidden!important;display:grid!important;grid-template-columns:repeat(5,180px)!important;min-width:0!important;width:100%!important;-webkit-overflow-scrolling:touch!important;padding-bottom:6px!important}
