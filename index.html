@@ -897,7 +897,7 @@ function setLanguage(lang){
    void translateHomeDynamic(lang,version);
  }
 }
-const CASTLEWAR_KEY="kor1816_castlewar_v4";let castleWarDoc=null,castleWarLegacyDoc=null,castleWarAdmin=false,castleWarLoadToken=0,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]},castleWarExtra=[
+const CASTLEWAR_KEY="kor1816_castlewar_shared_v1";let castleWarDoc=null,castleWarLegacyDoc=null,castleWarAdmin=false,castleWarLoadToken=0,castleWarData=Array(50).fill(""),castleWarPlan={attack:["","","",""],attackRatios:[["","","",""],["","","",""],["","","",""],["","","",""]],defense:["","","",""],defenseRatios:["","","",""]},castleWarExtra=[
 "공격 : 아마데 / 페라 / 로사\n(비율 : 505 / 514 / 415 / 406)\n\n수성 : 알카 / 마르고 / 살로 or 상대가 약하면 예거\n(비율 : 640)",
 "공격 : 1~4열 고정\n2첸코 / 2아마\n2첸코 / 아마네 / 파드\n2살로 / 첸코 / 아마네\n2힐데 / 살로 / 첸코",
 "1~4열 고정\n2힐데 / 살로 / 첸코\n4힐데\n2힐데 / 살로 / 고든\n2살로 / 1힐데 / 알카"
@@ -906,9 +906,12 @@ const CASTLEWAR_KEY="kor1816_castlewar_v4";let castleWarDoc=null,castleWarLegacy
    e.disabled=!enabled;
    e.style.cursor=enabled?"text":"default";
    e.style.opacity="1";
-   e.style.background="#0b1426";
-   e.style.color="#fff";
-   e.style.webkitTextFillColor="#fff";
+   e.style.setProperty("background-color","#0b1426","important");
+   e.style.setProperty("color","#fff","important");
+   e.style.setProperty("-webkit-text-fill-color","#fff","important");
+   e.style.setProperty("-webkit-box-shadow","0 0 0 1000px #0b1426 inset","important");
+   e.style.colorScheme="dark";
+   e.setAttribute("autocomplete","off");
  });
 }
 function normalizeCastleWarPlan(value){
@@ -965,7 +968,7 @@ function renderCastleWar(){
    const x=document.getElementById("castlewar-extra-"+n);
    if(x)x.value=castleWarExtra[n-1]||"";
  }
- setCastleWarInputsEnabled(castleWarAdmin); document.querySelectorAll("#castlewar input,#castlewar textarea").forEach(e=>e.setAttribute("autocomplete","new-password"));
+ setCastleWarInputsEnabled(castleWarAdmin);
 }
 function collectCastleWar(){const d=[];for(let n=1;n<=50;n++)d.push((document.getElementById("castlewar-slot-"+n)?.value||"").trim());const p={attack:[],attackRatios:[],defense:[],defenseRatios:[]};for(let n=1;n<=4;n++){p.attack.push((document.getElementById("castlewar-attack-"+n)?.value||"").trim());const rs=[];for(let r=1;r<=4;r++)rs.push((document.getElementById("castlewar-attack-ratio-"+n+"-"+r)?.value||"").trim());p.attackRatios.push(rs);p.defense.push((document.getElementById("castlewar-defense-"+n)?.value||"").trim());p.defenseRatios.push((document.getElementById("castlewar-defense-ratio-"+n)?.value||"").trim());}const extra=[];for(let n=1;n<=3;n++)extra.push(document.getElementById("castlewar-extra-"+n)?.value||"");return {slots:d,plan:p,extra};}function normalizeCastleWar(value){
  const src=value&&typeof value==="object"?value:{};
@@ -990,69 +993,57 @@ async function loadCastleWar(){
  if(!castleWarDoc||token!==castleWarLoadToken)return;
  try{
    const s=await Promise.race([
-     getDoc(castleWarDoc),
+     getDocFromServer(castleWarDoc),
      new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))
    ]);
    if(token!==castleWarLoadToken)return;
-   let cloudRaw=s.exists()?(s.data()||{}):null;
-   let needsMigration=false;
-   // Recover newer data from the previous shared castle_v1 document if present.
-   // Compare timestamps so a stale legacy copy never overwrites a newer dedicated save.
-   if(castleWarLegacyDoc){
-     try{
-       const legacy=await Promise.race([
-         getDoc(castleWarLegacyDoc),
-         new Promise((_,rej)=>setTimeout(()=>rej(Error("legacy timeout")),5000))
-       ]);
-       const nested=legacy.exists()?(legacy.data()||{}).castleWar:null;
-       const nestedUpdatedAt=Number(nested&&nested.updatedAt)||0;
-       const directUpdatedAt=Number(cloudRaw&&cloudRaw.updatedAt)||0;
-       if(nested&&typeof nested==="object"&&nestedUpdatedAt>directUpdatedAt){
-         cloudRaw=nested;
-         needsMigration=true;
-       }
-     }catch(e){console.warn("castlewar legacy read",e);}
-   }
-   if(token!==castleWarLoadToken)return;
-   let cloudUpdatedAt=Number(cloudRaw&&cloudRaw.updatedAt)||0;
-   let chosen=cloudRaw?normalizeCastleWar(cloudRaw):null;
-   let chosenUpdatedAt=cloudUpdatedAt;
+   const root=s.exists()?(s.data()||{}):{};
+   const cloudRaw=root.castleWarSharedV1&&typeof root.castleWarSharedV1==="object"
+     ?root.castleWarSharedV1:null;
+   const cloudUpdatedAt=Number(cloudRaw&&cloudRaw.updatedAt)||0;
+   let chosen=null;
+   let chosenUpdatedAt=0;
    let shouldWrite=false;
-   if(localRaw&&(!chosen||localUpdatedAt>cloudUpdatedAt)){
+   if(localRaw&&(!cloudRaw||localUpdatedAt>cloudUpdatedAt)){
      chosen=localData;
      chosenUpdatedAt=localUpdatedAt||Date.now();
      shouldWrite=true;
-   }else if(chosen&&needsMigration){
-     shouldWrite=true;
+   }else if(cloudRaw){
+     chosen=normalizeCastleWar(cloudRaw);
+     chosenUpdatedAt=cloudUpdatedAt;
    }
-   if(chosen){
-     castleWarData=chosen.slots;
-     castleWarPlan=chosen.plan;
-     castleWarExtra=chosen.extra;
-     if(shouldWrite){
-       try{
-         await setDoc(castleWarDoc,{
+   if(!chosen){
+     castleWarData=Array(50).fill("");
+     castleWarPlan=normalizeCastleWarPlan({});
+     renderCastleWar();
+     setMsg("castlewarMsg","새 캐슬전 공용 저장공간입니다. 수정 후 저장하세요.");
+     return;
+   }
+   castleWarData=chosen.slots;
+   castleWarPlan=chosen.plan;
+   castleWarExtra=chosen.extra;
+   writeLocal(CASTLEWAR_KEY,{
+     slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,
+     _updatedAt:chosenUpdatedAt
+   });
+   renderCastleWar();
+   if(shouldWrite){
+     try{
+       await setDoc(castleWarDoc,{
+         castleWarSharedV1:{
            slots:castleWarData,
            plan:castleWarFirestorePlan(castleWarPlan),
            extra:castleWarExtra,
            updatedAt:chosenUpdatedAt
-         });
-         cloudUpdatedAt=chosenUpdatedAt;
-       }catch(e){
-         console.error("castlewar migration/sync",e);
-         setMsg("castlewarMsg","캐슬전은 표시했지만 공용 서버 동기화 실패: "+(e?.code||e?.message||"unknown"));
-       }
+         }
+       },{merge:true});
+       setMsg("castlewarMsg","캐슬전 공용 서버 저장 완료!");
+     }catch(e){
+       console.error("castlewar local sync",e);
+       setMsg("castlewarMsg","공용 서버 동기화 실패: "+(e?.code||e?.message||"unknown")+" (이 기기에 임시 저장됨)");
      }
-     writeLocal(CASTLEWAR_KEY,{
-       slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,
-       _updatedAt:chosenUpdatedAt
-     });
-     renderCastleWar();
-     if(!shouldWrite)setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
-     else if(!document.getElementById("castlewarMsg")?.textContent?.includes("동기화 실패"))
-       setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
    }else{
-     setMsg("castlewarMsg","공용 서버에 저장된 캐슬전 내용이 없습니다.");
+     setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
    }
  }catch(e){
    if(token!==castleWarLoadToken)return;
@@ -1080,10 +1071,16 @@ async function saveCastleWar(){
  try{
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
-   // Same top-level save pattern as Holy Sword Clash and Three Alliances War.
+   // Use the proven, writable Castle Layout document without changing its own slots/timestamp.
+   // Old Castle War documents/local caches are intentionally not imported.
    await setDoc(castleWarDoc,{
-     slots:saveSlots,plan:castleWarFirestorePlan(savePlan),extra:saveExtra,updatedAt
-   });
+     castleWarSharedV1:{
+       slots:saveSlots,
+       plan:castleWarFirestorePlan(savePlan),
+       extra:saveExtra,
+       updatedAt
+     }
+   },{merge:true});
    setMsg("castlewarMsg","캐슬전 공용 서버 저장 완료!");
  }catch(e){
    console.error("castlewar save",e);
@@ -1174,7 +1171,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=doc(db,"siteData","castlewar_v2");castleWarLegacyDoc=doc(db,"siteData","castle_v1");firebaseReady=true;
+   db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
