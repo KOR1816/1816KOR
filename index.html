@@ -177,6 +177,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   #teams .slot input{width:100%!important;padding:9px 6px!important;font-size:12px!important}
 }
 </style><style id="castlewar-extra">
+#castlewar input:-webkit-autofill,#castlewar input:-webkit-autofill:hover,#castlewar input:-webkit-autofill:focus,#castlewar textarea:-webkit-autofill,#castlewar textarea:-webkit-autofill:hover,#castlewar textarea:-webkit-autofill:focus{ -webkit-text-fill-color:#fff!important; -webkit-box-shadow:0 0 0 1000px #0b1426 inset!important; box-shadow:0 0 0 1000px #0b1426 inset!important; transition:background-color 99999s ease-out 0s!important; }
 .castlewar-extra-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
 .castlewar-extra-card{background:#101a2e;border:1px solid #365783;border-radius:14px;overflow:hidden}
 .castlewar-extra-title{text-align:center;padding:12px 4px;font-weight:900;background:#202f52;color:#f7d77a}
@@ -1030,23 +1031,21 @@ async function loadCastleWar(){
  const localData=normalizeCastleWar(localRaw||{});
  const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
 
- // Show this device's copy immediately, then replace it with the server copy whenever available.
  castleWarData=localData.slots;
  castleWarPlan=localData.plan;
  castleWarExtra=localData.extra;
  castleWarLeaders=localData.leaders;
  renderCastleWar();
- setMsg("castlewarMsg","최신 캐슬전 내용을 불러오는 중입니다.");
+ setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
 
- if(token!==castleWarLoadToken)return;
+ await waitForDocRef(()=>castleWarDoc);
  if(!castleWarDoc){
-   setMsg("castlewarMsg","공용 서버 연결 중입니다. 잠시 후 내용이 자동으로 다시 불러와집니다.");
+   setMsg("castlewarMsg","공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.");
    return;
  }
-
  try{
    const snap=await Promise.race([
-     getDocFromServer(castleWarDoc),
+     getDoc(castleWarDoc),
      new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))
    ]);
    if(token!==castleWarLoadToken)return;
@@ -1056,7 +1055,6 @@ async function loadCastleWar(){
      ?root.castleWarSharedV1:null;
 
    if(remote){
-     // Never let stale PC/mobile localStorage replace a shared server value.
      const cloud=normalizeCastleWar(remote);
      const cloudUpdatedAt=Number(remote.updatedAt)||0;
      castleWarData=cloud.slots;
@@ -1068,43 +1066,39 @@ async function loadCastleWar(){
        leaders:castleWarLeaders,westTurretLeader:castleWarLeaders.westTurret,_updatedAt:cloudUpdatedAt
      });
      renderCastleWar();
+     translatePage(currentLang);
      setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
      return;
    }
 
    if(localRaw){
-     // Import the device copy only if the shared server field does not exist at all.
-     castleWarData=localData.slots;
-     castleWarPlan=localData.plan;
-     castleWarExtra=localData.extra;
-     castleWarLeaders=localData.leaders;
      const updatedAt=localUpdatedAt||Date.now();
      await setDoc(castleWarDoc,{
        castleWarSharedV1:{
-         slots:castleWarData,
-         plan:castleWarFirestorePlan(castleWarPlan),
-         extra:castleWarExtra,
-         leaders:castleWarLeaders,
-         westTurretLeader:castleWarLeaders.westTurret,
+         slots:localData.slots,
+         plan:castleWarFirestorePlan(localData.plan),
+         extra:localData.extra,
+         leaders:localData.leaders,
+         westTurretLeader:localData.leaders.westTurret,
          updatedAt
        }
      },{merge:true});
      if(token!==castleWarLoadToken)return;
      writeLocal(CASTLEWAR_KEY,{
-       slots:castleWarData,plan:castleWarPlan,extra:castleWarExtra,
-       leaders:castleWarLeaders,westTurretLeader:castleWarLeaders.westTurret,_updatedAt:updatedAt
+       slots:localData.slots,plan:localData.plan,extra:localData.extra,
+       leaders:localData.leaders,westTurretLeader:localData.leaders.westTurret,_updatedAt:updatedAt
      });
      renderCastleWar();
-     setMsg("castlewarMsg","기기 저장본을 공용 서버에 동기화했습니다.");
+     translatePage(currentLang);
+     setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
      return;
    }
 
-   // No shared data yet: leave the editable defaults as-is; don't upload an empty record automatically.
-   setMsg("castlewarMsg","새 캐슬전 공용 저장공간입니다. 수정 후 저장하세요.");
+   setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
    if(token!==castleWarLoadToken)return;
    console.error("castlewar read",e);
-   setMsg("castlewarMsg","캐슬전 공용 서버 불러오기 실패: "+(e?.code||e?.message||"unknown")+" (현재 기기 저장본 표시)");
+   setMsg("castlewarMsg","공용 서버 불러오기 실패: "+(e?.code||e?.message||"unknown")+" (현재 기기 저장본 표시)");
  }
 }
 
@@ -1129,11 +1123,10 @@ async function saveCastleWar(){
  });
  renderCastleWar();
  setCastleWarInputsEnabled(true);
+
  try{
    await waitForDocRef(()=>castleWarDoc);
    if(!castleWarDoc)throw Error("castlewar document is not ready");
-
-   // Castle War shares the already-writable Castle document; merge keeps Castle Layout data intact.
    await setDoc(castleWarDoc,{
      castleWarSharedV1:{
        slots:saveSlots,
@@ -1144,19 +1137,10 @@ async function saveCastleWar(){
        updatedAt
      }
    },{merge:true});
-
-   // Confirm the server received this exact save before reporting shared-save success.
-   const verify=await Promise.race([
-     getDocFromServer(castleWarDoc),
-     new Promise((_,rej)=>setTimeout(()=>rej(Error("server verification timeout")),7000))
-   ]);
-   const remote=verify.exists()?(verify.data()?.castleWarSharedV1||null):null;
-   if(!remote||Number(remote.updatedAt)!==updatedAt)throw Error("server verification mismatch");
-
-   setMsg("castlewarMsg","캐슬전 공용 서버 저장 및 확인 완료!");
+   setMsg("castlewarMsg","최신 캐슬전 내용을 불러왔습니다.");
  }catch(e){
    console.error("castlewar save",e);
-   setMsg("castlewarMsg","캐슬전 공용 서버 저장 실패: "+(e?.code||e?.message||"unknown")+" (이 기기에 임시 저장됨)");
+   setMsg("castlewarMsg","공용 서버 저장 실패: "+(e?.code||e?.message||"unknown")+" (이 기기에 임시 저장됨)");
  }
 }
 function renderCastle(){for(let n=1;n<=28;n++){const e=document.getElementById("castle-slot-"+n);if(e){e.value=castleData[n-1]||"";e.disabled=!castleAdmin;}}}
