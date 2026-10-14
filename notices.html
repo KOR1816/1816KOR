@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KOR1816 | 공지</title>
+<style>
+:root{--bg:#080d18;--panel:#101a2e;--line:#39557f;--gold:#e5b84b;--gold2:#ffd978;--text:#f4f7ff;--muted:#aebbd3}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Malgun Gothic",sans-serif;color:var(--text);background:radial-gradient(circle at 50% -10%,#1b2d4f 0,#0b1222 42%,#070b14 100%)}
+header{padding:26px 16px 20px;text-align:center;background:linear-gradient(135deg,#101d35,#172b4e 55%,#251d32);border-bottom:1px solid #3d527c}
+h1{margin:0;font-size:32px;letter-spacing:2px}header p{margin:8px 0 0;color:var(--muted);font-size:13px;letter-spacing:2px}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:13px;background:rgba(7,12,23,.96);border-bottom:1px solid #263b60;position:sticky;top:0;z-index:5}
+nav a,button{border:1px solid #39557f;border-radius:10px;padding:10px 15px;background:linear-gradient(180deg,#243a61,#172946);color:#fff;text-decoration:none;cursor:pointer;font-weight:700}
+nav a:hover,button:hover{border-color:var(--gold);background:linear-gradient(180deg,#3a5785,#243c63)}
+main{max-width:1200px;margin:auto;padding:24px 18px 42px}
+.intro{text-align:center;margin:4px 0 22px}.intro h2{margin:0 0 8px;color:var(--gold2);font-size:26px}.intro p{margin:0;color:var(--muted);font-size:13px;letter-spacing:1px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.card{position:relative;overflow:hidden;border:1px solid #3a5279;border-radius:17px;padding:18px;background:linear-gradient(145deg,rgba(20,32,55,.98),rgba(10,17,31,.98));box-shadow:0 10px 28px #0005}
+.card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#8b6728,var(--gold2),#8b6728)}
+.art{height:120px;border-radius:11px;margin-bottom:15px;display:flex;align-items:center;justify-content:center;font-size:58px;background:radial-gradient(circle at 50% 40%,#34476c,#111a2c 70%);border:1px solid #3b5278;text-shadow:0 5px 20px #000}
+.card h3{margin:0 0 15px;color:var(--gold2);font-size:22px;text-align:center}
+.block{border:1px solid #2c4164;border-radius:11px;padding:12px;margin-top:10px;background:#0b1426}
+.block h4{margin:0 0 8px;color:#cbdcff;font-size:13px;letter-spacing:1px}
+.content{white-space:pre-wrap;line-height:1.75;font-size:15px;overflow-wrap:anywhere}
+.content .en{color:#c8d5eb}
+textarea{width:100%;min-height:100px;resize:vertical;padding:11px;border:1px solid #39557f;border-radius:9px;background:#080f1e;color:#fff;font:inherit;line-height:1.6}
+.edit-only{display:none}.editing .edit-only{display:block}.editing .view-only{display:none}
+.label{display:block;margin:8px 0 5px;color:#cbdcff;font-size:12px;font-weight:700}
+.actions{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:18px 0 0}
+.status{text-align:center;min-height:24px;margin-top:12px;color:#7fe6d5;font-weight:700;font-size:13px}
+.hint{text-align:center;color:#8fa1bf;font-size:12px;margin-top:10px}
+footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654;font-size:12px}
+@media(max-width:800px){.cards{grid-template-columns:1fr}.art{height:95px}.card{padding:15px}.intro h2{font-size:22px}}
+</style>
+</head>
+<body>
+<header><h1>⚔️ KOR1816</h1><p>KINGDOM 1816 · OFFICIAL NOTICES</p></header>
+<nav><a href="./">🏠 홈</a><a href="./notices.html">📢 공지</a><a href="./#teams">⚔️ 성검쟁탈</a><a href="./#alliance">🛡️ 3대연맹전</a><a href="./#castle">🏰 캐슬배치</a><a href="./#castlewar">⚔️ 캐슬전</a></nav>
+<main>
+<div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
+<div class="cards">
+<section class="card"><div class="art">🐻</div><h3>곰사냥 · Bear Hunt</h3>
+<div class="block"><h4>집결장 · RALLY LEADERS</h4><div id="bearLeaders" class="content view-only"></div><div class="edit-only"><label class="label">집결장</label><textarea id="eBearLeaders"></textarea></div></div>
+<div class="block"><h4>집결원 · RALLY MEMBERS</h4><div id="bearMembers" class="content view-only"></div><div class="edit-only"><label class="label">집결원</label><textarea id="eBearMembers"></textarea></div></div>
+<div class="block"><h4>비율 · TROOP RATIO</h4><div id="bearRatio" class="content view-only"></div><div class="edit-only"><label class="label">비율</label><textarea id="eBearRatio"></textarea></div></div>
+<div class="block"><h4>병력 · TROOPS</h4><div id="bearTroops" class="content view-only"></div><div class="edit-only"><label class="label">병력</label><textarea id="eBearTroops"></textarea></div></div>
+</section>
+<section class="card"><div class="art">🗡️</div><h3>성검쟁탈 · Holy Sword Clash</h3>
+<div class="block"><h4>1군 · TEAM 1</h4><div id="swordTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eSwordTeam1"></textarea></div></div>
+<div class="block"><h4>2군 · TEAM 2</h4><div id="swordTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eSwordTeam2"></textarea></div></div>
+</section>
+<section class="card"><div class="art">🛡️</div><h3>3대연맹전 · Three Alliances War</h3>
+<div class="block"><h4>1군 · TEAM 1</h4><div id="allianceTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eAllianceTeam1"></textarea></div></div>
+<div class="block"><h4>2군 · TEAM 2</h4><div id="allianceTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eAllianceTeam2"></textarea></div></div>
+</section>
+</div>
+<div class="actions"><button id="refreshBtn">🔄 새로고침</button><button id="editBtn">🔐 관리자 수정</button><button id="saveBtn" style="display:none">💾 저장</button></div>
+<div id="status" class="status">공지 내용을 불러오는 중...</div><div class="hint">수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다.</div>
+</main><footer>KOR1816 · Together, We Grow Stronger! ❤️</footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
+const ADMIN_PASSWORD="0001", KEY="kor1816_notices_v1";
+const defaults={
+bearLeaders:"알카 · 페라 · 로사",
+bearMembers:"아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X",
+bearRatio:"10 · 10 · 80\n또는 / OR\n1 · 10 · 89",
+bearTroops:"100,000",
+swordTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
+swordTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting",
+allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
+allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
+};
+let data={...defaults},db=null,docRef=null,admin=false;
+const ids=Object.keys(defaults), status=document.getElementById("status");
+function say(s){status.textContent=s}
+function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
+function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
+function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
+async function refresh(){
+ const local=readLocal(); if(local) data={...defaults,...local}; render(); say("저장된 공지를 불러왔습니다.");
+ if(!docRef)return;
+ try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
+ if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
+ else{data={...defaults,...cloud};writeLocal();render()}
+ }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
+ say("최신 공지를 불러왔습니다.");
+ }catch(e){console.error(e);say("서버 연결에 실패했습니다. 현재 기기의 저장본을 표시합니다.")}
+}
+function toggleEdit(){
+ if(!admin){const p=prompt("관리자 비밀번호를 입력하세요.");if(p!=="0001"){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return}admin=true}
+ else admin=false;
+ document.body.classList.toggle("editing",admin);
+ document.getElementById("editBtn").textContent=admin?"🔒 수정 종료":"🔐 관리자 수정";
+ document.getElementById("saveBtn").style.display=admin?"inline-flex":"none";
+}
+async function save(){
+ if(!admin)return;
+ for(const id of ids)data[id]=document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value.trim();
+ const updatedAt=Date.now();data.updatedAt=updatedAt;writeLocal();render();
+ try{if(!docRef)throw Error("Firebase is not ready");await setDoc(docRef,{noticesV1:{...data,updatedAt}},{merge:true});say("공지 저장 완료! 다른 기기에서도 확인할 수 있습니다.")}
+ catch(e){console.error(e);say("기기에는 저장했지만 공용 서버 저장에 실패했습니다.")}
+}
+document.getElementById("refreshBtn").addEventListener("click",refresh);
+document.getElementById("editBtn").addEventListener("click",toggleEdit);
+document.getElementById("saveBtn").addEventListener("click",save);
+render();
+try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(app))}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
+</script></body></html>
