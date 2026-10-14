@@ -34,7 +34,29 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
 </head>
 <body>
 <header><h1>⚔️ KOR1816</h1><p>KINGDOM 1816 · OFFICIAL NOTICES</p></header>
-<nav><a href="./" data-nav="0">🏠 홈</a><a href="./notices.html" data-nav="1">📢 공지</a><a href="./#teams" data-nav="2">⚔️ 성검쟁탈</a><a href="./#alliance" data-nav="3">🛡️ 3대연맹전</a><a href="./#castle" data-nav="4">🏰 캐슬배치</a><a href="./#castlewar" data-nav="5">⚔️ 캐슬전</a></nav>
+<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🛡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">⚔️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🛡️ 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a></nav>
+<script>
+(function(){
+ const p=new URLSearchParams(location.search), urlLang=p.get("lang");
+ let lang=urlLang||"ko";
+ try{lang=urlLang||localStorage.getItem("kor1816_lang")||"ko"}catch{}
+ const labels={
+ ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🛡️ 3대연맹전","🏰 캐슬배치","⚔️ 캐슬전","🪑 자리배치","🛡️ 바이킹","🏆 영광의 순간들"],
+ en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🛡️ Three Alliances War","🏰 Castle Layout","⚔️ Castle War","🪑 Seating","🛡️ Viking","🏆 Glorious Moments"],
+ ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 城配置","⚔️ 城戦","🪑 席配置","🛡️ バイキング","🏆 栄光の瞬間"],
+ zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","⚔️ 城堡战","🪑 座位安排","🛡️ 维京","🏆 荣耀时刻"],
+ de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","⚔️ Burgenkrieg","🪑 Sitzplan","🛡️ Wikinger","🏆 Ruhmreiche Momente"],
+ it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","⚔️ Guerra del Castello","🪑 Posti","🛡️ Vichinghi","🏆 Momenti di gloria"],
+ es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Formación del Castillo","⚔️ Guerra del Castillo","🪑 Asientos","🛡️ Vikingos","🏆 Momentos de gloria"],
+ tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","⚔️ Kale Savaşı","🪑 Oturma Düzeni","🛡️ Viking","🏆 Zafer Anları"]
+ };
+ if(!labels[lang])lang="ko";
+ const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink"];
+ const paths=["./","./notices.html","./#teams","./#alliance","./#castle","./#castlewar","./#seating","./#viking","./glory.html"];
+ ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];el.href=paths[i]+(paths[i].includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)});
+ try{localStorage.setItem("kor1816_lang",lang)}catch{}
+})();
+</script>
 <main>
 <div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
 <div class="cards">
