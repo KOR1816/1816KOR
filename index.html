@@ -958,7 +958,13 @@ function applyFixedTextTranslations(lang){
 
 
 async function translateUnmappedStaticText(lang){
- if(!lang||lang==="ko")return;
+ if(!lang)return;
+ if(lang==="ko"){
+  const restoreWalker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  let restoreNode;
+  while((restoreNode=restoreWalker.nextNode()))if(restoreNode.__kor1816Source)restoreNode.nodeValue=restoreNode.__kor1816Source;
+  return;
+ }
  const cache=new Map();
  const excluded='[data-no-translate],input,textarea,select,option,script,style,code,pre,[contenteditable="true"],.nickname,[class*="nickname"],[class*="player-name"],.member-name,.team-members,.seating-list-wrap .seating-list,#teams .team-list,#alliance .team-list,#viking .viking-list,.home-latest,.latest-notice,.notice-body';
  const nodes=[];
