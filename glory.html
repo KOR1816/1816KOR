@@ -29,9 +29,16 @@ main{max-width:900px;margin:0 auto;padding:18px 14px 36px}
 </style>
 
 
+<style id="unified-title-and-language">
+header,header h1,header .sub{text-align:left!important}
+header .glory-language{display:flex;align-items:center;gap:8px;margin-top:14px;justify-content:flex-start;color:#cbd5e1;font-size:13px}
+header .glory-language select{max-width:100%;padding:8px 10px;border:1px solid #39557f;border-radius:9px;background:#0b1426;color:#fff;font:inherit}
+.hero h2{text-align:left!important;margin:0 0 18px!important}
+@media(max-width:560px){header{padding:20px 16px!important}header h1{font-size:28px!important}header .sub{margin-top:10px!important;line-height:1.55!important}.hero h2{margin-bottom:20px!important}}
+</style>
 </head>
 <body>
-<header><h1>🏰 KOR1816</h1><div class="sub" data-i18n="subtitle">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
+<header><h1>🏰 KOR1816</h1><div class="sub" data-i18n="subtitle">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="glory-language"><label for="gloryLanguage">언어 / Language</label><select id="gloryLanguage" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="siteNav"><a id="homeLink" href="index.html#home">🏠 홈</a><a id="noticeLink" href="notices.html">📢 공지</a><a id="teamsLink" href="index.html#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="index.html#alliance">⚔️ 3대연맹전</a><a id="castleLink" href="index.html#castle">🏰 캐슬배치</a><a id="castlewarLink" href="index.html#castlewar">⚔️ 캐슬전</a><a id="seatingLink" href="index.html#seating">🪑 자리배치</a><a id="vikingLink" href="index.html#viking">🛡️ 바이킹</a><a id="gloryLink" href="glory.html">🏆 영광의 순간들</a></nav>
 <main>
 <section class="hero"><h2 data-i18n="title">🏆 영광의 순간들</h2><img src="./ccc.png" alt="KOR1816 캐슬전 이미지"><div class="muted" data-i18n="heroCaption">준비기간과 전쟁기간의 승패를 기록합니다.</div></section>
@@ -76,6 +83,9 @@ function applyLanguage(){
  const params=new URLSearchParams(location.search),urlLang=params.get("lang");
  try{currentLang=(urlLang&&TEXT[urlLang])?urlLang:(localStorage.getItem("kor1816_lang")||"ko");}catch{currentLang=urlLang&&TEXT[urlLang]?urlLang:"ko";}
  if(!TEXT[currentLang])currentLang="ko";
+ const languageSelect=document.getElementById("gloryLanguage");
+ if(languageSelect){languageSelect.value=currentLang;languageSelect.onchange=()=>{try{localStorage.setItem("kor1816_lang",languageSelect.value)}catch{};const u=new URL(location.href);u.searchParams.set("lang",languageSelect.value);location.href=u.href;};}
+
  document.documentElement.lang=currentLang;
  const t=TEXT[currentLang];
  document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(el.tagName==="LABEL"){const input=el.querySelector("input,select,textarea");el.childNodes[0].textContent=t[key]||TEXT.ko[key];if(input&&input.tagName==="TEXTAREA")input.placeholder=t.placeholder||TEXT.ko.placeholder;}else el.textContent=t[key]||TEXT.ko[key];});
