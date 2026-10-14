@@ -98,7 +98,14 @@ allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선�
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
-function say(s){status.textContent=s}
+function say(s){
+ status.textContent=s;
+ const lang=new URLSearchParams(location.search).get("lang")||(()=>{try{return localStorage.getItem("kor1816_lang")||"ko"}catch{return "ko"}})();
+ if(lang!=="ko"&&/[가-힣]/.test(s)){
+  fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(s),{mode:"cors"})
+   .then(r=>r.ok?r.json():null).then(d=>{const out=Array.isArray(d?.[0])?d[0].map(x=>x?.[0]||"").join(""):"";if(out&&status.textContent===s)status.textContent=out;}).catch(()=>{});
+ }
+}
 function normalizeBear(source){const d={...source};const legacy={bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]};for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}return d}
 function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
@@ -203,6 +210,8 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  es:{refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",loading:"Cargando órdenes de batalla...",loaded:"Avisos guardados cargados.",latest:"Avisos más recientes cargados.",hint:"Guarda después de editar para ver los mismos avisos en otros dispositivos.",footer:"KOR1816 · ¡Juntos crecemos más fuertes! ❤️"},
  tr:{refresh:"🔄 Yenile",edit:"🔐 Yönetici düzenlemesi",save:"💾 Kaydet",loading:"Savaş emirleri yükleniyor...",loaded:"Kaydedilen duyurular yüklendi.",latest:"En güncel duyurular yüklendi.",hint:"Düzenledikten sonra kaydedin; aynı duyurular diğer cihazlarda da görünür.",footer:"KOR1816 · Birlikte daha güçlüyüz! ❤️"}};
  const fixed=labels[lang];
+ const subtitles={en:"Kingdom 1816 · Bite back if challenged! · Bear-loving community!!",ja:"Kingdom 1816 · 挑発したら噛みつく！ · クマ好きの集まり!!",zh:"Kingdom 1816 · 惹我们就反击！ · 熊迷聚会!!",de:"Kingdom 1816 · Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Kingdom 1816 · Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"Kingdom 1816 · ¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Kingdom 1816 · Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"};
+ const sub=document.querySelector("header .sub");if(sub&&subtitles[lang])sub.textContent=subtitles[lang];
  const headings={
   en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🛡️ Three Alliances War","TEAM 1","TEAM 2"],
   ja:["⚔️ 戦闘指示","作戦を確認 · 一丸となって戦おう","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
