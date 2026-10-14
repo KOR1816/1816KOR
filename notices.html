@@ -34,7 +34,7 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
 </head>
 <body>
 <header><h1>⚔️ KOR1816</h1><p>KINGDOM 1816 · OFFICIAL NOTICES</p></header>
-<nav><a href="./">🏠 홈</a><a href="./notices.html">📢 공지</a><a href="./#teams">⚔️ 성검쟁탈</a><a href="./#alliance">🛡️ 3대연맹전</a><a href="./#castle">🏰 캐슬배치</a><a href="./#castlewar">⚔️ 캐슬전</a></nav>
+<nav><a href="./">🏠 <span data-ko="홈" data-en="Home">홈</span></a><a href="./notices.html">📢 <span data-ko="공지" data-en="Notices">공지</span></a><a href="./#teams">⚔️ <span data-ko="성검쟁탈" data-en="Holy Sword Clash">성검쟁탈</span></a><a href="./#alliance">🛡️ <span data-ko="3대연맹전" data-en="Three Alliances War">3대연맹전</span></a><a href="./#castle">🏰 <span data-ko="캐슬배치" data-en="Castle Layout">캐슬배치</span></a><a href="./#castlewar">⚔️ <span data-ko="캐슬전" data-en="Castle War">캐슬전</span></a></nav>
 <main>
 <div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
 <div class="cards">
@@ -118,6 +118,8 @@ try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(
    lang=urlLang||localStorage.getItem("kor1816_lang")||"ko";
  }catch(e){}
  if(!/^(ko|en|ja|zh|de|it|es|tr)$/.test(lang))lang="ko";
+ document.documentElement.lang=lang;
+ document.querySelectorAll("nav [data-ko][data-en]").forEach(function(el){el.textContent=lang==="en"?el.dataset.en:el.dataset.ko;});
  try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
  document.querySelectorAll('nav a[href^="./"]').forEach(function(a){
    const u=new URL(a.getAttribute("href"),location.href);
