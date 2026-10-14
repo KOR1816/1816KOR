@@ -956,6 +956,39 @@ function applyFixedTextTranslations(lang){
  }
 }
 
+
+async function translateUnmappedStaticText(lang){
+ if(!lang||lang==="ko")return;
+ const cache=new Map();
+ const excluded='[data-no-translate],input,textarea,select,option,script,style,code,pre,[contenteditable="true"],.nickname,[class*="nickname"],[class*="player-name"],.member-name,.team-members,.seating-list-wrap .seating-list,#teams .team-list,#alliance .team-list,#viking .viking-list,.home-latest,.latest-notice,.notice-body';
+ const nodes=[];
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ let node;
+ while((node=walker.nextNode())){
+   const parent=node.parentElement;
+   if(!parent||parent.closest(excluded))continue;
+   const raw=node.nodeValue.trim();
+   if(!raw||!/[가-힣]/.test(raw)||/[A-Za-z]{2,}/.test(raw))continue;
+   if(/^[0-9\s.,:;!@#$%^&*()_+\-=\/\\|]+$/.test(raw))continue;
+   if(!node.__kor1816Source)node.__kor1816Source=raw;
+   nodes.push(node);
+ }
+ for(const node of nodes){
+   const source=node.__kor1816Source;
+   if(!source)continue;
+   const key=lang+"|"+source;
+   if(cache.has(key)){node.nodeValue=node.nodeValue.replace(node.nodeValue.trim(),cache.get(key));continue;}
+   try{
+     const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(source);
+     const res=await fetch(url,{mode:"cors"});
+     if(!res.ok)continue;
+     const data=await res.json();
+     const out=Array.isArray(data?.[0])?data[0].map(part=>part?.[0]||"").join(""):"";
+     if(out&&out!==source){cache.set(key,out);node.nodeValue=node.nodeValue.replace(node.nodeValue.trim(),out);}
+   }catch(e){console.warn("Static text translation unavailable",e);}
+ }
+}
+
 function translatePage(lang){
  const target=I18N[lang]||I18N.ko;
  document.querySelectorAll("[data-i18n]").forEach(e=>{
@@ -1002,6 +1035,7 @@ function translatePage(lang){
    if(v!==original)e.placeholder=v;
  });
  applyFixedTextTranslations(lang);
+ void translateUnmappedStaticText(lang);
 }
 async function translateDynamicText(text,lang){
  if(!text||lang==="ko")return text||"";
