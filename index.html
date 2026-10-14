@@ -639,19 +639,19 @@ function normalizeHomeData(d){
  }
  // 기존 저장 데이터의 성검쟁탈 일정을 1군/2군으로 자동 갱신
  const swordScheduleLines={
-   ko:["⚔️ 성검쟁탈 · 23:00 (UTC 14:00)","⚔️ 성검쟁탈1군 · 21:00 (UTC 12:00)\\n⚔️ 성검쟁탈2군 · 23:00 (UTC 14:00)"],
-   en:["⚔️ Holy Sword Clash · 23:00 (UTC 14:00)","⚔️ Holy Sword Clash 1st Team · 21:00 (UTC 12:00)\\n⚔️ Holy Sword Clash 2nd Team · 23:00 (UTC 14:00)"],
-   ja:["⚔️ 聖剣争奪 · 23:00 (UTC 14:00)","⚔️ 聖剣争奪1軍 · 21:00 (UTC 12:00)\\n⚔️ 聖剣争奪2軍 · 23:00 (UTC 14:00)"],
-   zh:["⚔️ 圣剑争夺 · 23:00 (UTC 14:00)","⚔️ 圣剑争夺一队 · 21:00 (UTC 12:00)\\n⚔️ 圣剑争夺二队 · 23:00 (UTC 14:00)"],
-   de:["⚔️ Heiliges Schwertduell · 23:00 (UTC 14:00)","⚔️ Heiliges Schwertduell 1. Team · 21:00 (UTC 12:00)\\n⚔️ Heiliges Schwertduell 2. Team · 23:00 (UTC 14:00)"],
-   it:["⚔️ Duello della Spada Sacra · 23:00 (UTC 14:00)","⚔️ Duello della Spada Sacra 1ª squadra · 21:00 (UTC 12:00)\\n⚔️ Duello della Spada Sacra 2ª squadra · 23:00 (UTC 14:00)"],
-   es:["⚔️ Duelo de la Espada Sagrada · 23:00 (UTC 14:00)","⚔️ Duelo de la Espada Sagrada 1.er equipo · 21:00 (UTC 12:00)\\n⚔️ Duelo de la Espada Sagrada 2.º equipo · 23:00 (UTC 14:00)"]
+   ko:["⚔️ 성검쟁탈 · 23:00 (UTC 14:00)","⚔️ 성검쟁탈1군 · 21:00 (UTC 12:00)\n⚔️ 성검쟁탈2군 · 23:00 (UTC 14:00)"],
+   en:["⚔️ Holy Sword Clash · 23:00 (UTC 14:00)","⚔️ Holy Sword Clash 1st Team · 21:00 (UTC 12:00)\n⚔️ Holy Sword Clash 2nd Team · 23:00 (UTC 14:00)"],
+   ja:["⚔️ 聖剣争奪 · 23:00 (UTC 14:00)","⚔️ 聖剣争奪1軍 · 21:00 (UTC 12:00)\n⚔️ 聖剣争奪2軍 · 23:00 (UTC 14:00)"],
+   zh:["⚔️ 圣剑争夺 · 23:00 (UTC 14:00)","⚔️ 圣剑争夺一队 · 21:00 (UTC 12:00)\n⚔️ 圣剑争夺二队 · 23:00 (UTC 14:00)"],
+   de:["⚔️ Heiliges Schwertduell · 23:00 (UTC 14:00)","⚔️ Heiliges Schwertduell 1. Team · 21:00 (UTC 12:00)\n⚔️ Heiliges Schwertduell 2. Team · 23:00 (UTC 14:00)"],
+   it:["⚔️ Duello della Spada Sacra · 23:00 (UTC 14:00)","⚔️ Duello della Spada Sacra 1ª squadra · 21:00 (UTC 12:00)\n⚔️ Duello della Spada Sacra 2ª squadra · 23:00 (UTC 14:00)"],
+   es:["⚔️ Duelo de la Espada Sagrada · 23:00 (UTC 14:00)","⚔️ Duelo de la Espada Sagrada 1.er equipo · 21:00 (UTC 12:00)\n⚔️ Duelo de la Espada Sagrada 2.º equipo · 23:00 (UTC 14:00)"]
  };
  for(const lang of Object.keys(swordScheduleLines)){
    const d=translations[lang];
    if(d?.schedule)d.schedule=d.schedule.replace(swordScheduleLines[lang][0],swordScheduleLines[lang][1]);
  }
- if(base.schedule)base.schedule=String(base.schedule).replace("⚔️ 성검쟁탈 · 23:00 (UTC 14:00)","⚔️ 성검쟁탈1군 · 21:00 (UTC 12:00)\\n⚔️ 성검쟁탈2군 · 23:00 (UTC 14:00)");
+ if(base.schedule)base.schedule=String(base.schedule).replace("⚔️ 성검쟁탈 · 23:00 (UTC 14:00)","⚔️ 성검쟁탈1군 · 21:00 (UTC 12:00)\n⚔️ 성검쟁탈2군 · 23:00 (UTC 14:00)");
  // 홈 이벤트 일정의 곰 2트랩 시간 변경을 기존 저장 데이터에도 적용
  const bear2Times={
    ko:["🐻 곰 2트랩 · 21:00 (UTC 12:00)","🐻 곰 2트랩 · 21:00 (UTC 12:00)"],
