@@ -59,9 +59,25 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getAuth, signInAnonymously, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
-const ADMIN_PASSWORD="0001", KEY="kor1816_notices_v1";
+const ADMIN_EMAILS=["to1ggi8410@gmail.com"], KEY="kor1816_notices_v1";
+let adminAuth=null;
+async function ensureGoogleAdmin(){
+ const auth=adminAuth||getAuth();
+ const allowed=ADMIN_EMAILS.map(x=>x.toLowerCase());
+ let user=auth.currentUser;
+ if(!user||!user.email){
+   try{user=(await signInWithPopup(auth,new GoogleAuthProvider())).user;}
+   catch(e){console.warn("Google admin sign-in",e);if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")alert("Google 로그인에 실패했습니다. 다시 시도해 주세요.");return false;}
+ }
+ if(!user?.email||!allowed.includes(user.email.toLowerCase())){
+   alert("운영자로 등록되지 않은 Google 계정입니다. 등록된 운영자 계정으로 로그인해 주세요.");
+   try{await signOut(auth);await signInAnonymously(auth);}catch(e){console.warn("restore anonymous session",e);}
+   return false;
+ }
+ return true;
+}
 const defaults={
 bearLeaders:"집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa",
 bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
@@ -89,8 +105,8 @@ async function refresh(){
  say("최신 공지를 불러왔습니다.");
  }catch(e){console.error(e);say("서버 연결에 실패했습니다. 현재 기기의 저장본을 표시합니다.")}
 }
-function toggleEdit(){
- if(!admin){const p=prompt("관리자 비밀번호를 입력하세요.");if(p!=="0001"){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return}admin=true}
+async function toggleEdit(){
+ if(!admin){if(!await ensureGoogleAdmin())return;admin=true}
  else admin=false;
  document.body.classList.toggle("editing",admin);
  document.getElementById("editBtn").textContent=admin?"🔒 수정 종료":"🔐 관리자 수정";
@@ -107,5 +123,5 @@ document.getElementById("refreshBtn").addEventListener("click",refresh);
 document.getElementById("editBtn").addEventListener("click",toggleEdit);
 document.getElementById("saveBtn").addEventListener("click",save);
 render();
-try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(app))}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
+try{const app=initializeApp(firebaseConfig);adminAuth=getAuth(app);try{await signInAnonymously(adminAuth)}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
 </script></body></html>
