@@ -1,4 +1,4 @@
-name: Validate site JavaScript
+name: Validate site JavaScript and Firestore rules
 
 on:
   pull_request:
@@ -19,3 +19,15 @@ jobs:
           python-version: "3.x"
       - name: Check inline JavaScript syntax
         run: python scripts/check_inline_js.py
+
+  firestore-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install test dependencies
+        run: npm install
+      - name: Test Firestore security rules in emulator
+        run: npm run test:rules
