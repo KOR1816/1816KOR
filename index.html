@@ -598,8 +598,8 @@ async function saveAllTeams(){
    await waitForDocRef(()=>teamDoc);
    if(!teamDoc)throw Error("team document is not ready");
    await setDoc(teamDoc,{...teamData,updatedAt});
-   setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");
- }catch(e){console.error(e);setMsg("teamMsg","최신 성검쟁탈 내용을 불러왔습니다.");}
+   setMsg("teamMsg","성검쟁탈 저장 완료!");
+ }catch(e){console.error(e);setMsg("teamMsg","서버 저장 실패!");}
 }
 function renderAlliance(){
  for(let t=1;t<=4;t++){const groups=allianceData.names?.[t]||{};for(let g=1;g<=(t<=2?2:1);g++){const vals=groups["g"+g]||[];for(let k=3;k<=7;k++){const v=vals[k]||"";const a=document.getElementById("alliance-"+t+"-"+g+"-"+k),e=document.getElementById("ae-"+t+"-"+g+"-"+k);if(a)a.value=v;if(e)e.value=v;}}}
@@ -642,8 +642,8 @@ async function saveAlliance(){
    await waitForDocRef(()=>allianceDoc);
    if(!allianceDoc)throw Error("alliance document is not ready");
    await setDoc(allianceDoc,{...allianceData,updatedAt});
-   setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");
- }catch(e){console.error(e);setMsg("allianceMsg","최신 3대연맹전 내용을 불러왔습니다.");}
+   setMsg("allianceMsg","3대연맹전 저장 완료!");
+ }catch(e){console.error(e);setMsg("allianceMsg","서버 저장 실패!");}
 }
 const HOME_LANGS=["ko","en","ja","zh","de","it","es"];
 const HOME_DEFAULT_TRANSLATIONS={
@@ -834,6 +834,17 @@ it:{"건들면 문다!":"Se lo tocchi, morde!","곰친자들의 모임!!":"Riuni
 es:{"건들면 문다!":"¡Si lo tocas, muerde!","곰친자들의 모임!!":"¡Reunión de amantes de los osos!","LATEST":"ÚLTIMO","SCHEDULE":"CALENDARIO","WELCOME":"BIENVENIDO","1열":"Fila 1","2열":"Fila 2","3열":"Fila 3","수정 종료":"Terminar edición","A30　B30　C30 + 5명":"A30　B30　C30 + 5 personas","A28　B28　C28 + 5명":"A28　B28　C28 + 5 personas","A31　B31　C31 + 5명":"A31　B31　C31 + 5 personas","A27　B27　C27 + 5명":"A27　B27　C27 + 5 personas","A19　B19　C19 + 5명":"A19　B19　C19 + 5 personas","A18　B18　C18 + 5명":"A18　B18　C18 + 5 personas","자리배치도":"Mapa de asientos","KOR1816 — Together, We Grow Stronger! ❤️":"KOR1816 — Together, We Grow Stronger! ❤️","Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!":"Kingdom 1816 · ¡Si lo tocas, muerde! · ¡Reunión de amantes de los osos!!"},tr:{"건들면 문다!":"Dokunursan ısırır!","곰친자들의 모임!!":"Ayı tutkunlarının buluşması!!","LATEST":"SON","SCHEDULE":"PROGRAM","WELCOME":"HOŞ GELDİNİZ","1열":"1. Sıra","2열":"2. Sıra","3열":"3. Sıra","수정 종료":"Düzenlemeyi Bitir","A30　B30　C30 + 5명":"A30　B30　C30 + 5 kişi","A28　B28　C28 + 5명":"A28　B28　C28 + 5 kişi","A31　B31　C31 + 5명":"A31　B31　C31 + 5 kişi","A27　B27　C27 + 5명":"A27　B27　C27 + 5 kişi","A19　B19　C19 + 5명":"A19　B19　C19 + 5 kişi","A18　B18　C18 + 5명":"A18　B18　C18 + 5 kişi","자리배치도":"Oturma Haritası","KOR1816 — Together, We Grow Stronger! ❤️":"KOR1816 — Birlikte Daha Güçlüyüz! ❤️","Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!":"Kingdom 1816 · Dokunursan ısırır! · Ayı tutkunlarının buluşması!!"}
 };
 for(const lang of Object.keys(EXTRA_I18N))Object.assign(I18N[lang],EXTRA_I18N[lang]);
+const SAVE_STATUS_TRANSLATIONS={
+ ko:{"성검쟁탈 저장 완료!":"성검쟁탈 저장 완료!","3대연맹전 저장 완료!":"3대연맹전 저장 완료!","서버 저장 실패!":"서버 저장 실패!"},
+ en:{"성검쟁탈 저장 완료!":"Holy Sword Clash saved!","3대연맹전 저장 완료!":"Three Alliances War saved!","서버 저장 실패!":"Server save failed!"},
+ ja:{"성검쟁탈 저장 완료!":"聖剣争奪を保存しました！","3대연맹전 저장 완료!":"3大連盟戦を保存しました！","서버 저장 실패!":"サーバーへの保存に失敗しました！"},
+ zh:{"성검쟁탈 저장 완료!":"圣剑争夺已保存！","3대연맹전 저장 완료!":"三大联盟战已保存！","서버 저장 실패!":"服务器保存失败！"},
+ de:{"성검쟁탈 저장 완료!":"Heiliges Schwertduell gespeichert!","3대연맹전 저장 완료!":"Krieg der drei Allianzen gespeichert!","서버 저장 실패!":"Speichern auf dem Server fehlgeschlagen!"},
+ it:{"성검쟁탈 저장 완료!":"Duello della Spada Sacra salvato!","3대연맹전 저장 완료!":"Guerra delle Tre Alleanze salvata!","서버 저장 실패!":"Salvataggio sul server non riuscito!"},
+ es:{"성검쟁탈 저장 완료!":"¡Duelo de la Espada Sagrada guardado!","3대연맹전 저장 완료!":"¡Guerra de las Tres Alianzas guardada!","서버 저장 실패!":"¡Error al guardar en el servidor!"},
+ tr:{"성검쟁탈 저장 완료!":"Kutsal Kılıç Savaşı kaydedildi!","3대연맹전 저장 완료!":"Üç İttifak Savaşı kaydedildi!","서버 저장 실패!":"Sunucuya kaydetme başarısız!"}
+};
+for(const [lang,entries] of Object.entries(SAVE_STATUS_TRANSLATIONS))Object.assign(I18N[lang],entries);
 function translateString(value,lang){
  const raw=String(value??"");
  const target=I18N[lang]||I18N.ko;
