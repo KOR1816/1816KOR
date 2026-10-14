@@ -55,7 +55,7 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
  if(!labels[lang])lang="ko";
  const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink"];
  const paths=["./","./notices.html","./#teams","./#alliance","./#castle","./#castlewar","./#seating","./#viking","./glory.html"];
- ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];el.href=paths[i]+(paths[i].includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)});
+ ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];const href=paths[i],hashAt=href.indexOf("#"),base=hashAt>=0?href.slice(0,hashAt):href,hash=hashAt>=0?href.slice(hashAt):"";el.href=base+(base.includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)+hash;});
  try{localStorage.setItem("kor1816_lang",lang)}catch{}
 })();
 </script>
