@@ -43,6 +43,13 @@ test("allowlisted Google admin can change shared site data", async () => {
   await assertSucceeds(setDoc(doc(db, "siteData", "teams"), { safe: true }));
 });
 
+test("second allowlisted Google admin can change shared site data", async () => {
+  const db = env.authenticatedContext("admin-2", {
+    email: "to1ggi8403@gmail.com"
+  }).firestore();
+  await assertSucceeds(setDoc(doc(db, "siteData", "teams"), { safe: true }));
+});
+
 test("unlisted Google account cannot change shared site data", async () => {
   const db = env.authenticatedContext("other-1", {
     email: "not-an-admin@example.com"
