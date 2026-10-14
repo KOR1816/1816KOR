@@ -72,6 +72,16 @@ test("signed-in visitor can create a registration only at their own UID", async 
   }));
 });
 
+test("Viking registrations cannot select teams above 25", async () => {
+  const db = env.authenticatedContext("visitor-25").firestore();
+  await assertFails(setDoc(doc(db, "vikingRegistrations", "visitor-25"), {
+    nickname: "TestPlayer25",
+    team: 26,
+    uid: "visitor-25",
+    createdAt: Date.now()
+  }));
+});
+
 test("visitors cannot edit registrations in place", async () => {
   await env.withSecurityRulesDisabled(async context => {
     await setDoc(doc(context.firestore(), "vikingRegistrations", "visitor-3"), {
