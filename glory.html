@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KOR1816 | 영광의 순간들</title>
+<style>
+:root{--bg:#080d18;--panel:#101a2e;--line:#344b72;--gold:#f7d77a;--text:#f4f7ff;--muted:#aebbd3}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#1b2d4f 0,#0b1222 42%,#070b14 100%);color:var(--text);font-family:Arial,"Malgun Gothic",sans-serif}
+header{padding:20px 14px 16px;text-align:center;background:linear-gradient(135deg,#101d35,#172b4e 55%,#251d32);border-bottom:1px solid #3d527c}
+header h1{margin:0;color:var(--gold);font-size:clamp(25px,5vw,36px);letter-spacing:1px}header p{margin:7px 0 0;color:var(--muted);font-size:13px}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:#080d18;border-bottom:1px solid #263b60;position:sticky;top:0;z-index:3}
+nav a,button{border:1px solid #39557f;border-radius:10px;padding:9px 13px;background:linear-gradient(180deg,#243a61,#172946);color:#fff;text-decoration:none;cursor:pointer;font-weight:700;font-size:14px}
+nav a:hover,button:hover{border-color:var(--gold)}
+main{max-width:900px;margin:0 auto;padding:18px 14px 36px}
+.hero{border:1px solid #40577e;border-radius:18px;background:linear-gradient(135deg,#14213b,#202b49);padding:16px;text-align:center;margin-bottom:16px}
+.hero h2{font-size:clamp(24px,4vw,34px);margin:0 0 12px;color:var(--gold)}
+.hero img{display:block;width:100%;max-width:640px;max-height:230px;object-fit:contain;margin:0 auto 10px;border-radius:12px;background:#080d18}
+.muted{color:var(--muted);font-size:13px}.tools{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin:12px 0}
+.records{display:grid;gap:14px}.record{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:15px;overflow:hidden}
+.record-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.matchup{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,24px);padding:14px 4px 12px}.side{flex:1;min-width:0;text-align:center}
+.result{font-size:clamp(42px,8vw,68px);font-weight:1000;line-height:1.02;letter-spacing:1px}.loss{color:#ff7777;text-shadow:0 0 18px #ff444426}.win{color:var(--gold);text-shadow:0 0 18px #f7d77a26}
+.kingdom{font-size:clamp(17px,3vw,23px);font-weight:900;margin-top:6px;overflow-wrap:anywhere}.vs{font-size:clamp(17px,3vw,24px);font-weight:900;color:#aab8d1}
+.phases{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}.phase{background:#192741;border-radius:11px;text-align:center;padding:10px}.phase span{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}.phase strong{font-size:21px}
+.memo{margin-top:10px;color:#c3cde0;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.editor{display:none;background:var(--panel);border:1px solid #40577e;border-radius:14px;padding:15px;margin:12px 0}.editor.open{display:block}.editor h3{margin:0 0 12px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.form label{display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:13px}.form input,.form select,.form textarea{width:100%;min-width:0;background:#0b1426;color:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit}.form textarea{grid-column:1/-1;min-height:70px;resize:vertical}.form-actions{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.msg{min-height:18px;margin:9px 0 0;color:var(--gold);font-size:13px}.sources{margin-top:18px;text-align:center;line-height:1.8}.sources a{color:#b8d6ff}
+@media(max-width:560px){main{padding:12px 10px 28px}.hero{padding:12px}.record{padding:11px}.form{grid-template-columns:1fr}.form textarea,.form-actions{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><h1 data-i18n="title">🏆 영광의 순간들</h1><p data-i18n="subtitle">KOR1816 · KvK 전투 기록</p></header>
+<nav><a id="homeLink" href="index.html" data-i18n="home">🏠 홈으로</a><a id="noticeLink" href="notices.html" data-i18n="notices">📢 공지</a></nav>
+<main>
+<section class="hero"><h2 data-i18n="title">🏆 영광의 순간들</h2><img src="./ccc.png" alt="KOR1816 캐슬전 이미지"><div class="muted" data-i18n="heroCaption">준비기간과 전쟁기간의 승패를 기록합니다.</div></section>
+<div class="tools"><button onclick="openEditor()" data-i18n="add">➕ 기록 추가</button><button onclick="loadRecords()" data-i18n="refresh">🔄 새로고침</button></div>
+<section id="editor" class="editor"><h3 data-i18n="addTitle">캐슬전 기록 추가</h3><div class="form">
+<label data-i18n="dateLabel">전투 날짜<input id="date" type="date" required></label>
+<label data-i18n="opponentLabel">상대 왕국<input id="opponent" type="number" min="1" max="9999" placeholder="예: 1775" required></label>
+<label data-i18n="prepLabel">준비기간 결과<select id="prep"><option value="패">패배</option><option value="승">승리</option></select></label>
+<label data-i18n="castleLabel">전쟁기간 결과<select id="castle"><option value="패">패배</option><option value="승">승리</option></select></label>
+<label data-i18n="memoLabel" style="grid-column:1/-1">전투 메모 — 선택 사항<textarea id="memo" placeholder="전투 관련 메모 (선택 사항)"></textarea></label>
+<div class="form-actions"><button onclick="saveRecord()" data-i18n="save">💾 기록 저장</button><button onclick="closeEditor()" data-i18n="cancel">취소</button></div>
+</div><p id="editorMsg" class="msg"></p></section>
+<section id="records" class="records"></section><p id="msg" class="msg"></p>
+<div class="sources muted"><span data-i18n="source">공개 KvK 전적 참고</span> · <a href="https://stratforge.tools/ko/k/1816" target="_blank" rel="noopener">1816 왕국 전적</a> · <a href="https://kingshot.net/nexus/1775" target="_blank" rel="noopener">1775 왕국 전적</a></div>
+</main>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {getFirestore,doc,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import {getAuth,signInAnonymously,signInWithPopup,GoogleAuthProvider,signOut} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
+const ADMIN_EMAILS=["to1ggi8410@gmail.com","to1ggi8403@gmail.com"];
+const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app),recordsDoc=doc(db,"siteData","glory_records");
+const DEFAULTS=[
+ {date:"2026-10-10",opponent:1775,prep:"패",castle:"패",memo:""},
+ {date:"2026-09",opponent:1772,prep:"승",castle:"패",memo:""},
+ {date:"2026-08",opponent:1786,prep:"승",castle:"패",memo:""},
+ {date:"2026-07",opponent:1799,prep:"패",castle:"승",memo:""},
+ {date:"2026-06",opponent:1800,prep:"패",castle:"패",memo:""}
+];
+let records=[...DEFAULTS],currentLang="ko";
+const TEXT={
+ko:{title:"🏆 영광의 순간들",subtitle:"KOR1816 · KvK 전투 기록",home:"🏠 홈으로",notices:"📢 공지",heroCaption:"준비기간과 전쟁기간의 승패를 기록합니다.",add:"➕ 기록 추가",refresh:"🔄 새로고침",addTitle:"캐슬전 기록 추가",dateLabel:"전투 날짜",opponentLabel:"상대 왕국",prepLabel:"준비기간 결과",castleLabel:"전쟁기간 결과",memoLabel:"전투 메모 — 선택 사항",save:"💾 기록 저장",cancel:"취소",source:"공개 KvK 전적 참고",prep:"준비기간",castle:"전쟁기간",win:"승",loss:"패",placeholder:"전투 관련 메모 (선택 사항)",need:"전투 날짜와 상대 왕국 번호를 확인해 주세요.",saved:"기록이 공용 서버에 저장됐습니다.",readError:"공용 기록을 불러오지 못해 기본 전적을 표시합니다."},
+en:{title:"🏆 Glorious Moments",subtitle:"KOR1816 · KvK Battle Records",home:"🏠 Home",notices:"📢 Notices",heroCaption:"Track results from the preparation and battle phases.",add:"➕ Add Record",refresh:"🔄 Refresh",addTitle:"Add Castle Battle Record",dateLabel:"Battle Date",opponentLabel:"Opponent Kingdom",prepLabel:"Preparation Result",castleLabel:"Battle Result",memoLabel:"Battle Notes — Optional",save:"💾 Save Record",cancel:"Cancel",source:"Public KvK records",prep:"Preparation",castle:"Battle",win:"WIN",loss:"LOSS",placeholder:"Optional battle notes",need:"Check the battle date and opponent kingdom.",saved:"Record saved to the shared server.",readError:"Could not load shared records; showing baseline history."},
+ja:{title:"🏆 栄光の瞬間",subtitle:"KOR1816 · KvK戦闘記録",home:"🏠 ホーム",notices:"📢 お知らせ",heroCaption:"準備期間と戦争期間の勝敗を記録します。",add:"➕ 記録を追加",refresh:"🔄 更新",addTitle:"城戦記録を追加",dateLabel:"戦闘日",opponentLabel:"相手王国",prepLabel:"準備期間の結果",castleLabel:"戦争期間の結果",memoLabel:"戦闘メモ（任意）",save:"💾 保存",cancel:"キャンセル",source:"公開KvK記録",prep:"準備期間",castle:"戦争期間",win:"勝",loss:"敗",placeholder:"任意のメモ",need:"日付と相手王国を確認してください。",saved:"共有サーバーに保存しました。",readError:"共有記録を読み込めず、初期記録を表示します。"},
+zh:{title:"🏆 荣耀时刻",subtitle:"KOR1816 · KvK战斗记录",home:"🏠 首页",notices:"📢 公告",heroCaption:"记录准备阶段与战争阶段的胜负。",add:"➕ 添加记录",refresh:"🔄 刷新",addTitle:"添加城堡战记录",dateLabel:"战斗日期",opponentLabel:"对手王国",prepLabel:"准备阶段结果",castleLabel:"战争阶段结果",memoLabel:"战斗备注（选填）",save:"💾 保存记录",cancel:"取消",source:"公开KvK记录",prep:"准备阶段",castle:"战争阶段",win:"胜",loss:"败",placeholder:"可选战斗备注",need:"请检查日期和对手王国编号。",saved:"记录已保存到共享服务器。",readError:"无法读取共享记录，显示基础战绩。"},
+de:{title:"🏆 Ruhmreiche Momente",subtitle:"KOR1816 · KvK-Kampfprotokoll",home:"🏠 Startseite",notices:"📢 Hinweise",heroCaption:"Ergebnisse der Vorbereitungs- und Kampfphase festhalten.",add:"➕ Eintrag hinzufügen",refresh:"🔄 Aktualisieren",addTitle:"Burgkampf-Eintrag hinzufügen",dateLabel:"Kampftag",opponentLabel:"Gegnerisches Königreich",prepLabel:"Vorbereitungsphase",castleLabel:"Kampfphase",memoLabel:"Kampfnotiz — optional",save:"💾 Speichern",cancel:"Abbrechen",source:"Öffentliche KvK-Daten",prep:"Vorbereitung",castle:"Kampf",win:"SIEG",loss:"NIEDERLAGE",placeholder:"Optionale Notiz",need:"Datum und gegnerisches Königreich prüfen.",saved:"Eintrag auf dem gemeinsamen Server gespeichert.",readError:"Gemeinsame Daten nicht verfügbar; Basisdaten werden angezeigt."},
+it:{title:"🏆 Momenti di gloria",subtitle:"KOR1816 · Registro battaglie KvK",home:"🏠 Home",notices:"📢 Avvisi",heroCaption:"Registra i risultati della preparazione e della battaglia.",add:"➕ Aggiungi record",refresh:"🔄 Aggiorna",addTitle:"Aggiungi record della battaglia",dateLabel:"Data della battaglia",opponentLabel:"Regno avversario",prepLabel:"Risultato preparazione",castleLabel:"Risultato battaglia",memoLabel:"Note — facoltative",save:"💾 Salva",cancel:"Annulla",source:"Dati KvK pubblici",prep:"Preparazione",castle:"Battaglia",win:"VITTORIA",loss:"SCONFITTA",placeholder:"Note facoltative",need:"Controlla la data e il regno avversario.",saved:"Record salvato sul server condiviso.",readError:"Impossibile caricare i record condivisi; mostro i dati iniziali."},
+es:{title:"🏆 Momentos de gloria",subtitle:"KOR1816 · Historial de batallas KvK",home:"🏠 Inicio",notices:"📢 Avisos",heroCaption:"Registra los resultados de preparación y batalla.",add:"➕ Añadir registro",refresh:"🔄 Actualizar",addTitle:"Añadir registro de batalla",dateLabel:"Fecha de batalla",opponentLabel:"Reino rival",prepLabel:"Resultado de preparación",castleLabel:"Resultado de batalla",memoLabel:"Notas — opcional",save:"💾 Guardar",cancel:"Cancelar",source:"Registros públicos de KvK",prep:"Preparación",castle:"Batalla",win:"VICTORIA",loss:"DERROTA",placeholder:"Notas opcionales",need:"Comprueba la fecha y el reino rival.",saved:"Registro guardado en el servidor compartido.",readError:"No se pudieron cargar los registros compartidos; se muestra el historial base."},
+tr:{title:"🏆 Zafer Anları",subtitle:"KOR1816 · KvK Savaş Kayıtları",home:"🏠 Ana Sayfa",notices:"📢 Duyurular",heroCaption:"Hazırlık ve savaş aşamalarının sonuçlarını kaydedin.",add:"➕ Kayıt ekle",refresh:"🔄 Yenile",addTitle:"Kale savaşı kaydı ekle",dateLabel:"Savaş tarihi",opponentLabel:"Rakip krallık",prepLabel:"Hazırlık sonucu",castleLabel:"Savaş sonucu",memoLabel:"Savaş notu — isteğe bağlı",save:"💾 Kaydet",cancel:"İptal",source:"Herkese açık KvK kayıtları",prep:"Hazırlık",castle:"Savaş",win:"ZAFER",loss:"MAĞLUBİYET",placeholder:"İsteğe bağlı not",need:"Tarihi ve rakip krallığı kontrol edin.",saved:"Kayıt ortak sunucuya kaydedildi.",readError:"Ortak kayıtlar yüklenemedi; temel geçmiş gösteriliyor."}
+};
+function applyLanguage(){
+ const params=new URLSearchParams(location.search),urlLang=params.get("lang");
+ try{currentLang=(urlLang&&TEXT[urlLang])?urlLang:(localStorage.getItem("kor1816_lang")||"ko");}catch{currentLang=urlLang&&TEXT[urlLang]?urlLang:"ko";}
+ if(!TEXT[currentLang])currentLang="ko";
+ document.documentElement.lang=currentLang;
+ const t=TEXT[currentLang];
+ document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.dataset.i18n;if(el.tagName==="LABEL"){const input=el.querySelector("input,select,textarea");el.childNodes[0].textContent=t[key]||TEXT.ko[key];if(input&&input.tagName==="TEXTAREA")input.placeholder=t.placeholder||TEXT.ko.placeholder;}else el.textContent=t[key]||TEXT.ko[key];});
+ document.getElementById("homeLink").href="index.html?lang="+currentLang;
+ document.getElementById("noticeLink").href="notices.html?lang="+currentLang;
+ document.getElementById("memo").placeholder=t.placeholder||TEXT.ko.placeholder;
+}
+function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+function dateLabel(d){return String(d||"").replace(/^(\d{4})-(\d{2})-(\d{2})$/,"$1.$2.$3").replace(/^(\d{4})-(\d{2})$/,"$1.$2");}
+function render(){
+ const root=document.getElementById("records"),t=TEXT[currentLang];
+ root.innerHTML=[...records].sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(r=>{
+  const prep=r.prep==="승"?"승":"패",castle=r.castle==="승"?"승":"패";
+  const overall=castle,ours=overall,opponentResult=overall==="승"?"패":"승";
+  return '<article class="record"><div class="record-head"><strong>'+esc(dateLabel(r.date))+'</strong><span>상대 왕국 '+esc(r.opponent)+'</span></div><div class="matchup"><div class="side"><div class="result '+(ours==="승"?"win":"loss")+'">'+(ours==="승"?t.win:t.loss)+'</div><div class="kingdom">1816</div></div><div class="vs">VS</div><div class="side"><div class="result '+(opponentResult==="승"?"win":"loss")+'">'+(opponentResult==="승"?t.win:t.loss)+'</div><div class="kingdom">'+esc(r.opponent)+'</div></div></div><div class="phases"><div class="phase"><span>'+t.prep+'</span><strong class="'+(prep==="승"?"win":"loss")+'">'+(prep==="승"?t.win:t.loss)+'</strong></div><div class="phase"><span>'+t.castle+'</span><strong class="'+(castle==="승"?"win":"loss")+'">'+(castle==="승"?t.win:t.loss)+'</strong></div></div>'+(r.memo?'<div class="memo">📝 '+esc(r.memo)+'</div>':'')+'</article>';
+ }).join("");
+}
+async function loadRecords(){
+ try{await signInAnonymously(auth).catch(()=>{});const snap=await getDoc(recordsDoc);if(snap.exists()&&Array.isArray(snap.data().records))records=snap.data().records;}
+ catch(e){console.warn(e);document.getElementById("msg").textContent=TEXT[currentLang].readError;}
+ render();
+}
+async function ensureAdmin(){
+ let user=auth.currentUser;
+ if(!user||!user.email){try{user=(await signInWithPopup(auth,new GoogleAuthProvider())).user;}catch(e){alert("Google 관리자 로그인이 취소되었거나 실패했습니다.");return false;}}
+ if(!user.email||!ADMIN_EMAILS.includes(user.email.toLowerCase())){alert("등록된 관리자 Google 계정으로 로그인해 주세요.");try{await signOut(auth);await signInAnonymously(auth);}catch{}return false;}
+ return true;
+}
+async function openEditor(){if(!await ensureAdmin())return;document.getElementById("editor").classList.add("open");if(!document.getElementById("date").value)document.getElementById("date").value=new Date().toISOString().slice(0,10);}
+function closeEditor(){document.getElementById("editor").classList.remove("open");}
+async function saveRecord(){
+ const date=document.getElementById("date").value,opponent=Number(document.getElementById("opponent").value),prep=document.getElementById("prep").value,castle=document.getElementById("castle").value,memo=document.getElementById("memo").value.trim(),t=TEXT[currentLang];
+ if(!date||!Number.isInteger(opponent)||opponent<1||opponent>9999){document.getElementById("editorMsg").textContent=t.need;return;}
+ if(!await ensureAdmin())return;
+ try{
+  const next=[{date,opponent,prep,castle,memo},...records.filter(r=>!(r.date===date&&Number(r.opponent)===opponent))].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  await setDoc(recordsDoc,{records:next,updatedAt:new Date().toISOString()});
+  records=next;render();document.getElementById("editorMsg").textContent=t.saved;document.getElementById("opponent").value="";document.getElementById("memo").value="";
+ }catch(e){console.error(e);document.getElementById("editorMsg").textContent="Save failed: "+(e.message||"unknown error");}
+}
+window.openEditor=openEditor;window.closeEditor=closeEditor;window.saveRecord=saveRecord;window.loadRecords=loadRecords;
+applyLanguage();loadRecords();
+</script>
+</body>
+</html>
