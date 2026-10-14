@@ -1387,7 +1387,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    adminAuth=getAuth(app);
-   try{await Promise.race([signInAnonymously(adminAuth),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
+   if(!adminAuth.currentUser){try{await Promise.race([signInAnonymously(adminAuth),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}}
    db=getFirestore(app);teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");vikingDoc=doc(db,"siteData","viking_v1");castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
