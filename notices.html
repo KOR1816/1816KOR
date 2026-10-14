@@ -173,4 +173,45 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
 @media(max-width:1000px){nav#mainNav,nav#siteNav{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;padding:12px 8px!important}nav#mainNav a,nav#mainNav button,nav#siteNav a{min-height:42px!important;padding:8px 5px!important;font-size:13px!important}}
 @media(max-width:600px){header{padding:26px 12px!important}header h1{font-size:30px!important}header .sub{font-size:14px!important}nav#mainNav,nav#siteNav{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding:10px 7px!important}nav#mainNav a,nav#mainNav button,nav#siteNav a{min-height:40px!important;padding:7px 4px!important;font-size:12px!important}}
 </style>
+
+<script>
+(async function translateNoticeChrome(lang){
+ const excluded='.content,textarea,input,select,option,script,style,footer .brand,.nickname,[class*="nickname"],[contenteditable="true"]';
+ const sourceNodes=[];
+ const walker=document.createTreeWalker(document.querySelector("main")||document.body,NodeFilter.SHOW_TEXT);
+ let node;
+ while((node=walker.nextNode())){
+  const p=node.parentElement,raw=node.nodeValue.trim();
+  if(!p||p.closest(excluded)||!raw||!/[가-힣]/.test(raw)||/[A-Za-z]{2,}/.test(raw))continue;
+  if(!node.__kor1816Original)node.__kor1816Original=raw;
+  sourceNodes.push(node);
+ }
+ for(const n of sourceNodes){
+  const source=n.__kor1816Original;
+  try{
+   const res=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(source),{mode:"cors"});
+   if(!res.ok)continue;
+   const data=await res.json(),out=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||"").join(""):"";
+   if(out&&out!==source)n.nodeValue=n.nodeValue.replace(n.nodeValue.trim(),out);
+  }catch(e){console.warn("Notice page translation unavailable",e);}
+ }
+ const labels={en:{refresh:"🔄 Refresh",edit:"🔐 Admin Edit",save:"💾 Save",loading:"Loading battle orders...",loaded:"Saved notices loaded.",latest:"Latest notices loaded.",hint:"After editing, save to view the same notices on other devices.",footer:"KOR1816 · Together, We Grow Stronger! ❤️"},
+ ja:{refresh:"🔄 更新",edit:"🔐 管理者編集",save:"💾 保存",loading:"戦闘指示を読み込み中...",loaded:"保存済みのお知らせを読み込みました。",latest:"最新のお知らせを読み込みました。",hint:"編集後に保存すると、他の端末でも同じお知らせを確認できます。",footer:"KOR1816 · 共に成長し、より強く！ ❤️"},
+ zh:{refresh:"🔄 刷新",edit:"🔐 管理员编辑",save:"💾 保存",loading:"正在加载战斗公告...",loaded:"已加载保存的公告。",latest:"已加载最新公告。",hint:"编辑后保存，其他设备也能看到相同公告。",footer:"KOR1816 · 携手成长，更加强大！ ❤️"},
+ de:{refresh:"🔄 Aktualisieren",edit:"🔐 Admin-Bearbeitung",save:"💾 Speichern",loading:"Kampfaufträge werden geladen...",loaded:"Gespeicherte Hinweise geladen.",latest:"Neueste Hinweise geladen.",hint:"Nach der Bearbeitung speichern, damit dieselben Hinweise auch auf anderen Geräten angezeigt werden.",footer:"KOR1816 · Gemeinsam wachsen wir stärker! ❤️"},
+ it:{refresh:"🔄 Aggiorna",edit:"🔐 Modifica admin",save:"💾 Salva",loading:"Caricamento degli ordini di battaglia...",loaded:"Avvisi salvati caricati.",latest:"Ultimi avvisi caricati.",hint:"Dopo le modifiche, salva per vedere gli stessi avvisi anche sugli altri dispositivi.",footer:"KOR1816 · Insieme diventiamo più forti! ❤️"},
+ es:{refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",loading:"Cargando órdenes de batalla...",loaded:"Avisos guardados cargados.",latest:"Avisos más recientes cargados.",hint:"Guarda después de editar para ver los mismos avisos en otros dispositivos.",footer:"KOR1816 · ¡Juntos crecemos más fuertes! ❤️"},
+ tr:{refresh:"🔄 Yenile",edit:"🔐 Yönetici düzenlemesi",save:"💾 Kaydet",loading:"Savaş emirleri yükleniyor...",loaded:"Kaydedilen duyurular yüklendi.",latest:"En güncel duyurular yüklendi.",hint:"Düzenledikten sonra kaydedin; aynı duyurular diğer cihazlarda da görünür.",footer:"KOR1816 · Birlikte daha güçlüyüz! ❤️"}};
+ const fixed=labels[lang];
+ if(fixed){
+  const refresh=document.getElementById("refreshBtn"),edit=document.getElementById("editBtn"),save=document.getElementById("saveBtn");
+  if(refresh)refresh.textContent=fixed.refresh;if(edit)edit.textContent=fixed.edit;if(save)save.textContent=fixed.save;
+  const hint=document.querySelector(".hint");if(hint)hint.textContent=fixed.hint;
+  const footer=document.querySelector("footer");if(footer)footer.textContent=fixed.footer;
+  const status=document.getElementById("status");
+  if(status){const s=status.textContent;if(s.includes("불러오는 중"))status.textContent=fixed.loading;else if(s.includes("저장된 공지"))status.textContent=fixed.loaded;else if(s.includes("최신 공지"))status.textContent=fixed.latest;}
+ }
+})(new URLSearchParams(location.search).get("lang")||localStorage.getItem("kor1816_lang")||"ko");
+</script>
+
 </body></html>
