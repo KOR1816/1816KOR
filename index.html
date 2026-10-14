@@ -461,10 +461,6 @@ function normalizeTeams(d){
  if(d&&Array.isArray(d.subs))out.subs=d.subs.slice(0,10).concat(Array(10).fill("")).slice(0,10);
  return out;
 }
-function isLegacySeatingData(d){
- const rows=Array.isArray(d)?d:(d&&Array.isArray(d.columns)?d.columns:[]);
- return rows.some(row=>row&&[...(Array.isArray(row.left)?row.left:[]),...(Array.isArray(row.right)?row.right:[])].some(name=>["egoist","ssungbi"].includes(String(name||"").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g,""))));
-}
 function normalizeSeating(d){
  if(!Array.isArray(d)||d.length!==3)return clone(seatingData);
  const ok=d.every(x=>x&&Array.isArray(x.left)&&Array.isArray(x.right));
