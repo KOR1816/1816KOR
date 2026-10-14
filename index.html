@@ -1469,7 +1469,8 @@ async function initFirebase(){
 window.show=show;window.loadViking=loadViking;window.joinVikingTeam=joinVikingTeam;window.toggleVikingCustomNick=toggleVikingCustomNick;window.toggleVikingPhotoAdmin=toggleVikingPhotoAdmin;window.triggerVikingPhoto=triggerVikingPhoto;window.leaveVikingTeam=leaveVikingTeam;window.addVikingTeams=addVikingTeams;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",async()=>{
  const lang=document.getElementById("languageSelect");
- const savedLang=readLocal("kor1816_lang","ko");
+ const urlLang=new URLSearchParams(location.search).get("lang");
+ const savedLang=I18N[urlLang]?urlLang:readLocal("kor1816_lang","ko");
  homeData=normalizeHomeData(readLocal(HOME_KEY,homeData));renderHome(homeData);renderViking();renderTeams();setTeamsInputsEnabled(false);renderAlliance();
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
