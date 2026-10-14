@@ -6,8 +6,8 @@
 <style>
 :root{--bg:#080d18;--panel:#101a2e;--line:#39557f;--gold:#e5b84b;--gold2:#ffd978;--text:#f4f7ff;--muted:#aebbd3}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Malgun Gothic",sans-serif;color:var(--text);background:radial-gradient(circle at 50% -10%,#1b2d4f 0,#0b1222 42%,#070b14 100%)}
-header{padding:26px 16px 20px;text-align:center;background:linear-gradient(135deg,#101d35,#172b4e 55%,#251d32);border-bottom:1px solid #3d527c}
-h1{margin:0;font-size:32px;letter-spacing:2px}header p{margin:8px 0 0;color:var(--muted);font-size:13px;letter-spacing:2px}
+header{padding:28px 20px;background:linear-gradient(135deg,#101d35,#172b4e 55%,#251d32);text-align:center;border-bottom:1px solid #3d527c}
+header h1{margin:0;font-size:34px;letter-spacing:0;color:#fff;text-shadow:0 2px 12px #000}.sub{opacity:.8;margin-top:8px;color:var(--muted);font-size:16px;letter-spacing:0}
 nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:13px;background:rgba(7,12,23,.96);border-bottom:1px solid #263b60;position:sticky;top:0;z-index:5}
 nav a,button{border:1px solid #39557f;border-radius:10px;padding:10px 15px;background:linear-gradient(180deg,#243a61,#172946);color:#fff;text-decoration:none;cursor:pointer;font-weight:700}
 nav a:hover,button:hover{border-color:var(--gold);background:linear-gradient(180deg,#3a5785,#243c63)}
@@ -33,7 +33,7 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
 </style>
 </head>
 <body>
-<header><h1>🏰 KOR1816</h1><p>Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</p></header>
+<header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
 <nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🛡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">⚔️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🛡️ 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a></nav>
 <script>
 (function(){
