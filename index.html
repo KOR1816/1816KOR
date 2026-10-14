@@ -1661,18 +1661,43 @@ html,body{overflow-anchor:none!important}
 @media(max-width:900px){#teams{min-height:0!important}#teams .team-columns-wrap{overscroll-behavior-x:contain!important}}
 </style>
 
-<style id="castlewar-force-navy-final-v2">
-/* Castle War uses the same dark-navy palette as Holy Sword. Override shared card styles and inline backgrounds. */
-html body #castlewar,html body #castlewar.page,html body #castlewar.page.active{background:transparent!important;background-color:transparent!important;color:#eef2ff!important}
-html body #castlewar>.castlewar-card,html body #castlewar .castlewar-card,html body #castlewar>.card{background:#151d34!important;background-color:#151d34!important;background-image:none!important;color:#eef2ff!important}
-html body #castlewar .castlewar-columns,html body #castlewar .castlewar-extra-columns{background:transparent!important;background-color:transparent!important;background-image:none!important}
-html body #castlewar .castlewar-column,html body #castlewar .castlewar-column[style],html body #castlewar .castlewar-extra-card,html body #castlewar .castlewar-extra-card[style]{background:#151d34!important;background-color:#151d34!important;background-image:none!important;color:#eef2ff!important}
-html body #castlewar .castlewar-slot,html body #castlewar .castlewar-slot[style],html body #castlewar .castlewar-leader-row,html body #castlewar .castlewar-leader-row[style],html body #castlewar .castlewar-substitute-slot,html body #castlewar .castlewar-substitute-slot[style]{background:#101a2e!important;background-color:#101a2e!important;background-image:none!important;color:#eef2ff!important}
-html body #castlewar .castlewar-title,html body #castlewar .castlewar-title[style],html body #castlewar .castlewar-extra-title{background:#202f52!important;background-color:#202f52!important;background-image:none!important;color:#f7d77a!important}
-html body #castlewar .castlewar-slot>span,html body #castlewar .castlewar-leader-row>span,html body #castlewar .castlewar-substitute-slot>span{background:#101a2e!important;background-color:#101a2e!important;color:#cfe0fa!important}
-html body #castlewar input,html body #castlewar input:disabled,html body #castlewar input[readonly],html body #castlewar textarea,html body #castlewar textarea:disabled,html body #castlewar textarea[readonly],html body #castlewar select{background:#0b1426!important;background-color:#0b1426!important;background-image:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;filter:none!important;box-shadow:inset 0 0 0 1000px #0b1426!important;caret-color:#fff!important;color-scheme:dark!important}
-html body #castlewar input:-webkit-autofill,html body #castlewar input:-webkit-autofill:hover,html body #castlewar input:-webkit-autofill:focus,html body #castlewar input:-webkit-autofill:active,html body #castlewar textarea:-webkit-autofill,html body #castlewar textarea:-webkit-autofill:hover,html body #castlewar textarea:-webkit-autofill:focus,html body #castlewar textarea:-webkit-autofill:active{-webkit-box-shadow:0 0 0 1000px #0b1426 inset!important;box-shadow:0 0 0 1000px #0b1426 inset!important;-webkit-text-fill-color:#fff!important;caret-color:#fff!important}
-@media(max-width:900px){html body #castlewar .castlewar-card,html body #castlewar .castlewar-column,html body #castlewar .castlewar-column[style],html body #castlewar .castlewar-extra-card,html body #castlewar .castlewar-extra-card[style]{background:#151d34!important;background-color:#151d34!important;background-image:none!important}html body #castlewar .castlewar-slot,html body #castlewar .castlewar-slot[style],html body #castlewar .castlewar-substitute-slot,html body #castlewar .castlewar-substitute-slot[style]{background:#101a2e!important;background-color:#101a2e!important;background-image:none!important}}
+<style id="castlewar-force-navy-final-v3">
+/* Castle War: use navy on the section itself as well, so mobile cannot show a gray parent through transparent gaps. */
+html body #castlewar,html body #castlewar.page,html body #castlewar.page.active{
+ background:#151d34!important;background-color:#151d34!important;background-image:none!important;color:#eef2ff!important;
+}
+html body #castlewar>.castlewar-card,html body #castlewar .castlewar-card,html body #castlewar>.card{
+ background:#151d34!important;background-color:#151d34!important;background-image:none!important;color:#eef2ff!important;
+}
+html body #castlewar .castlewar-columns,html body #castlewar .castlewar-extra-columns{
+ background:#151d34!important;background-color:#151d34!important;background-image:none!important;
+}
+html body #castlewar .castlewar-column,html body #castlewar .castlewar-column[style],html body #castlewar .castlewar-extra-card,html body #castlewar .castlewar-extra-card[style]{
+ background:#151d34!important;background-color:#151d34!important;background-image:none!important;color:#eef2ff!important;
+}
+html body #castlewar .castlewar-slot,html body #castlewar .castlewar-slot[style],html body #castlewar .castlewar-leader-row,html body #castlewar .castlewar-leader-row[style],html body #castlewar .castlewar-substitute-slot,html body #castlewar .castlewar-substitute-slot[style]{
+ background:#101a2e!important;background-color:#101a2e!important;background-image:none!important;color:#eef2ff!important;
+}
+html body #castlewar .castlewar-title,html body #castlewar .castlewar-title[style],html body #castlewar .castlewar-extra-title{
+ background:#202f52!important;background-color:#202f52!important;background-image:none!important;color:#f7d77a!important;
+}
+html body #castlewar .castlewar-slot>span,html body #castlewar .castlewar-leader-row>span,html body #castlewar .castlewar-substitute-slot>span{
+ background:#101a2e!important;background-color:#101a2e!important;color:#cfe0fa!important;
+}
+html body #castlewar input,html body #castlewar input:disabled,html body #castlewar input[readonly],html body #castlewar textarea,html body #castlewar textarea:disabled,html body #castlewar textarea[readonly],html body #castlewar select{
+ background:#0b1426!important;background-color:#0b1426!important;background-image:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;filter:none!important;box-shadow:inset 0 0 0 1000px #0b1426!important;caret-color:#fff!important;color-scheme:dark!important;
+}
+html body #castlewar input:-webkit-autofill,html body #castlewar input:-webkit-autofill:hover,html body #castlewar input:-webkit-autofill:focus,html body #castlewar input:-webkit-autofill:active,html body #castlewar textarea:-webkit-autofill,html body #castlewar textarea:-webkit-autofill:hover,html body #castlewar textarea:-webkit-autofill:focus,html body #castlewar textarea:-webkit-autofill:active{
+ -webkit-box-shadow:0 0 0 1000px #0b1426 inset!important;box-shadow:0 0 0 1000px #0b1426 inset!important;-webkit-text-fill-color:#fff!important;caret-color:#fff!important;
+}
+@media(max-width:900px){
+ html body #castlewar,html body #castlewar.page,html body #castlewar.page.active,html body #castlewar .castlewar-card,html body #castlewar .castlewar-column,html body #castlewar .castlewar-column[style],html body #castlewar .castlewar-extra-card,html body #castlewar .castlewar-extra-card[style],html body #castlewar .castlewar-columns,html body #castlewar .castlewar-extra-columns{
+  background:#151d34!important;background-color:#151d34!important;background-image:none!important;
+ }
+ html body #castlewar .castlewar-slot,html body #castlewar .castlewar-slot[style],html body #castlewar .castlewar-substitute-slot,html body #castlewar .castlewar-substitute-slot[style]{
+  background:#101a2e!important;background-color:#101a2e!important;background-image:none!important;
+ }
+}
 </style>
 
 <style id="kor1816-unified-section-headings-final">
