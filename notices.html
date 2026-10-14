@@ -34,7 +34,7 @@ footer{text-align:center;padding:22px;color:#71829e;border-top:1px solid #223654
 </head>
 <body>
 <header><h1>⚔️ KOR1816</h1><p>KINGDOM 1816 · OFFICIAL NOTICES</p></header>
-<nav><a href="./">🏠 <span data-ko="홈" data-en="Home">홈</span></a><a href="./notices.html">📢 <span data-ko="공지" data-en="Notices">공지</span></a><a href="./#teams">⚔️ <span data-ko="성검쟁탈" data-en="Holy Sword Clash">성검쟁탈</span></a><a href="./#alliance">🛡️ <span data-ko="3대연맹전" data-en="Three Alliances War">3대연맹전</span></a><a href="./#castle">🏰 <span data-ko="캐슬배치" data-en="Castle Layout">캐슬배치</span></a><a href="./#castlewar">⚔️ <span data-ko="캐슬전" data-en="Castle War">캐슬전</span></a></nav>
+<nav><a href="./" data-nav="0">🏠 홈</a><a href="./notices.html" data-nav="1">📢 공지</a><a href="./#teams" data-nav="2">⚔️ 성검쟁탈</a><a href="./#alliance" data-nav="3">🛡️ 3대연맹전</a><a href="./#castle" data-nav="4">🏰 캐슬배치</a><a href="./#castlewar" data-nav="5">⚔️ 캐슬전</a></nav>
 <main>
 <div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
 <div class="cards">
@@ -110,7 +110,7 @@ render();
 try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(app))}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
 </script>
 <script>
-// Keep the language selected on the main site when navigating from bilingual notices back to a section.
+// Match the main site's full navigation translations for every supported language.
 (function(){
  let lang="ko";
  try{
@@ -118,13 +118,23 @@ try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(
    lang=urlLang||localStorage.getItem("kor1816_lang")||"ko";
  }catch(e){}
  if(!/^(ko|en|ja|zh|de|it|es|tr)$/.test(lang))lang="ko";
+ const navLabels={
+  ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🛡️ 3대연맹전","🏰 캐슬배치","⚔️ 캐슬전"],
+  en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🛡️ Three Alliances War","🏰 Castle Layout","⚔️ Castle War"],
+  ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 キャッスル配置","⚔️ キャッスル戦"],
+  zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","⚔️ 城堡战"],
+  de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","⚔️ Burgenkrieg"],
+  it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","⚔️ Guerra del Castello"],
+  es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","⚔️ Guerra del Castillo"],
+  tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🛡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","⚔️ Kale Savaşı"]
+ };
  document.documentElement.lang=lang;
- document.querySelectorAll("nav [data-ko][data-en]").forEach(function(el){el.textContent=lang==="en"?el.dataset.en:el.dataset.ko;});
  try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
- document.querySelectorAll('nav a[href^="./"]').forEach(function(a){
+ document.querySelectorAll("nav a[data-nav]").forEach(function(a){
+   const i=Number(a.dataset.nav);
+   if(navLabels[lang]&&navLabels[lang][i])a.textContent=navLabels[lang][i];
    const u=new URL(a.getAttribute("href"),location.href);
-   if(u.pathname.endsWith("/notices.html"))return;
-   u.searchParams.set("lang",lang);
+   if(i!==1)u.searchParams.set("lang",lang);
    a.href=u.pathname+u.search+u.hash;
  });
 })();
