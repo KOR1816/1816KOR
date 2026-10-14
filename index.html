@@ -413,8 +413,8 @@ async function ensureGoogleAdmin(){
      const result=await signInWithPopup(auth,new GoogleAuthProvider());
      user=result.user;
    }catch(e){
-     console.warn("Google admin sign-in",e);
-     if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")alert("Google 로그인에 실패했습니다. 다시 시도해 주세요.");
+     console.error("Google admin sign-in failed:",e.code,e.message,e);
+     if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")alert("Google 로그인 실패: "+(e.code||"원인 코드 없음")+"\n"+(e.message||"Firebase 인증 설정을 확인해 주세요."));
      return false;
    }
  }
