@@ -123,5 +123,5 @@ document.getElementById("refreshBtn").addEventListener("click",refresh);
 document.getElementById("editBtn").addEventListener("click",toggleEdit);
 document.getElementById("saveBtn").addEventListener("click",save);
 render();
-try{const app=initializeApp(firebaseConfig);adminAuth=getAuth(app);try{await signInAnonymously(adminAuth)}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
+try{const app=initializeApp(firebaseConfig);adminAuth=getAuth(app);if(!adminAuth.currentUser){try{await signInAnonymously(adminAuth)}catch(e){console.warn(e)}}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
 </script></body></html>
