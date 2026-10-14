@@ -203,6 +203,24 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  es:{refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",loading:"Cargando órdenes de batalla...",loaded:"Avisos guardados cargados.",latest:"Avisos más recientes cargados.",hint:"Guarda después de editar para ver los mismos avisos en otros dispositivos.",footer:"KOR1816 · ¡Juntos crecemos más fuertes! ❤️"},
  tr:{refresh:"🔄 Yenile",edit:"🔐 Yönetici düzenlemesi",save:"💾 Kaydet",loading:"Savaş emirleri yükleniyor...",loaded:"Kaydedilen duyurular yüklendi.",latest:"En güncel duyurular yüklendi.",hint:"Düzenledikten sonra kaydedin; aynı duyurular diğer cihazlarda da görünür.",footer:"KOR1816 · Birlikte daha güçlüyüz! ❤️"}};
  const fixed=labels[lang];
+ const headings={
+  en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🛡️ Three Alliances War","TEAM 1","TEAM 2"],
+  ja:["⚔️ 戦闘指示","作戦を確認 · 一丸となって戦おう","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
+  zh:["⚔️ 战斗公告","查看计划 · 团结作战","🐻 猎熊","集结队长","集结成员","兵力比例","兵力","🗡️ 圣剑争夺","第一队","第二队","🛡️ 三大联盟战","第一队","第二队"],
+  de:["⚔️ Kampfaufträge","Plan lesen · Gemeinsam kämpfen","🐻 Bärenjagd","Rally-Leiter","Rally-Mitglieder","Truppenverhältnis","Truppen","🗡️ Heiliges Schwertduell","TEAM 1","TEAM 2","🛡️ Krieg der drei Allianzen","TEAM 1","TEAM 2"],
+  it:["⚔️ Ordini di battaglia","Leggi il piano · Combatti unito","🐻 Caccia all'orso","Leader del rally","Membri del rally","Rapporto truppe","Truppe","🗡️ Duello della Spada Sacra","SQUADRA 1","SQUADRA 2","🛡️ Guerra delle Tre Alleanze","SQUADRA 1","SQUADRA 2"],
+  es:["⚔️ Órdenes de batalla","Consulta el plan · Lucha en equipo","🐻 Caza del oso","Líderes de rally","Miembros del rally","Proporción de tropas","Tropas","🗡️ Duelo de la Espada Sagrada","EQUIPO 1","EQUIPO 2","🛡️ Guerra de las Tres Alianzas","EQUIPO 1","EQUIPO 2"],
+  tr:["⚔️ Savaş Emirleri","Planı oku · Birlikte savaş","🐻 Ayı Avı","Sefer Liderleri","Sefer Katılımcıları","Birlik Oranı","Birlikler","🗡️ Kutsal Kılıç Savaşı","1. TAKIM","2. TAKIM","🛡️ Üç İttifak Savaşı","1. TAKIM","2. TAKIM"]
+ };
+ if(headings[lang]){
+  const intro=document.querySelector(".intro");if(intro){const h=intro.querySelector("h2"),p=intro.querySelector("p");if(h)h.textContent=headings[lang][0];if(p)p.textContent=headings[lang][1];}
+  const cards=[...document.querySelectorAll(".cards>.card")];
+  cards.forEach((card,i)=>{const h=card.querySelector("h3");if(h)h.textContent=headings[lang][[2,7,10][i]];});
+  document.querySelectorAll(".cards>.card").forEach((card,i)=>{
+   const blocks=[...card.querySelectorAll(".block h4")];
+   blocks.forEach((h,j)=>{const pos=i===0?3+j:i===1?8+j:11+j;if(headings[lang][pos])h.textContent=headings[lang][pos];});
+  });
+ }
  if(fixed){
   const refresh=document.getElementById("refreshBtn"),edit=document.getElementById("editBtn"),save=document.getElementById("saveBtn");
   if(refresh)refresh.textContent=fixed.refresh;if(edit)edit.textContent=fixed.edit;if(save)save.textContent=fixed.save;
