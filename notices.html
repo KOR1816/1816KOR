@@ -42,21 +42,21 @@ header,header h1,header .sub{text-align:left!important}
 </head>
 <body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
-<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🛡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">⚔️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🛡️ 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a></nav>
+<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🗡️⚔️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🛡️ 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a></nav>
 <script>
 (function(){
  const p=new URLSearchParams(location.search), urlLang=p.get("lang");
  let lang=urlLang||"ko";
  try{lang=urlLang||localStorage.getItem("kor1816_lang")||"ko"}catch{}
  const labels={
- ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🛡️ 3대연맹전","🏰 캐슬배치","⚔️ 캐슬전","🪑 자리배치","🛡️ 바이킹","🏆 영광의 순간들"],
- en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🛡️ Three Alliances War","🏰 Castle Layout","⚔️ Castle War","🪑 Seating","🛡️ Viking","🏆 Glorious Moments"],
+ ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🗡️⚔️ 캐슬전","🪑 자리배치","🛡️ 바이킹","🏆 영광의 순간들"],
+ en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🗡️🗡️⚔️ Castle War","🪑 Seating","🛡️ Viking","🏆 Glorious Moments"],
  ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 城配置","⚔️ 城戦","🪑 席配置","🛡️ バイキング","🏆 栄光の瞬間"],
- zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","⚔️ 城堡战","🪑 座位安排","🛡️ 维京","🏆 荣耀时刻"],
+ zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","🗡️⚔️ 城堡战","🪑 座位安排","🛡️ 维京","🏆 荣耀时刻"],
  de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","⚔️ Burgenkrieg","🪑 Sitzplan","🛡️ Wikinger","🏆 Ruhmreiche Momente"],
- it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","⚔️ Guerra del Castello","🪑 Posti","🛡️ Vichinghi","🏆 Momenti di gloria"],
- es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Formación del Castillo","⚔️ Guerra del Castillo","🪑 Asientos","🛡️ Vikingos","🏆 Momentos de gloria"],
- tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","⚔️ Kale Savaşı","🪑 Oturma Düzeni","🛡️ Viking","🏆 Zafer Anları"]
+ it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🗡️⚔️ Guerra del Castello","🪑 Posti","🛡️ Vichinghi","🏆 Momenti di gloria"],
+ es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Formación del Castillo","🗡️⚔️ Guerra del Castillo","🪑 Asientos","🛡️ Vikingos","🏆 Momentos de gloria"],
+ tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","🗡️⚔️ Kale Savaşı","🪑 Oturma Düzeni","🛡️ Viking","🏆 Zafer Anları"]
  };
  if(!labels[lang])lang="ko";
  const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink"];
@@ -156,14 +156,14 @@ try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(
  }catch(e){}
  if(!/^(ko|en|ja|zh|de|it|es|tr)$/.test(lang))lang="ko";
  const navLabels={
-  ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🛡️ 3대연맹전","🏰 캐슬배치","⚔️ 캐슬전"],
-  en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🛡️ Three Alliances War","🏰 Castle Layout","⚔️ Castle War"],
-  ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 キャッスル配置","⚔️ キャッスル戦"],
-  zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","⚔️ 城堡战"],
+  ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🗡️⚔️ 캐슬전"],
+  en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🗡️🗡️⚔️ Castle War"],
+  ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 キャッスル配置","🗡️⚔️ キャッスル戦"],
+  zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","🗡️⚔️ 城堡战"],
   de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","⚔️ Burgenkrieg"],
-  it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","⚔️ Guerra del Castello"],
-  es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","⚔️ Guerra del Castillo"],
-  tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🛡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","⚔️ Kale Savaşı"]
+  it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🗡️⚔️ Guerra del Castello"],
+  es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🗡️⚔️ Guerra del Castillo"],
+  tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🛡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🗡️⚔️ Kale Savaşı"]
  };
  document.documentElement.lang=lang;
  try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
@@ -219,7 +219,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  const subtitles={en:"Kingdom 1816 · Bite back if challenged! · Bear-loving community!!",ja:"Kingdom 1816 · 挑発したら噛みつく！ · クマ好きの集まり!!",zh:"Kingdom 1816 · 惹我们就反击！ · 熊迷聚会!!",de:"Kingdom 1816 · Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Kingdom 1816 · Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"Kingdom 1816 · ¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Kingdom 1816 · Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"};
  const sub=document.querySelector("header .sub");if(sub&&subtitles[lang])sub.textContent=subtitles[lang];
  const headings={
-  en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🛡️ Three Alliances War","TEAM 1","TEAM 2"],
+  en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🗡️ Three Alliances War","TEAM 1","TEAM 2"],
   ja:["⚔️ 戦闘指示","作戦を確認 · 一丸となって戦おう","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
   zh:["⚔️ 战斗公告","查看计划 · 团结作战","🐻 猎熊","集结队长","集结成员","兵力比例","兵力","🗡️ 圣剑争夺","第一队","第二队","🛡️ 三大联盟战","第一队","第二队"],
   de:["⚔️ Kampfaufträge","Plan lesen · Gemeinsam kämpfen","🐻 Bärenjagd","Rally-Leiter","Rally-Mitglieder","Truppenverhältnis","Truppen","🗡️ Heiliges Schwertduell","TEAM 1","TEAM 2","🛡️ Krieg der drei Allianzen","TEAM 1","TEAM 2"],
