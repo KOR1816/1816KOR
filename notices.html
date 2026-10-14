@@ -113,8 +113,12 @@ try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(
 // Keep the language selected on the main site when navigating from bilingual notices back to a section.
 (function(){
  let lang="ko";
- try{lang=localStorage.getItem("kor1816_lang")||new URLSearchParams(location.search).get("lang")||"ko"}catch(e){}
+ try{
+   const urlLang=new URLSearchParams(location.search).get("lang");
+   lang=urlLang||localStorage.getItem("kor1816_lang")||"ko";
+ }catch(e){}
  if(!/^(ko|en|ja|zh|de|it|es|tr)$/.test(lang))lang="ko";
+ try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
  document.querySelectorAll('nav a[href^="./"]').forEach(function(a){
    const u=new URL(a.getAttribute("href"),location.href);
    if(u.pathname.endsWith("/notices.html"))return;
