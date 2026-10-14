@@ -108,4 +108,19 @@ document.getElementById("editBtn").addEventListener("click",toggleEdit);
 document.getElementById("saveBtn").addEventListener("click",save);
 render();
 try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(app))}catch(e){console.warn(e)}db=getFirestore(app);docRef=doc(db,"siteData","notices");await refresh()}catch(e){console.error(e);say("공용 서버 연결에 실패했습니다. 현재 기기 저장본을 표시합니다.")}
-</script></body></html>
+</script>
+<script>
+// Keep the language selected on the main site when navigating from bilingual notices back to a section.
+(function(){
+ let lang="ko";
+ try{lang=localStorage.getItem("kor1816_lang")||new URLSearchParams(location.search).get("lang")||"ko"}catch(e){}
+ if(!/^(ko|en|ja|zh|de|it|es|tr)$/.test(lang))lang="ko";
+ document.querySelectorAll('nav a[href^="./"]').forEach(function(a){
+   const u=new URL(a.getAttribute("href"),location.href);
+   if(u.pathname.endsWith("/notices.html"))return;
+   u.searchParams.set("lang",lang);
+   a.href=u.pathname+u.search+u.hash;
+ });
+})();
+</script>
+</body></html>
