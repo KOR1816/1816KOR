@@ -328,7 +328,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 </style>
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
-<nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="location.href='notices.html'">📢 공지</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">⚔️ 캐슬전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('viking')">🛡️ 바이킹</button></nav>
+<nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="location.href='notices.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">📢 공지</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">⚔️ 3대연맹전</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">⚔️ 캐슬전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('viking')">🛡️ 바이킹</button></nav>
 <main class="wrap">
 <section id="home" class="page active">
 <div class="sword-image-wrap home-main-image"><img src="1816.jpg" alt="1816" class="sword-image"></div>
@@ -493,15 +493,25 @@ function renderSeatingAdmin(){
 function collectSeating(){
  return seatingData.map((row,ri)=>({row:row.row,left:row.left.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-0-"+ni)?.value||""),right:row.right.map((_,ni)=>document.getElementById("seating-edit-"+ri+"-1-"+ni)?.value||"")}));
 }
+function getSeatingRows(value){
+ if(Array.isArray(value))return value;
+ if(!value||typeof value!=="object")return [];
+ for(const key of ["columns","seating","layout","rows","seatingData","placements","members","data"]){
+   const candidate=value[key];
+   if(Array.isArray(candidate))return candidate;
+   if(candidate&&typeof candidate==="object"){const nested=getSeatingRows(candidate);if(nested.length)return nested;}
+ }
+ return [];
+}
 function seatingHasNames(data){
- const rows=Array.isArray(data)?data:(data&&Array.isArray(data.columns)?data.columns:[]);
+ const rows=getSeatingRows(data);
  return rows.some(row=>row&&[...(Array.isArray(row.left)?row.left:[]),...(Array.isArray(row.right)?row.right:[])].some(name=>String(name??"").trim()!==""));
 }
 async function loadSeating(){
  const localKeys=[SEATING_KEY,"kor1816_seating_v7","kor1816_seating_v6","kor1816_seating_v5","kor1816_seating_v4","kor1816_seating_v3","kor1816_seating_v2","kor1816_seating_v1"];
  let localRaw=null;
  for(const key of localKeys){const candidate=readLocal(key,null);if(candidate&&seatingHasNames(candidate)){localRaw=candidate;break;}if(!localRaw&&candidate)localRaw=candidate;}
- const localData=normalizeSeating(Array.isArray(localRaw)?localRaw:(localRaw?.columns||null));
+ const localData=normalizeSeating(getSeatingRows(localRaw));
  const localUpdatedAt=Number(localRaw&&localRaw._updatedAt)||0;
  seatingData=localData;
  renderSeating();renderSeatingAdmin();translatePage(currentLang);
@@ -514,12 +524,12 @@ async function loadSeating(){
    const currentSnap=await Promise.race([getDoc(seatingDoc),new Promise((_,rej)=>setTimeout(()=>rej(Error("timeout")),7000))]);
    if(currentSnap.exists()){
      const data=currentSnap.data()||{};
-     if(seatingHasNames(data.columns))chosen={data,updatedAt:Number(data.updatedAt)||0,source:"v4"};
+     const rows=getSeatingRows(data);if(seatingHasNames(rows))chosen={data,columns:rows,updatedAt:Number(data.updatedAt)||0,source:"v4"};
    }
  }catch(e){console.warn("current seating read",e);}
  if(!chosen&&Array.isArray(seatingLegacyDocs)){
    const legacyResults=await Promise.all(seatingLegacyDocs.map(async item=>{
-     try{const snap=await getDoc(item.ref);if(!snap.exists())return null;const data=snap.data()||{};return seatingHasNames(data.columns)?{data,updatedAt:Number(data.updatedAt)||0,source:item.name}:null;}catch(e){console.warn("legacy seating read",item.name,e);return null;}
+     try{const snap=await getDoc(item.ref);if(!snap.exists())return null;const data=snap.data()||{};const rows=getSeatingRows(data);return seatingHasNames(rows)?{data,columns:rows,updatedAt:Number(data.updatedAt)||0,source:item.name}:null;}catch(e){console.warn("legacy seating read",item.name,e);return null;}
    }));
    chosen=legacyResults.filter(Boolean).sort((a,b)=>b.updatedAt-a.updatedAt)[0]||null;
  }
@@ -530,7 +540,7 @@ async function loadSeating(){
    writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:updatedAt});
    try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt},{merge:true});}catch(e){console.warn("seating local recovery sync",e);}
  }else if(chosen){
-   seatingData=normalizeSeating(chosen.data.columns);
+   seatingData=normalizeSeating(chosen.columns);
    const updatedAt=chosen.updatedAt||Date.now();
    writeLocal(SEATING_KEY,{columns:seatingData,_updatedAt:updatedAt});
    if(chosen.source!=="v4")try{await setDoc(seatingDoc,{columns:seatingData,version:1,updatedAt},{merge:true});}catch(e){console.warn("seating legacy migration",e);}
@@ -803,7 +813,7 @@ async function show(id,updateHash=true){
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(id)?.classList.add("active");
  try{localStorage.setItem(PAGE_KEY,id);}catch{}
- if(updateHash&&location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+ if(updateHash&&location.hash!=="#"+id)history.replaceState(null,"",location.pathname+location.search+"#"+id);
  if(id==="home")await loadHome();
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
@@ -1492,7 +1502,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});
     var page=document.getElementById(id);
     if(page) page.classList.add("active");
-    try{history.replaceState(null,"","#"+id);}catch(e){}
+    try{history.replaceState(null,"",location.pathname+location.search+"#"+id);}catch(e){}
     window.scrollTo(0,0);
   }
   if(typeof window.show!=="function") window.show=fallbackShow;
