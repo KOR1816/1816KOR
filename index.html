@@ -968,9 +968,10 @@ async function translateUnmappedStaticText(lang){
    const parent=node.parentElement;
    if(!parent||parent.closest(excluded))continue;
    const raw=node.nodeValue.trim();
-   if(!raw||!/[가-힣]/.test(raw)||/[A-Za-z]{2,}/.test(raw))continue;
-   if(/^[0-9\s.,:;!@#$%^&*()_+\-=\/\\|]+$/.test(raw))continue;
-   if(!node.__kor1816Source)node.__kor1816Source=raw;
+   const source=node.__kor1816Source||raw;
+   if(!source||!/[가-힣]/.test(source)||/[A-Za-z]{2,}/.test(source))continue;
+   if(/^[0-9\s.,:;!@#$%^&*()_+\-=\/\\|]+$/.test(source))continue;
+   if(!node.__kor1816Source)node.__kor1816Source=source;
    nodes.push(node);
  }
  for(const node of nodes){
