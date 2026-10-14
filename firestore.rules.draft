@@ -1,0 +1,60 @@
+// DRAFT ONLY — do not publish until the site code is migrated and tested.
+// Add every approved operator email to isAdmin() before production use.
+// Public users may read public site content and create/delete only their own
+// Viking registration document. Existing siteData documents are admin-write only.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email in [
+          'to1ggi8410@gmail.com',
+          'to1ggi8403@gmail.com'
+        ];
+    }
+
+    match /siteData/{documentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /vikingRegistrations/{registrationId} {
+      allow read: if true;
+
+      allow create: if isAdmin() || (signedIn()
+        && registrationId == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'nickname', 'team', 'uid', 'createdAt'
+        ])
+        && request.resource.data.nickname is string
+        && request.resource.data.nickname.size() > 0
+        && request.resource.data.nickname.size() <= 80
+        && request.resource.data.team is int
+        && request.resource.data.team >= 1
+        && request.resource.data.team <= 25
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.createdAt is int
+        && !exists(
+          /databases/$(database)/documents/vikingRegistrations/$(registrationId)
+        ));
+
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.uid == request.auth.uid);
+
+      // Registrations cannot be edited in place; delete and recreate instead.
+      allow update: if false;
+    }
+
+    // Everything else is denied unless explicitly allowed above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
