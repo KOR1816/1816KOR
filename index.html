@@ -149,7 +149,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 #bear .bear-ratio-card{grid-column:1!important}
 #bear .bear-ratio-text{text-align:center!important;line-height:2!important;white-space:normal!important}
 @media(max-width:700px){#bear .bear-image{width:80%!important;max-width:80%!important}.bear-ratio-card{grid-column:1!important}}
-</style><style id="viking-style">.viking-register{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;padding:12px;background:#0b1427;border-radius:12px}.viking-register select{padding:10px;background:#182642;color:white;border:1px solid #405b83;border-radius:8px}.viking-register .msg{grid-column:1/-1}.viking-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:15px 0}.viking-toolbar strong{margin-right:auto;color:#f4d27a}.viking-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.viking-team{background:#101b31;border:1px solid #334b70;border-radius:12px;padding:12px}.viking-team h3{display:flex;justify-content:space-between;margin:0 0 8px}.viking-member,.viking-empty{padding:8px;margin:5px 0;background:#1b2943;border-radius:7px;overflow-wrap:anywhere}.viking-empty{color:#9aaac4}@media(max-width:700px){.viking-register{grid-template-columns:1fr 1fr}.viking-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="kor-language-menu">.kor-lang{position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;margin:0;z-index:10}.kor-lang label{font-size:12px;opacity:.85}.kor-lang select{padding:7px 28px 7px 9px;border-radius:9px;border:1px solid #49688f;background:#1b2745;color:#fff;font-weight:700;cursor:pointer}.kor-lang select:focus{outline:none;border-color:#e5b84b}header{position:relative;padding-right:180px}</style>
+</style><style id="viking-style">.viking-register{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;padding:12px;background:#0b1427;border-radius:12px}.viking-register select{padding:10px;background:#182642;color:white;border:1px solid #405b83;border-radius:8px}.viking-register .msg{grid-column:1/-1}.viking-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:15px 0}.viking-toolbar strong{margin-right:auto;color:#f4d27a}.viking-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.viking-team{background:#101b31;border:1px solid #334b70;border-radius:12px;padding:12px}.viking-team h3{display:flex;justify-content:space-between;margin:0 0 8px}.viking-member,.viking-empty{padding:8px;margin:5px 0;background:#1b2943;border-radius:7px;overflow-wrap:anywhere}.viking-empty{color:#9aaac4}@media(max-width:700px){.viking-register{grid-template-columns:1fr 1fr}.viking-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="viking-25-grid">#viking .viking-grid{grid-template-columns:repeat(5,minmax(0,1fr))}@media(max-width:900px){#viking .viking-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){#viking .viking-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="kor-language-menu">.kor-lang{position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;margin:0;z-index:10}.kor-lang label{font-size:12px;opacity:.85}.kor-lang select{padding:7px 28px 7px 9px;border-radius:9px;border:1px solid #49688f;background:#1b2745;color:#fff;font-weight:700;cursor:pointer}.kor-lang select:focus{outline:none;border-color:#e5b84b}header{position:relative;padding-right:180px}</style>
 <style id="mobile-nav-final">
 @media(max-width:700px){
   #mainNav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:8px!important}
@@ -399,10 +399,32 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getFirestore, doc, getDoc, getDocFromServer, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getAuth, signInAnonymously, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
-const ADMIN_PASSWORD="0001";
+const ADMIN_EMAILS=["to1ggi8410@gmail.com","to1ggi8403@gmail.com"];
+let adminAuth=null;
+async function ensureGoogleAdmin(){
+ const auth=adminAuth||getAuth();
+ const allowed=ADMIN_EMAILS.map(x=>x.toLowerCase());
+ let user=auth.currentUser;
+ if(!user||!user.email){
+   try{
+     const result=await signInWithPopup(auth,new GoogleAuthProvider());
+     user=result.user;
+   }catch(e){
+     console.warn("Google admin sign-in",e);
+     if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")alert("Google 로그인에 실패했습니다. 다시 시도해 주세요.");
+     return false;
+   }
+ }
+ if(!user?.email||!allowed.includes(user.email.toLowerCase())){
+   alert("운영자로 등록되지 않은 Google 계정입니다. 등록된 운영자 계정으로 로그인해 주세요.");
+   try{await signOut(auth);await signInAnonymously(auth);}catch(e){console.warn("restore anonymous session",e);}
+   return false;
+ }
+ return true;
+}
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
 let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,vikingDoc=null,firebaseReady=false;
@@ -511,7 +533,7 @@ async function saveSeating(){
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  }catch(e){console.error(e);setMsg("seatingMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}
 }
-let seatingAdmin=false;function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
+let seatingAdmin=false;async function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{if(!await ensureGoogleAdmin())return;seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 function renderTeams(){
  ["A","B","C","D"].forEach(t=>{for(let n=1;n<=7;n++){const e=document.getElementById("team-"+t+"-"+n);if(e)e.value=teamData[t][n-1]||"";}});
  for(let n=1;n<=2;n++){const e=document.getElementById("extra-"+n);if(e)e.value=teamData.extra[n-1]||"";}
@@ -551,10 +573,9 @@ async function loadTeams(){
 }
 let teamsAdmin=false;
 function setTeamsInputsEnabled(enabled){document.querySelectorAll("#teams input").forEach(e=>{e.disabled=!enabled;e.style.cursor=enabled?"text":"default";e.style.opacity=enabled?"1":"0.82";});}
-function toggleTeamsAdmin(){
+async function toggleTeamsAdmin(){
  if(teamsAdmin){teamsAdmin=false;setTeamsInputsEnabled(false);document.getElementById("teamsSaveBtn").style.display="none";document.getElementById("teamsAdminBtn").textContent="🔐 관리자 수정";return;}
- const p=prompt("관리자 비밀번호를 입력하세요.");
- if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}
+ if(!await ensureGoogleAdmin())return;
  teamsAdmin=true;setTeamsInputsEnabled(true);document.getElementById("teamsSaveBtn").style.display="inline-block";document.getElementById("teamsAdminBtn").textContent="🔒 수정 종료";
 }
 async function saveAllTeams(){
@@ -752,8 +773,8 @@ async function saveHome(){
  }
 }
 let homeAdmin=false,allianceAdmin=false;
-function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
-function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
+async function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{if(!await ensureGoogleAdmin())return;homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
+async function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{if(!await ensureGoogleAdmin())return;allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 let pageLoadVersion=0;
 async function show(id,updateHash=true){
  const valid=["home","teams","alliance","seating","castle","castlewar","viking"];if(!valid.includes(id))id="home";
@@ -1335,19 +1356,15 @@ async function saveCastle(){
    setMsg("castleMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");
  }
 }
-function toggleCastleAdmin(){
- if(castleAdmin){castleAdmin=false;}else{const p=prompt("관리자 비밀번호를 입력하세요.");if(p!==ADMIN_PASSWORD){if(p!==null)alert("비밀번호가 올바르지 않습니다.");return;}castleAdmin=true;}
+async function toggleCastleAdmin(){
+ if(castleAdmin){castleAdmin=false;}else{if(!await ensureGoogleAdmin())return;castleAdmin=true;}
  renderCastle();document.getElementById("castleAdminBtn").textContent=castleAdmin?"🔒 수정 종료":"🔐 관리자 수정";document.getElementById("castleSaveBtn").style.display=castleAdmin?"inline-flex":"none";
 }
-function toggleCastleWarAdmin(){
+async function toggleCastleWarAdmin(){
  if(castleWarAdmin){
    castleWarAdmin=false;
  }else{
-   const p=prompt("관리자 비밀번호를 입력하세요.");
-   if(p!==ADMIN_PASSWORD){
-     if(p!==null)alert("비밀번호가 올바르지 않습니다.");
-     return;
-   }
+   if(!await ensureGoogleAdmin())return;
    castleWarAdmin=true;
  }
  setCastleWarInputsEnabled(castleWarAdmin);
