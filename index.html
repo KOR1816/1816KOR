@@ -805,9 +805,16 @@ let homeAdmin=false,allianceAdmin=false;
 async function toggleHomeAdmin(){if(homeAdmin){homeAdmin=false;}else{if(!await ensureGoogleAdmin())return;homeAdmin=true;}document.getElementById("homeView").style.display=homeAdmin?"none":"grid";document.getElementById("homeEdit").style.display=homeAdmin?"grid":"none";document.getElementById("homeAdminBtn").textContent=homeAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 async function toggleAllianceAdmin(){if(allianceAdmin){allianceAdmin=false;}else{if(!await ensureGoogleAdmin())return;allianceAdmin=true;}document.getElementById("allianceView").style.display=allianceAdmin?"none":"block";document.getElementById("allianceEdit").style.display=allianceAdmin?"block":"none";document.getElementById("allianceAdminBtn").textContent=allianceAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
 let pageLoadVersion=0;
+try{if("scrollRestoration" in history)history.scrollRestoration="manual";}catch{}
+function resetPageScroll(){
+ window.scrollTo({top:0,left:0,behavior:"auto"});
+ document.documentElement.scrollTop=0;
+ document.body.scrollTop=0;
+}
 async function show(id,updateHash=true){
  const valid=["home","teams","alliance","seating","castle","castlewar","viking"];if(!valid.includes(id))id="home";
  const version=++pageLoadVersion;
+ resetPageScroll();
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(id)?.classList.add("active");
  try{localStorage.setItem(PAGE_KEY,id);}catch{}
@@ -821,7 +828,8 @@ async function show(id,updateHash=true){
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  translatePage(currentLang);
- window.scrollTo({top:0,behavior:"instant"});
+ resetPageScroll();
+ requestAnimationFrame(()=>resetPageScroll());
 }
 async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar","viking"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar","viking"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🗡️⚔️ 캐슬전","🪑 자리배치","🛡️ 바이킹","🏆 영광의 순간들"],en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🗡️⚔️ Castle War","🪑 Seating","🛡️ Viking","🏆 Glorious Moments"],ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 キャッスル配置","🗡️⚔️ キャッスル戦","🪑 席配置","🛡️ バイキング","🏆 栄光の瞬間"],zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🗡️⚔️ 城堡战","🪑 座位安排","🛡️ 维京","🏆 荣耀时刻"],de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🗡️⚔️ Burgenkrieg","🪑 Sitzplan","🛡️ Wikinger","🏆 Ruhmreiche Momente"],it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🗡️⚔️ Guerra del Castello","🪑 Posti","🛡️ Vichinghi","🏆 Momenti di gloria"],es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🗡️⚔️ Guerra del Castillo","🪑 Asientos","🛡️ Vikingos","🏆 Momentos de gloria"],tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🗡️⚔️ Kale Savaşı","🪑 Oturma Düzeni","🛡️ Vikingler","🏆 Zafer Anları"]}
@@ -1618,6 +1626,10 @@ html body #castlewar input,html body #castlewar input:disabled,html body #castle
 html body #castlewar .castlewar-slot[style],html body #castlewar .castlewar-substitute-slot[style]{background-color:#242424!important}
 html body #castlewar .castlewar-substitute-slot[style]{background-color:#303030!important}
 @media(max-width:900px){html body #castlewar .castlewar-card,html body #castlewar .castlewar-column,html body #castlewar .castlewar-extra-card{background:#181818!important;background-color:#181818!important}html body #castlewar .castlewar-slot{background:#242424!important;background-color:#242424!important}html body #castlewar .castlewar-substitute-slot{background:#303030!important;background-color:#303030!important}}
+</style>
+<style id="home-teams-scroll-stability">
+html,body{overflow-anchor:none!important;scroll-behavior:auto!important}
+#home,#teams,#home * ,#teams *{overflow-anchor:none!important;scroll-margin-top:0!important}
 </style>
 <style id="teams-mobile-scroll-stability">
 html,body{overflow-anchor:none!important}
