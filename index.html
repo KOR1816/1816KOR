@@ -362,6 +362,26 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  opacity:1!important;
 }
 </style>
+
+<style id="seating-mobile-color-lock">
+/* 자리배치 목록 전용: 모바일에서도 PC와 같은 6가지 제목 색상을 유지. 사진/데이터/저장 기능은 변경하지 않음. */
+#seating .seating-list-wrap{color-scheme:only light!important}
+#seating .seating-row-group:nth-child(1) .seating-split-card.bear1-card .seating-split-title{background:linear-gradient(180deg,#2f6fd6,#1f4f9d)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+#seating .seating-row-group:nth-child(1) .seating-split-card.bear2-card .seating-split-title{background:linear-gradient(180deg,#79c7f2,#4b9ed0)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+#seating .seating-row-group:nth-child(2) .seating-split-card.bear1-card .seating-split-title{background:linear-gradient(180deg,#45b96b,#2f8d4d)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+#seating .seating-row-group:nth-child(2) .seating-split-card.bear2-card .seating-split-title{background:linear-gradient(180deg,#9bd98a,#67b95e)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+#seating .seating-row-group:nth-child(3) .seating-split-card.bear1-card .seating-split-title{background:linear-gradient(180deg,#e99a45,#c96f22)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+#seating .seating-row-group:nth-child(3) .seating-split-card.bear2-card .seating-split-title{background:linear-gradient(180deg,#a78bea,#7655c7)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+@media(max-width:700px){
+ #seating .seating-split-card .seating-split-title{opacity:1!important;filter:none!important;background-blend-mode:normal!important}
+ #seating .seating-column-head{background:linear-gradient(180deg,#263d65,#1a2c4c)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+ #seating .seating-row{background:rgba(9,17,31,.62)!important;color:#eef4ff!important}
+ #seating .seating-row:nth-child(even){background:rgba(255,255,255,.025)!important}
+ #seating .seating-row span{color:#eef4ff!important;-webkit-text-fill-color:#eef4ff!important}
+ #seating .seating-row span:first-child{color:#9fb8e5!important;-webkit-text-fill-color:#9fb8e5!important;background:rgba(38,61,101,.16)!important}
+}
+</style>
+
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="location.href='notices.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">📢 공지</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">🗡️ 3대연맹전</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">🔱🛡️ 캐슬전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('viking')">🪓 바이킹</button><button onclick="location.href='glory.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">🏆 영광의 순간들</button></nav>
