@@ -18,12 +18,13 @@ This is a preparation branch only. **Do not merge it into the live GitHub Pages 
 4. Viking public join/leave code now uses individual `vikingRegistrations/{uid}` documents rather than writing the entire shared roster document. Existing roster data remains in `siteData/viking_v1` and is still displayed alongside new registrations; the existing shared document is not deleted.
 5. Team-count changes now update only team-count metadata in the old shared document, using merge mode, so the legacy roster is not overwritten.
 6. Added `firestore.rules.draft`: public reads, admin-only writes to `siteData`, and individual Viking registrations limited to the signed-in user's own UID. Draft only.
-7. Opened draft PR: https://github.com/KOR1816/1816KOR/pull/1
+7. Added automated JavaScript syntax checking and Firestore rules emulator tests for public reads, admin-only shared writes, own-UID registration, and registration cancellation.
+8. Opened draft PR: https://github.com/KOR1816/1816KOR/pull/1
 
 ## Important limitations — not ready to publish
 
 - The Google sign-in UI is not enough by itself. Current live Firestore rules remain open, so direct Firestore writes are not yet restricted.
-- These changes have **not** been deployed to the live site and have not been tested end-to-end against a separate staging Firebase project.
+- These changes have **not** been deployed to the live site. GitHub Actions runs syntax and emulator tests; these are not a substitute for testing the actual UI against a separate staging Firebase project.
 - Existing Viking entries are preserved and displayed, but their original sign-up owners cannot be inferred. A legacy entry cannot be cancelled by a public user through the new ownership rule; an operator must handle those legacy cancellations.
 - The client checks duplicate nicknames for normal use, but this is not a complete anti-impersonation system because users are not individually verified against Kingshot accounts.
 - Additional operator emails must be added to the allowlist after the user confirms them.
