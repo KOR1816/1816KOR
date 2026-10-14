@@ -1563,4 +1563,22 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
 @media(max-width:1000px){nav#mainNav,nav#siteNav{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;padding:12px 8px!important}nav#mainNav a,nav#mainNav button,nav#siteNav a{min-height:42px!important;padding:8px 5px!important;font-size:13px!important}}
 @media(max-width:600px){header{padding:26px 12px!important}header h1{font-size:30px!important}header .sub{font-size:14px!important}nav#mainNav,nav#siteNav{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding:10px 7px!important}nav#mainNav a,nav#mainNav button,nav#siteNav a{min-height:40px!important;padding:7px 4px!important;font-size:12px!important}}
 </style>
+
+<style id="mobile-title-alignment-fix">
+/* 제목과 번역/언어 선택 영역 사이 간격 확보 + 전체 큰 제목 왼쪽 정렬 */
+header { text-align:left!important; padding-left: max(20px, calc((100% - 1050px)/2 + 20px))!important; }
+header h1, header .sub { text-align:left!important; }
+.page h2, .page h3 { text-align:left; margin-bottom:18px!important; }
+.page .card h2, .page .card h3 { text-align:left!important; }
+.lang-switch { margin-top:10px!important; padding-top:12px!important; }
+@media(max-width:600px) {
+  header { padding:20px 16px!important; }
+  header h1 { text-align:left!important; font-size:28px!important; }
+  header .sub { text-align:left!important; margin-top:10px!important; line-height:1.55!important; }
+  .page h2, .page h3 { margin-top:0!important; margin-bottom:20px!important; }
+  .page .card h2, .page .card h3 { text-align:left!important; }
+  .lang-switch { margin-top:12px!important; padding:12px 10px 0!important; }
+}
+</style>
+
 </body></html>
