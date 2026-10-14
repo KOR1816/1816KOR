@@ -7,7 +7,7 @@ import tempfile
 import sys
 
 FILES = ["index.html", "notices.html"]
-SCRIPT_RE = re.compile(r"<script\\b([^>]*)>([\\s\\S]*?)</script\\s*>", re.IGNORECASE)
+SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script\s*>", re.IGNORECASE | re.DOTALL)
 
 def main():
     errors = []
@@ -21,10 +21,11 @@ def main():
             found = 0
             for number, match in enumerate(SCRIPT_RE.finditer(html), 1):
                 attrs, body = match.group(1), match.group(2)
-                if re.search(r"\\bsrc\\s*=", attrs, re.IGNORECASE) or not body.strip():
+                if re.search(r"\bsrc\s*=", attrs, re.IGNORECASE) or not body.strip():
                     continue
                 found += 1
-                suffix = ".mjs" if re.search(r'type\\s*=\\s*["\\']module["\\']', attrs, re.IGNORECASE) else ".js"
+                is_module = 'type="module"' in attrs.lower() or "type='module'" in attrs.lower()
+                suffix = ".mjs" if is_module else ".js"
                 check_path = Path(tmp) / f"{path.stem}_{number}{suffix}"
                 check_path.write_text(body, encoding="utf-8")
                 result = subprocess.run(
@@ -32,11 +33,11 @@ def main():
                     text=True, capture_output=True
                 )
                 if result.returncode:
-                    errors.append(f"{filename} inline script {number}:\\n{result.stderr}")
+                    errors.append(f"{filename} inline script {number}:\n{result.stderr}")
             if not found:
                 errors.append(f"{filename}: no inline scripts found")
     if errors:
-        print("\\n".join(errors))
+        print("\n".join(errors))
         return 1
     print("Inline JavaScript syntax checks passed.")
     return 0
