@@ -38,7 +38,7 @@ service cloud.firestore {
         && request.resource.data.nickname.size() <= 80
         && request.resource.data.team is int
         && request.resource.data.team >= 1
-        && request.resource.data.team <= 200
+        && request.resource.data.team <= 25
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.createdAt is int
         && !exists(
