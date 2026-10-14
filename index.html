@@ -1441,7 +1441,26 @@ document.addEventListener("DOMContentLoaded",async()=>{
 });
 </script>
 
-
-
+<!-- Emergency fallback: keep the site navigable if Firebase module imports fail. -->
+<style>.page.active{display:block!important}</style>
+<script>
+(function(){
+  var ids=["home","teams","alliance","seating","castle","castlewar","viking"];
+  function fallbackShow(id){
+    if(ids.indexOf(id)<0) id="home";
+    document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});
+    var page=document.getElementById(id);
+    if(page) page.classList.add("active");
+    try{history.replaceState(null,"","#"+id);}catch(e){}
+    window.scrollTo(0,0);
+  }
+  if(typeof window.show!=="function") window.show=fallbackShow;
+  document.addEventListener("DOMContentLoaded",function(){
+    var current=location.hash.slice(1);
+    if(ids.indexOf(current)<0) current="home";
+    try{window.show(current,false);}catch(e){fallbackShow(current);}
+  });
+})();
+</script>
 
 </body></html>
