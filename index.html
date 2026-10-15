@@ -701,7 +701,13 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   <div class="newcastle-actions"><button class="admin-btn" onclick="loadNewCastleFeatures()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleNewCastleAdmin()" data-newcastle="admin">🔐 관리자 수정</button><button class="admin-btn" onclick="saveNewCastleFeatures()" data-newcastle="save">💾 저장</button></div>
  </div>
 </section>
-
+<section id="castle1" class="page new-castle-page" style="display:none!important">
+ <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="ncLayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
+  <div class="newcastle-actions"><button class="admin-btn" onclick="runNewCastleAuto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleNewCastleManual()" id="ncManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveNewCastleFeatures()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadNewCastleFeatures()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleNewCastleAdmin()" data-newcastle="admin">🔐 관리자 수정</button></div>
+  <p data-newcastle="layoutDesc">1~6번은 S등급 고정 집결장, 7~28번은 A1 → A2 → A3 → B1 → B2 → B3 → C1 → C2 → C3 순서로 배치됩니다.</p>
+  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="ncCastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="ncCastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
+ </div>
+</section>
 
 </main><footer>KOR1816 — Together, We Grow Stronger! ❤️</footer>
 
@@ -1121,7 +1127,7 @@ function resetPageScroll(){
  document.body.scrollTop=0;
 }
 async function show(id,updateHash=true){
- const valid=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1"];if(!valid.includes(id))id="home";
+ const valid=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"];if(!valid.includes(id))id="home";
  const version=++pageLoadVersion;
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(id)?.classList.add("active");
@@ -1134,14 +1140,14 @@ async function show(id,updateHash=true){
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
  else if(id==="seating")await loadSeating();
- else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="battleJoin"||id==="castlewar1")await loadNewCastleFeatures();
+ else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="battleJoin"||id==="castlewar1"||id==="castle1")await loadNewCastleFeatures();
  if(version!==pageLoadVersion)return;
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  translatePage(currentLang);
- if(id==="battleJoin"||id==="castlewar1")ncRenderJoin();
+ if(id==="battleJoin"||id==="castlewar1"||id==="castle1")ncRenderJoin();
 }
-async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1"].includes(saved)?saved:"home"),false);}
+async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들"],en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments"],ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 キャッスル配置","🔱🛡️ キャッスル戦","🪑 席配置","🪓 バイキング","🏆 栄光の瞬間"],zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻"],de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente"],it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria"],es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria"],tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Vikingler","🏆 Zafer Anları","⚔️ Savaşa Katılım","🔱 Kale Savaşı 1","🏰 Kale Yerleşimi 1"]}
 const I18N={
 ko:{
@@ -1917,7 +1923,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 <style>.page.active{display:block!important}</style>
 <script>
 (function(){
-  var ids=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1"];
+  var ids=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"];
   function fallbackShow(id){
     if(ids.indexOf(id)<0) id="home";
     document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});
