@@ -1877,6 +1877,7 @@ async function addVikingTeams(){document.getElementById("vikingMsg").textContent
 async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
+   adminAuth=getAuth(app);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
    db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");castleLayout1Doc=doc(db,"siteData","castle_layout1_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
