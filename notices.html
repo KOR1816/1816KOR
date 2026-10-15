@@ -87,6 +87,9 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 <div class="block"><h4>1군 · TEAM 1</h4><div id="allianceTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eAllianceTeam1"></textarea></div></div>
 <div class="block"><h4>2군 · TEAM 2</h4><div id="allianceTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eAllianceTeam2"></textarea></div></div>
 </section>
+<section class="card"><div class="art">⚔️</div><h3>골든 글레이브 월요일 (GOLDEN GLAIVES MONDAY)</h3>
+<div class="block"><h4>일요일 정보(Intel)를 아껴두세요 · SAVE SUNDAY INTEL</h4><div id="goldenGlaives" class="content view-only"></div><div class="edit-only"><label class="label">골든 글레이브 공지</label><textarea id="eGoldenGlaives"></textarea></div></div>
+</section>
 </div>
 <div class="actions"><button id="refreshBtn">🔄 새로고침</button><button id="editBtn">🔐 관리자 수정</button><button id="saveBtn" style="display:none">💾 저장</button></div>
 <div id="status" class="status">공지 내용을 불러오는 중...</div><div class="hint">수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다.</div>
@@ -102,10 +105,11 @@ bearLeaders:"집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera 
 bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
 bearRatio:"비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89",
 bearTroops:"병력: 100,000\nTroops: 100,000",
-swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순으로 선정\nTeam 1: UCT 14:00 (23:00 KST) — Selected by power ranking",
-swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표로 선정\nTeam 2: UCT 12:00 (21:00 KST) — Selected by first-come, first-served voting",
-allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
-allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
+swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순\nTeam 1: UCT 14:00 (23:00 KST) — Power ranking",
+swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표\nTeam 2: UCT 12:00 (21:00 KST) — First-come voting",
+allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순\nTeam 1: UCT 12:00 (21:00 KST) — Power ranking",
+allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표\nTeam 2: UCT 14:00 (23:00 KST) — First-come voting",
+goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n❗️ Save your Sunday Intel\n\nUTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\nUTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\nUTC00:00 (한국 09:00) — ✅ 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\n\n💡 작동 방식 · HOW IT WORKS\n✅ PAN = 정보 스킬 사용 (화면 이동/탐색)\nPAN = Use the Intel Pan skill (explore/move)\nDO = 정보 미션 완료\nDO = Complete Intel missions\nCOLLECT = 보상 수령\nCOLLECT = Claim rewards\n\n정보 이벤트 · INTEL EVENT\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\n(PAN 유지 15시간 · Pan remains active for 15 hours)"
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
