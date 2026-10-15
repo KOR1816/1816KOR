@@ -1873,7 +1873,7 @@ function ncRankForName(n){if(ncIsFixedS(n))return "S";const p=ncData.participant
 function ncWarCell(key,i){const n=ncData.war[key][i],p=ncData.participants.find(x=>x.nickname===n);return ncAdmin?ncSelectMarkup("ncWar_"+key+"_"+i,n):ncMemberCard(n,p?(ncPublicTier(p)+" · "+ncText("saloShort")+" "+(p.salo==="yes"?"O":"X")+" · Hilde "+(p.hilde==="yes"?"O":"X")):"");}
 function ncWarLeaderCell(key){const n=ncData.warLeaders[key]||(key==="assault"?"Nemesis":key==="rush"?"Pham":"");const p=ncData.participants.find(x=>x.nickname===n);return ncAdmin?ncSelectMarkup("ncLeader_"+key,n):ncMemberCard(n,p?(ncPublicTier(p)+" · "+ncText("saloShort")+" "+(p.salo==="yes"?"O":"X")+" · Hilde "+(p.hilde==="yes"?"O":"X")):ncText("fixedLeader"));}
 function ncSubCell(key){const n=ncData.war.substitute[key],p=ncData.participants.find(x=>x.nickname===n);return ncAdmin?ncSelectMarkup("ncSub_"+key,n):ncMemberCard(n,p?(ncPublicTier(p)+" · "+ncText("saloShort")+" "+(p.salo==="yes"?"O":"X")+" · Hilde "+(p.hilde==="yes"?"O":"X")):ncText("substitute"));}
-function ncRenderWar(){const groups=[["assault",ncText("assault")],["rush",ncText("rush")],["finish",ncText("finish")]];document.getElementById("ncWarAttack").innerHTML=groups.map(([key,label])=>'<div class="nc-war-column"><h3>'+label+'</h3><div class="nc-war-row nc-war-leader-row"><b>'+ncText("rallyLeader")+'</b>'+ncWarLeaderCell(key)+'</div>'+Array.from({length:7},(_,i)=>{const n=ncData.war[key][i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-war-row"><b>'+(i+1)+'</b>'+(ncAdmin?ncAttackSelectMarkup("ncWar_"+key+"_"+i,n):(p?ncParticipantCard(p):ncMemberCard(n)))+(ncAdmin?"":(n?'':'<span class="nc-empty">—</span>'))+'</div>';}).join("")+'<div class="nc-war-row"><b>'+ncText("substitute")+'</b>'+ncSubCell(key)+'</div></div>').join("");document.getElementById("ncWarTurrets").innerHTML=[["north",ncText("north")],["west",ncText("west")]].map(([key,label])=>'<div class="nc-turret-column"><div class="nc-war-row nc-war-leader-row"><b>'+ncText("rallyLeader")+'</b>'+ncWarCell(key,0)+'</div>'+Array.from({length:10},(_,i)=>'<div class="nc-war-row"><b>'+(i+1)+'</b>'+ncWarCell(key,i) + '</div>').join("")+'</div>').join("");}
+function ncRenderWar(){const groups=[["assault",ncText("assault")],["rush",ncText("rush")],["finish",ncText("finish")]];document.getElementById("ncWarAttack").innerHTML=groups.map(([key,label])=>'<div class="nc-war-column"><h3>'+label+'</h3><div class="nc-war-row nc-war-leader-row"><b>'+ncText("rallyLeader")+'</b>'+ncWarLeaderCell(key)+'</div>'+Array.from({length:7},(_,i)=>{const n=ncData.war[key][i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-war-row"><b>'+(i+1)+'</b>'+(ncAdmin?ncAttackSelectMarkup("ncWar_"+key+"_"+i,n):(p?ncParticipantCard(p):ncMemberCard(n)))+(ncAdmin?"":(n?'':'<span class="nc-empty">—</span>'))+'</div>';}).join("")+'<div class="nc-war-row"><b>'+ncText("substitute")+'</b>'+ncSubCell(key)+'</div></div>').join("");document.getElementById("ncWarTurrets").innerHTML=[["north"],["west"]].map(([key])=>'<div class="nc-turret-column">'+Array.from({length:10},(_,i)=>'<div class="nc-war-row"><b>'+(i+1)+'</b>'+ncWarCell(key,i)+'</div>').join("")+'</div>').join("");}
 function ncRenderLayout(){const leaders=ncData.leaders.layout||NC_FIXED_S_LEADERS;document.getElementById("ncCastleLeaders").innerHTML=Array.from({length:6},(_,i)=>{const n=leaders[i]||NC_FIXED_S_LEADERS[i];return '<div class="nc-leader-slot"><div class="nc-leader-person"><strong>'+(i+1)+' · S · '+ncText("rallyLeader")+'</strong>'+ncMemberCard(n,ncText("fixedLeader"))+'</div>'+'<span class="nc-badge">'+escapeVikingHtml(ncText("fixedLeader"))+'</span>'+'</div>';}).join("");document.getElementById("ncCastleSlots").innerHTML=Array.from({length:22},(_,j)=>{const i=j+6,n=ncData.castleSlots[i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-castle-slot"><strong>'+(i+1)+' · '+(p?ncRank(p):"—")+'</strong>'+(ncAdmin&&ncManual?ncSelectMarkup("ncSlot_"+i,n):ncMemberCard(n,p?(ncRank(p)+' · '+ncText("saloShort")+' '+(p.salo==="yes"?"O":"X")+' · Hilde '+(p.hilde==="yes"?"O":"X")):""))+'</div>';}).join("");document.getElementById("ncManualBtn").textContent=ncManual?ncText("manual")+" ✓":ncText("manual");}
 function updateNewCastleJoinFields(){const special=ncIsFixedS(document.getElementById("ncNick")?.value);document.querySelectorAll("#battleJoin [data-nc-optional]").forEach(el=>{el.style.display=special?"none":"";});}
 function ncRenderAll(){const deleteAllBtn=document.getElementById("ncDeleteAllBtn");if(deleteAllBtn)deleteAllBtn.style.display=ncAdmin?"inline-flex":"none";const searchResults=document.getElementById("ncNickSearchResults");if(searchResults){searchResults.hidden=true;searchResults.style.display="none";}document.querySelectorAll("[data-newcastle]").forEach(el=>{const k=el.dataset.newcastle;el.textContent=ncText(k);});const status=document.getElementById("ncStatus");if(status){const old=status.value;status.innerHTML='<option value="yes">'+ncText("yes")+'</option><option value="no">'+ncText("no")+'</option><option value="later">'+ncText("later")+'</option>';status.value=old||"yes";}const tier=document.getElementById("ncTier");if(tier){const old=tier.value;tier.innerHTML='<option value="A">'+ncText("tierA")+'</option><option value="B">'+ncText("tierB")+'</option><option value="C">'+ncText("tierC")+'</option><option value="none">'+ncText("tierNone")+'</option>';tier.value=old||"A";}updateNewCastleJoinFields();ncRenderJoin();ncRenderWar();ncRenderLayout();}
@@ -2132,5 +2132,30 @@ html body #castlewar1 .nc-turret-column .nc-war-row>b{
 }
 html body #castlewar1 .nc-war-column .nc-war-row>*:not(b),
 html body #castlewar1 .nc-turret-column .nc-war-row>*:not(b){min-width:0!important;max-width:100%!important;}
+</style>
+
+<style id="castlewar1-final-row-and-turret-grid">
+/* Same narrow label width for rally leader, 1–7, and substitute, including last-child overrides. */
+html body #castlewar1 .nc-war-column .nc-war-row,
+html body #castlewar1 .nc-war-column .nc-war-row:last-child,
+html body #castlewar1 .nc-war-column .nc-war-leader-row{
+  grid-template-columns:58px minmax(0,1fr)!important;column-gap:6px!important;gap:6px!important;
+}
+html body #castlewar1 .nc-war-column .nc-war-row>b,
+html body #castlewar1 .nc-war-column .nc-war-row:last-child>b,
+html body #castlewar1 .nc-war-column .nc-war-leader-row>b{
+  width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
+}
+/* Turret columns remain side-by-side; only the single shared title says “포탑”. */
+html body #castlewar1 .nc-war-turrets{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:start!important;
+}
+html body #castlewar1 .nc-turret-column{display:flex!important;flex-direction:column!important;width:100%!important;min-width:0!important;}
+html body #castlewar1 .nc-turret-column .nc-war-row,
+html body #castlewar1 .nc-turret-column .nc-war-row:last-child{
+  display:grid!important;grid-template-columns:32px minmax(0,1fr)!important;gap:5px!important;
+}
+html body #castlewar1 .nc-turret-column .nc-war-row>b{width:100%!important;min-width:0!important;max-width:100%!important;}
+@media(max-width:560px){html body #castlewar1 .nc-war-turrets{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}}
 </style>
 </body></html>
