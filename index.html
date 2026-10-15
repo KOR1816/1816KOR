@@ -2113,4 +2113,24 @@ html body #castlewar1 .nc-turret-column .nc-war-row>b{
 }
 </style>
 
+
+<style id="castlewar1-compact-label-width">
+/* Narrow the left label cell so nicknames have more room, consistently across rally leader, slots 1-7, substitute, and turret rows. */
+html body #castlewar1 .nc-war-column .nc-war-row,
+html body #castlewar1 .nc-war-column .nc-war-leader-row,
+html body #castlewar1 .nc-turret-column .nc-war-row,
+html body #castlewar1 .nc-turret-column .nc-war-leader-row{
+  grid-template-columns:58px minmax(0,1fr)!important;
+  column-gap:6px!important;
+  gap:6px!important;
+}
+html body #castlewar1 .nc-war-column .nc-war-row>b,
+html body #castlewar1 .nc-turret-column .nc-war-row>b{
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  box-sizing:border-box!important;white-space:nowrap!important;
+  padding:0!important;margin:0!important;font-size:13px!important;
+}
+html body #castlewar1 .nc-war-column .nc-war-row>*:not(b),
+html body #castlewar1 .nc-turret-column .nc-war-row>*:not(b){min-width:0!important;max-width:100%!important;}
+</style>
 </body></html>
