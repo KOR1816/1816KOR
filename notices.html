@@ -102,8 +102,8 @@ bearLeaders:"집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera 
 bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
 bearRatio:"비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89",
 bearTroops:"병력: 100,000\nTroops: 100,000",
-swordTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
-swordTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting",
+swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순으로 선정\nTeam 1: UCT 14:00 (23:00 KST) — Selected by power ranking",
+swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표로 선정\nTeam 2: UCT 12:00 (21:00 KST) — Selected by first-come, first-served voting",
 allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
 allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
 };
@@ -117,16 +117,16 @@ function say(s){
    .then(r=>r.ok?r.json():null).then(d=>{const out=Array.isArray(d?.[0])?d[0].map(x=>x?.[0]||"").join(""):"";if(out&&status.textContent===s)status.textContent=out;}).catch(()=>{});
  }
 }
-function normalizeBear(source){const d={...source};const legacy={bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]};for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}return d}
+function normalizeSword(source){const d={...source};if(d.swordTeam1==="1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking")d.swordTeam1=defaults.swordTeam1;if(d.swordTeam2==="2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting")d.swordTeam2=defaults.swordTeam2;return d}\nfunction normalizeBear(source){const d={...source};const legacy={bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]};for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}return d}
 function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local) data={...defaults,...local}; data=normalizeBear(data); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local) data={...defaults,...local}; data=normalizeSword(normalizeBear(data)); render(); say("저장된 공지를 불러왔습니다.");
  if(!docRef)return;
  try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
- else{data=normalizeBear({...defaults,...cloud});writeLocal();render()}
+ else{data=normalizeSword(normalizeBear({...defaults,...cloud}));writeLocal();render()}
  }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
  say("최신 공지를 불러왔습니다.");
  }catch(e){console.error(e);say("서버 연결에 실패했습니다. 현재 기기의 저장본을 표시합니다.")}
