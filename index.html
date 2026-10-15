@@ -547,8 +547,9 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   background-image:none!important;
 }
 /* Keep leader/substitute labels in one horizontal line and align all numbered rows. */
-#castlewar1 .nc-war-row{
-  grid-template-columns:50px minmax(0,1fr)!important;
+#castlewar1 .nc-war-row,
+#castlewar1 .nc-war-leader-row{
+  grid-template-columns:58px minmax(0,1fr)!important;
 }
 #castlewar1 .nc-war-leader-row>b,
 #castlewar1 .nc-war-row>b{
@@ -565,9 +566,14 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   line-height:1.15;
   font-weight:800;
   letter-spacing:0;
-  padding:0 1px;
+  padding:0;
 }
-#castlewar1 .nc-war-leader-row>b{font-size:14px!important;}
+#castlewar1 .nc-war-leader-row>b{
+  font-size:14px!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+}
 #castlewar1 .nc-war-row .nc-member-card,
 #castlewar1 .nc-war-leader-row .nc-member-card{
   min-width:0;
