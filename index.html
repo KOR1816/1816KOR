@@ -609,16 +609,6 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   #castlewar1 .nc-war-leader-row>b{font-size:14px!important}
 }
 </style>
-
-<style id="castle-layout1-isolated">
-#castle1 .castle-card{overflow:hidden!important}
-#castle1 .castle-map-wrap{margin:12px auto 18px!important;padding:10px!important;background:linear-gradient(145deg,#172846,#0d1525)!important;border:1px solid #3c5b88!important;border-radius:14px!important}
-#castle1 .castle-map-image{display:block!important;max-width:100%!important;width:auto!important;height:auto!important;margin:0 auto!important;border-radius:10px!important}
-#castle1 .castle-layout1-desc{padding:10px 12px;border:1px solid #365783;border-radius:10px;background:#0c1628;color:#dbe7ff}
-#castle1 .castle-layout1-slots{grid-template-columns:repeat(4,minmax(180px,1fr));}
-#castle1 .nc-castle-slot{min-width:0}
-@media(max-width:700px){#castle1 .castle-layout1-slots{grid-template-columns:repeat(2,minmax(150px,1fr));overflow-x:auto}}
-</style>
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="location.href='notices.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">📢 공지</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">🗡️ 3대연맹전</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">🔱🛡️ 캐슬전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('viking')">🪓 바이킹</button><button onclick="location.href='glory.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">🏆 영광의 순간들</button><button onclick="show('battleJoin')">⚔️ 캐슬참전</button><button onclick="show('castlewar1')">🔱 캐슬전 1</button><button onclick="show('castle1')">🏰 캐슬배치 1</button></nav>
@@ -712,18 +702,10 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  </div>
 </section>
 <section id="castle1" class="page new-castle-page">
- <div class="card castle-card">
-  <h2>🏰 캐슬배치 1</h2>
-  <div class="sword-image-wrap castle-map-wrap"><img src="./cc.png" alt="캐슬 자리배치도" class="sword-image castle-map-image"></div>
-  <div class="msg castle-load-msg" id="castleLayout1Msg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
-  <div class="newcastle-actions">
-   <button class="admin-btn" onclick="runCastleLayout1Auto()" id="castleLayout1AutoBtn">⚙️ 자동 배치</button>
-   <button class="admin-btn" onclick="saveCastleLayout1()" id="castleLayout1SaveBtn" style="display:none">💾 저장</button>
-   <button class="admin-btn" onclick="loadCastleLayout1()">🔄 새로고침</button>
-   <button class="admin-btn" onclick="toggleCastleLayout1Admin()" id="castleLayout1AdminBtn">🔐 관리자 수정</button>
-  </div>
-  <p class="castle-layout1-desc">1~6번은 집결장 고정 · 7~28번은 등급순 자동 배치</p>
-  <div id="castleLayout1Slots" class="nc-castle-slots castle-layout1-slots"></div>
+ <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="ncLayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
+  <div class="newcastle-actions"><button class="admin-btn" onclick="runNewCastleAuto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleNewCastleManual()" id="ncManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveNewCastleFeatures()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadNewCastleFeatures()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleNewCastleAdmin()" data-newcastle="admin">🔐 관리자 수정</button></div>
+  <p data-newcastle="layoutDesc">1~6번은 S등급 고정 집결장, 7~28번은 A1 → A2 → A3 → B1 → B2 → B3 → C1 → C2 → C3 순서로 배치됩니다.</p>
+  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="ncCastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="ncCastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
  </div>
 </section>
 
@@ -762,7 +744,7 @@ async function ensureGoogleAdmin(){
 }
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
-let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,seatingLegacyDocs=[],vikingDoc=null,castleLayout1Doc=null,firebaseReady=false;
+let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,seatingLegacyDocs=[],vikingDoc=null,firebaseReady=false;
 const SEATING_KEY="kor1816_seating_v8";
 const CASTLE_KEY="kor1816_castle_v1";
 let castleDoc=null,castleAdmin=false;
@@ -1158,7 +1140,7 @@ async function show(id,updateHash=true){
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
  else if(id==="seating")await loadSeating();
- else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="castle1")await loadCastleLayout1();else if(id==="battleJoin"||id==="castlewar1")await loadNewCastleFeatures();
+ else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="battleJoin"||id==="castlewar1"||id==="castle1")await loadNewCastleFeatures();
  if(version!==pageLoadVersion)return;
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
@@ -1864,7 +1846,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");castleLayout1Doc=doc(db,"siteData","castle_layout1_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
+   db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
@@ -1891,73 +1873,6 @@ function ncNameOptions(selected,includeBlank=true){let out=includeBlank?'<option
 function ncSprite(n){const p=getVikingSprite(n);const style=p?vikingSpriteStyle(n):"";return '<span class="nc-avatar" style="'+style+'">'+(p?"":escapeVikingHtml((n||"?").slice(0,1)))+'</span>';}
 function ncMemberCard(n,meta){if(!n)return '<div class="nc-empty">'+escapeVikingHtml(ncText("empty"))+'</div>';if(ncIsFixedS(n))return '<div class="nc-member-card nc-participant-card"><strong class="nc-rank-label">S</strong>'+ncSprite(n)+'<div class="nc-member-main"><div class="nc-name-line"><strong>'+escapeVikingHtml(n)+'</strong><span class="nc-barracks">('+escapeVikingHtml(ncText("rallyLeader"))+')</span></div></div></div>';return '<div class="nc-member-card">'+ncSprite(n)+'<div class="nc-member-main"><strong>'+escapeVikingHtml(n)+'</strong><div class="nc-meta">'+escapeVikingHtml(meta||"")+'</div></div></div>';}
 function ncAllUsed(except){const used=new Set();const add=n=>{if(n&&n!==except)used.add(n);};for(const p of ncData.participants)add(p.nickname);for(const n of ncData.leaders?.layout||[])add(n);for(const n of ncData.castleSlots||[])add(n);for(const g of Object.values(ncData.war||{}))if(Array.isArray(g))for(const n of g)add(n);for(const n of Object.values(ncData.warLeaders||{}))add(n);return used;}
-/* Castle Layout 1: independent storage and rendering. It only reads participant ranks from castle_features_v1. */
-const CASTLE_LAYOUT1_LOCAL_KEY="kor1816_castle_layout1_v1";
-const CASTLE_LAYOUT1_FIXED=["Nemesis","Pham","샌디에이고","Jinno","Leo li","SsungBi"];
-let castleLayout1Slots=CASTLE_LAYOUT1_FIXED.concat(Array(22).fill(""));
-let castleLayout1Admin=false;
-function renderCastleLayout1(){
- const root=document.getElementById("castleLayout1Slots");if(!root)return;
- root.innerHTML=Array.from({length:28},(_,i)=>{
-  const n=castleLayout1Slots[i]||"",p=(ncData.participants||[]).find(x=>x.nickname===n);
-  const rank=i<6?"S":(p?ncRank(p):"");
-  const meta=i<6?"집결장 고정":(p?rank:"");
-  return '<div class="nc-castle-slot"><strong>'+String(i+1)+' · '+escapeVikingHtml(rank||"—")+(i<6?' · 집결장 고정':'')+'</strong>'+ncMemberCard(n,meta)+'</div>';
- }).join("");
- const auto=document.getElementById("castleLayout1AutoBtn"),save=document.getElementById("castleLayout1SaveBtn");
- if(auto)auto.style.display=castleLayout1Admin?"inline-flex":"none";
- if(save)save.style.display=castleLayout1Admin?"inline-flex":"none";
- const admin=document.getElementById("castleLayout1AdminBtn");if(admin)admin.textContent=castleLayout1Admin?"🔒 수정 종료":"🔐 관리자 수정";
-}
-async function loadCastleLayout1(){
- const msg=document.getElementById("castleLayout1Msg");
- const local=readLocal(CASTLE_LAYOUT1_LOCAL_KEY,null);
- if(local&&Array.isArray(local.slots))castleLayout1Slots=Array.from({length:28},(_,i)=>String(local.slots[i]||""));
- castleLayout1Slots=CASTLE_LAYOUT1_FIXED.concat(castleLayout1Slots.slice(6,28));
- try{
-  if(!castleLayout1Doc)throw Error("Castle Layout 1 storage is not ready");
-  const snap=await getDoc(castleLayout1Doc);
-  if(snap.exists()){
-   const data=snap.data()||{};
-   if(Array.isArray(data.slots)){const savedSlots=data.slots.length>=28?data.slots.slice(6,28):data.slots.slice(0,22);castleLayout1Slots=CASTLE_LAYOUT1_FIXED.concat(Array.from({length:22},(_,i)=>String(savedSlots[i]||"")));}
-   writeLocal(CASTLE_LAYOUT1_LOCAL_KEY,{slots:castleLayout1Slots,updatedAt:Number(data.updatedAt)||0});
-  }
-  if(ncDoc){const people=await getDoc(ncDoc);if(people.exists())ncData=ncNormalize(people.data());}
-  if(msg)msg.textContent="최신 캐슬배치 1 내용을 불러왔습니다.";
- }catch(e){console.warn("castle layout 1 load",e);if(msg)msg.textContent="서버 연결이 안 되어 현재 기기의 저장본을 표시합니다.";}
- renderCastleLayout1();
-}
-async function toggleCastleLayout1Admin(){
- if(castleLayout1Admin){castleLayout1Admin=false;renderCastleLayout1();return;}
- if(!await ensureGoogleAdmin())return;
- castleLayout1Admin=true;renderCastleLayout1();
-}
-async function runCastleLayout1Auto(){
- if(!castleLayout1Admin){alert("관리자 수정 권한이 필요합니다.");return;}
- if(!confirm("1~6번 집결장은 그대로 두고, 7~28번만 참가 가능자의 등급순으로 자동 배치할까요?"))return;
- try{
-  if(ncDoc){const snap=await getDoc(ncDoc);if(snap.exists())ncData=ncNormalize(snap.data());}
-  const order=["A1","A2","A3","B1","B2","B3","C1","C2","C3"];
-  const fixed=new Set(CASTLE_LAYOUT1_FIXED);
-  const sorted=(ncData.participants||[]).filter(p=>p.status==="yes"&&ncRank(p)&&!fixed.has(p.nickname))
-   .sort((a,b)=>order.indexOf(ncRank(a))-order.indexOf(ncRank(b))||a.nickname.localeCompare(b.nickname));
-  castleLayout1Slots=CASTLE_LAYOUT1_FIXED.concat(Array.from({length:22},(_,i)=>sorted[i]?.nickname||""));
-  renderCastleLayout1();
-  const msg=document.getElementById("castleLayout1Msg");if(msg)msg.textContent="자동 배치 완료 · 저장 버튼을 눌러야 다른 기기에도 반영됩니다.";
- }catch(e){console.error("castle layout 1 auto",e);alert("참가자 등급을 불러오지 못해 자동 배치를 중단했습니다.");}
-}
-async function saveCastleLayout1(){
- if(!castleLayout1Admin){alert("관리자 수정 권한이 필요합니다.");return;}
- const slots=CASTLE_LAYOUT1_FIXED.concat(castleLayout1Slots.slice(6,28));
- const updatedAt=Date.now();
- writeLocal(CASTLE_LAYOUT1_LOCAL_KEY,{slots,updatedAt});
- try{
-  if(!castleLayout1Doc)throw Error("Castle Layout 1 storage is not ready");
-  await setDoc(castleLayout1Doc,{slots,updatedAt},{merge:true});
-  const msg=document.getElementById("castleLayout1Msg");if(msg)msg.textContent="캐슬배치 1이 공용 서버에 저장되었습니다.";
- }catch(e){console.error("castle layout 1 save",e);const msg=document.getElementById("castleLayout1Msg");if(msg)msg.textContent="공용 서버 저장 실패 · 현재 기기에 임시 저장되었습니다.";}
- renderCastleLayout1();
-}
 function ncNormalize(raw){const d=raw&&typeof raw==="object"?raw:{};const chosen=Array.isArray(d.leaders?.layout)?d.leaders.layout:[];const leaders=[];for(const n of chosen){if(NC_FIXED_S_LEADERS.includes(n)&&!leaders.includes(n)&&leaders.length<6)leaders.push(n);}for(const n of NC_FIXED_S_LEADERS){if(leaders.length>=6)break;if(!leaders.includes(n))leaders.push(n);}return {participants:Array.isArray(d.participants)?d.participants.filter(p=>p&&p.nickname).map(p=>({nickname:String(p.nickname),status:p.status==="no"?"no":p.status==="later"?"later":"yes",tier:["A","B","C","none"].includes(p.tier)?p.tier:"A",salo:p.salo==="yes"?"yes":"no",hilde:p.hilde==="yes"?"yes":"no"})):[],leaders:{layout:leaders},castleSlots:Array.from({length:28},(_,i)=>{const n=String(d.castleSlots?.[i]||"");return ncIsFixedS(n)?"":n;}),war:{assault:Array.from({length:8},(_,i)=>String(d.war?.assault?.[i]||"")),rush:Array.from({length:8},(_,i)=>String(d.war?.rush?.[i]||"")),finish:Array.from({length:8},(_,i)=>String(d.war?.finish?.[i]||"")),north:Array.from({length:8},(_,i)=>String(d.war?.north?.[i]||"")),west:Array.from({length:8},(_,i)=>String(d.war?.west?.[i]||"")),reserve:Array.from({length:8},(_,i)=>String(d.war?.reserve?.[i]||"")),substitute:{assault:String(d.war?.substitute?.assault||""),rush:String(d.war?.substitute?.rush||""),finish:String(d.war?.substitute?.finish||"")}},warLeaders:{assault:String(d.warLeaders?.assault||""),rush:String(d.warLeaders?.rush||""),finish:String(d.warLeaders?.finish||""),reserve:String(d.warLeaders?.reserve||"")},layoutMode:d.layoutMode==="manual"?"manual":"auto",updatedAt:Number(d.updatedAt||0)};}
 function filterNewCastleNicknames(){const input=document.getElementById("ncIdSearch"),box=document.getElementById("ncNickSearchResults");if(!input||!box)return;const q=normalizeVikingNick(input.value||"");if(!q){box.innerHTML="";box.hidden=true;box.style.display="none";return;}const names=[...new Set([...NC_FIXED_S_LEADERS,...vikingRankNames.filter(n=>String(n||"").trim())])];const matches=names.filter(n=>normalizeVikingNick(n).startsWith(q));if(!matches.length){box.innerHTML='<div class="nc-nickname-no-results">검색 결과가 없습니다.</div>';box.hidden=false;box.style.display="block";return;}box.innerHTML=matches.map(n=>'<button type="button" class="nc-nickname-result" data-nickname="'+escapeVikingHtml(n)+'" onclick="chooseNewCastleNickname(this.getAttribute(\'data-nickname\'))">'+escapeVikingHtml(n+(ncData.participants.some(p=>p.nickname===n)?" ✓":""))+'</button>').join("");box.hidden=false;box.style.display="block";}
 function chooseNewCastleNickname(name){const sel=document.getElementById("ncNick"),input=document.getElementById("ncIdSearch"),box=document.getElementById("ncNickSearchResults");if(!sel||!name)return;sel.value=name;if(input)input.value=name;if(box){box.hidden=true;box.style.display="none";}updateNewCastleJoinFields();}
@@ -1987,7 +1902,7 @@ function ncSetLang(){ncRenderAll();}
 function exportNewCastleBackup(){const blob=new Blob([JSON.stringify(ncData,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="kor1816-castle-features-backup.json";a.click();URL.revokeObjectURL(url);alert(ncText("exported"));}
 async function importNewCastleBackup(event){if(!ncAdmin){alert(ncText("needAdmin"));event.target.value="";return;}const file=event.target.files?.[0];if(!file)return;try{const d=ncNormalize(JSON.parse(await file.text()));ncData=d;ncRenderAll();await saveNewCastleFeatures();}catch(e){alert(ncText("badBackup"));}finally{event.target.value="";}}
 
-window.loadCastleLayout1=loadCastleLayout1;window.saveCastleLayout1=saveCastleLayout1;window.toggleCastleLayout1Admin=toggleCastleLayout1Admin;window.runCastleLayout1Auto=runCastleLayout1Auto;window.show=show;window.loadNewCastleFeatures=loadNewCastleFeatures;window.saveNewCastleFeatures=saveNewCastleFeatures;window.submitNewCastleParticipation=submitNewCastleParticipation;window.cancelNewCastleParticipation=cancelNewCastleParticipation;window.deleteAllNewCastleParticipants=deleteAllNewCastleParticipants;window.updateNewCastleJoinFields=updateNewCastleJoinFields;window.toggleNewCastleAdmin=toggleNewCastleAdmin;window.toggleNewCastleManual=toggleNewCastleManual;window.runNewCastleAuto=runNewCastleAuto;window.runNewCastleWarAuto=runNewCastleWarAuto;window.exportNewCastleBackup=exportNewCastleBackup;window.importNewCastleBackup=importNewCastleBackup;window.loadViking=loadViking;window.joinVikingTeam=joinVikingTeam;window.toggleVikingCustomNick=toggleVikingCustomNick;window.toggleVikingPhotoAdmin=toggleVikingPhotoAdmin;window.triggerVikingPhoto=triggerVikingPhoto;window.leaveVikingTeam=leaveVikingTeam;window.addVikingTeams=addVikingTeams;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
+window.show=show;window.loadNewCastleFeatures=loadNewCastleFeatures;window.saveNewCastleFeatures=saveNewCastleFeatures;window.submitNewCastleParticipation=submitNewCastleParticipation;window.cancelNewCastleParticipation=cancelNewCastleParticipation;window.deleteAllNewCastleParticipants=deleteAllNewCastleParticipants;window.updateNewCastleJoinFields=updateNewCastleJoinFields;window.toggleNewCastleAdmin=toggleNewCastleAdmin;window.toggleNewCastleManual=toggleNewCastleManual;window.runNewCastleAuto=runNewCastleAuto;window.runNewCastleWarAuto=runNewCastleWarAuto;window.exportNewCastleBackup=exportNewCastleBackup;window.importNewCastleBackup=importNewCastleBackup;window.loadViking=loadViking;window.joinVikingTeam=joinVikingTeam;window.toggleVikingCustomNick=toggleVikingCustomNick;window.toggleVikingPhotoAdmin=toggleVikingPhotoAdmin;window.triggerVikingPhoto=triggerVikingPhoto;window.leaveVikingTeam=leaveVikingTeam;window.addVikingTeams=addVikingTeams;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",async()=>{
  const lang=document.getElementById("languageSelect");
  const urlLang=new URLSearchParams(location.search).get("lang");
