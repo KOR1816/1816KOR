@@ -2158,4 +2158,26 @@ html body #castlewar1 .nc-turret-column .nc-war-row:last-child{
 html body #castlewar1 .nc-turret-column .nc-war-row>b{width:100%!important;min-width:0!important;max-width:100%!important;}
 @media(max-width:560px){html body #castlewar1 .nc-war-turrets{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}}
 </style>
+
+<style id="castlewar1-heading-unified-and-leader-gap">
+/* Remove the visual gap between the rally-leader row and slot 1 in all three attack columns. */
+html body #castlewar1 .nc-war-column .nc-war-leader-row{margin-bottom:0!important;padding-bottom:0!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;}
+html body #castlewar1 .nc-war-column .nc-war-leader-row + .nc-war-row{margin-top:0!important;border-top:0!important;border-radius:0 0 8px 8px!important;}
+/* All five headings share the same typography and outlined title treatment. */
+html body #castlewar1 #ncWarAttack .nc-war-column>h3,
+html body #castlewar1 #ncWarTurretTitle{
+  display:flex!important;align-items:center!important;gap:10px!important;
+  box-sizing:border-box!important;min-height:48px!important;padding:10px 14px!important;
+  margin:0 0 12px!important;border:1px solid rgba(125,157,208,.55)!important;
+  border-radius:10px!important;background:linear-gradient(135deg,rgba(38,57,87,.92),rgba(17,28,47,.96))!important;
+  color:#f4f7ff!important;font-size:21px!important;font-weight:850!important;line-height:1.2!important;
+  letter-spacing:.02em!important;text-align:left!important;text-shadow:0 1px 3px rgba(0,0,0,.45)!important;
+}
+html body #castlewar1 #ncWarAttack .nc-war-column>h3::before,
+html body #castlewar1 #ncWarTurretTitle::before{
+  content:""!important;display:inline-block!important;flex:0 0 4px!important;width:4px!important;height:23px!important;
+  border-radius:4px!important;background:#82a8ed!important;box-shadow:0 0 10px rgba(105,151,224,.35)!important;
+}
+html body #castlewar1 #ncWarTurretTitle{width:100%!important;}
+</style>
 </body></html>
