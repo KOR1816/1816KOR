@@ -1786,7 +1786,7 @@ function normalizeVikingNick(v){return String(v||"").normalize("NFKD").toLowerCa
 function displayVikingNick(v){return String(v||"").replace(/[^A-Za-z0-9가-힣 ]/g,"").replace(/\s+/g," ").trim();}
 const vikingRankExactLookup=new Map(),vikingRankLookup=new Map();
 vikingRankNames.forEach((name,i)=>{const exact=String(name||"").normalize("NFKC").trim().toLowerCase(),key=normalizeVikingNick(name);if(exact&&!vikingRankExactLookup.has(exact))vikingRankExactLookup.set(exact,i+1);if(key){const ranks=vikingRankLookup.get(key)||[];ranks.push(i+1);vikingRankLookup.set(key,ranks);}});
-const vikingLegacyRankAliases=new Map([["팜Phamᴷᴼᴿ",2],["¤moon¤",16],["용이_yongi",15],["Pika皮卡丘",20],["윌크_Wilk",27],["OMEGA 小漁村",30],["Zidf@",31],["老司机LSJ",35],["GieZeues",39],["Commander_주",54],["쿠우크앙 Kuu Rawr",79],["쿠우크앙, Kuu Rawr",79],["Bilal#",83],["MissCocoᵀᴷ",99]].map(([name,rank])=>[String(name).normalize('NFKC').trim().toLowerCase(),rank]));
+const vikingLegacyRankAliases=new Map([["팜Phamᴷᴼᴿ",2],["¤moon¤",16],["용이_yongi",15],["Pika皮卡丘",20],["윌크_Wilk",27],["OMEGA 小漁村",30],["Zidf@",31],["老司机LSJ",35],["GieZeues",39],["Commander_주",54],["쿠우크앙 Kuu Rawr",79],["쿠우크앙, Kuu Rawr",79],["Bilal#",83],["MissCocoᵀᴷ",99],["lan",51]].map(([name,rank])=>[String(name).normalize('NFKC').trim().toLowerCase(),rank]));
 function getVikingSprite(nickname){
  const exact=String(nickname||"").normalize("NFKC").trim().toLowerCase();
  const matches=vikingRankLookup.get(normalizeVikingNick(nickname))||[];
