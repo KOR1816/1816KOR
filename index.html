@@ -549,7 +549,27 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 /* Keep leader/substitute labels in one horizontal line and align all numbered rows. */
 #castlewar1 .nc-war-row,
 #castlewar1 .nc-war-leader-row{
-  grid-template-columns:58px minmax(0,1fr)!important;
+  grid-template-columns:78px minmax(0,1fr)!important;
+}
+#castlewar1 .nc-war-row>b{
+  width:100%;
+  box-sizing:border-box;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+#castlewar1 .nc-war-leader-row>b{
+  width:100%;
+  box-sizing:border-box;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
 }
 #castlewar1 .nc-war-leader-row>b,
 #castlewar1 .nc-war-row>b{
