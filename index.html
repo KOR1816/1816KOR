@@ -453,6 +453,55 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 @media(max-width:760px){.new-castle-page .newcastle-form{grid-template-columns:1fr;gap:7px}.nc-war-attack{grid-template-columns:repeat(3,minmax(285px,1fr));overflow-x:auto;padding-bottom:8px}.nc-war-turrets{grid-template-columns:repeat(2,minmax(285px,1fr));overflow-x:auto;padding-bottom:8px}.nc-castle-leaders{grid-template-columns:repeat(6,minmax(300px,1fr));overflow-x:auto;padding-bottom:8px}.nc-castle-slots{grid-template-columns:repeat(6,minmax(155px,1fr));overflow-x:auto}.nc-castle-slot{padding:6px}.nc-leader-slot{padding:7px;grid-template-columns:minmax(0,1fr) minmax(115px,.85fr)}.nc-member-card{gap:6px;padding:7px}.nc-avatar{width:36px;height:36px;flex-basis:36px}}
 </style>
 
+
+<style id="castlewar1-red-theme">
+/* Castle War 1 visual refresh only — data, assignments and save logic are untouched. */
+#castlewar1.new-castle-page>.card{
+  position:relative;overflow:hidden;
+  padding:clamp(14px,2.2vw,26px);
+  border:1px solid #632b37;border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(122,28,43,.22),transparent 46%),linear-gradient(155deg,#171216 0%,#0b0a0d 60%,#120b0e 100%);
+  box-shadow:0 16px 42px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.035);
+}
+#castlewar1 .card h2{margin:0 0 12px;padding:0 0 14px;border-bottom:1px solid #48232c;color:#fff0f1;letter-spacing:.3px}
+#castlewar1 #ncWarMsg{padding:10px 13px;margin:12px 0 18px;border:1px solid #5b2833;border-radius:10px;background:linear-gradient(90deg,rgba(110,24,42,.28),rgba(34,17,23,.55));color:#ffdbe0;font-size:13px}
+#castlewar1 h3[data-newcastle="turrets"],#castlewar1 h3[data-newcastle="waiting"]{display:flex;align-items:center;gap:9px;margin:24px 0 12px;color:#ffe8eb;font-size:17px}
+#castlewar1 h3[data-newcastle="turrets"]::before,#castlewar1 h3[data-newcastle="waiting"]::before{content:"";display:inline-block;width:4px;height:19px;border-radius:4px;background:#c33d51;box-shadow:0 0 12px rgba(195,61,81,.28)}
+#castlewar1 .nc-war-attack{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0 22px;overflow-x:visible;padding:0}
+#castlewar1 .nc-war-column,#castlewar1 .nc-turret-column{min-width:0;border:1px solid #512631;border-radius:14px;background:linear-gradient(180deg,#171116,#0e0b0e 75%);box-shadow:0 8px 22px rgba(0,0,0,.24)}
+#castlewar1 .nc-war-column h3,#castlewar1 .nc-turret-column h3{padding:13px 10px;background:linear-gradient(110deg,#6f1e2d,#35131c 72%,#211015);border-bottom:1px solid #853445;color:#fff0f2;font-size:15px;letter-spacing:.45px;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+#castlewar1 .nc-war-row{grid-template-columns:32px minmax(0,1fr);gap:7px;padding:7px 8px;border-top:1px solid rgba(126,55,69,.22)}
+#castlewar1 .nc-war-row:nth-child(odd){background:rgba(255,255,255,.018)}
+#castlewar1 .nc-war-row>b{display:flex;align-items:center;justify-content:center;min-height:27px;border:1px solid #512631;border-radius:7px;background:#211217;color:#f0b7c0;font-size:12px;font-weight:800}
+#castlewar1 .nc-war-leader-row{grid-template-columns:76px minmax(0,1fr);background:linear-gradient(90deg,rgba(116,29,46,.2),rgba(255,255,255,.015));border-bottom:1px solid rgba(126,55,69,.3)}
+#castlewar1 .nc-war-leader-row>b{color:#ffe4e8}
+#castlewar1 .nc-war-row .nc-member-card{border:0;background:transparent;padding:4px 2px}
+#castlewar1 .nc-member-card{background:linear-gradient(145deg,#21171c,#151014);border-color:#512631;border-radius:10px}
+#castlewar1 .nc-avatar{background-color:#46202a;border-color:#9a4656}
+#castlewar1 .nc-rank-label{color:#ffb9c4;text-shadow:0 1px 10px rgba(220,58,83,.18)}
+#castlewar1 .nc-meta{color:#c5aeb4}
+#castlewar1 .nc-badge{border-color:#6a3541;background:rgba(120,31,49,.18);color:#f2c9d0}
+#castlewar1 .nc-select,#castlewar1 select{background-color:#171015!important;color:#fff0f2!important;border-color:#6b3440!important;border-radius:8px}
+#castlewar1 .nc-select:focus,#castlewar1 select:focus{outline:none;border-color:#d45a6d!important;box-shadow:0 0 0 3px rgba(190,49,72,.18)}
+#castlewar1 .nc-war-turrets{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#castlewar1 .nc-empty{color:#9f858c}
+#castlewar1 .newcastle-list .nc-member-card{border-color:#4a2730;background:linear-gradient(145deg,#20161b,#110d10)}
+#castlewar1 .newcastle-actions{padding-top:14px;margin-top:20px;border-top:1px solid #48232c;gap:8px}
+#castlewar1 .newcastle-actions .admin-btn{min-height:38px;padding:9px 13px;border:1px solid #71303d;border-radius:9px;background:linear-gradient(180deg,#4b1b27,#291117);color:#ffe9ec;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,.2);transition:transform .15s ease,border-color .15s ease,filter .15s ease}
+#castlewar1 .newcastle-actions .admin-btn:hover{border-color:#c24b60;filter:brightness(1.12);transform:translateY(-1px)}
+#castlewar1 .newcastle-actions .admin-btn:active{transform:translateY(0)}
+@media(max-width:760px){
+  #castlewar1.new-castle-page>.card{padding:13px;border-radius:14px}
+  #castlewar1 .nc-war-attack{grid-template-columns:repeat(3,minmax(270px,1fr));overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:0 0 10px}
+  #castlewar1 .nc-war-column{min-width:270px;scroll-snap-align:start}
+  #castlewar1 .nc-war-turrets{grid-template-columns:repeat(2,minmax(240px,1fr));overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:8px}
+  #castlewar1 .nc-turret-column{min-width:240px}
+  #castlewar1 .newcastle-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #castlewar1 .newcastle-actions .admin-btn{width:100%;min-width:0;padding:10px 7px;font-size:12px;white-space:normal}
+  #castlewar1 h3[data-newcastle="turrets"],#castlewar1 h3[data-newcastle="waiting"]{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){#castlewar1 .newcastle-actions .admin-btn{transition:none}}
+</style>
 </head><body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="languageSelect">언어</label><select id="languageSelect" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
 <nav id="mainNav"><button onclick="show('home')">🏠 홈</button><button onclick="location.href='notices.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">📢 공지</button><button onclick="show('teams')">⚔️ 성검쟁탈</button><button onclick="show('alliance')">🗡️ 3대연맹전</button><button onclick="show('castle')">🏰 캐슬배치</button><button onclick="show('castlewar')">🔱🛡️ 캐슬전</button><button onclick="show('seating')">🪑 자리배치</button><button onclick="show('viking')">🪓 바이킹</button><button onclick="location.href='glory.html?lang='+encodeURIComponent(localStorage.getItem('kor1816_lang')||'ko')">🏆 영광의 순간들</button><button onclick="show('battleJoin')">⚔️ 캐슬참전</button><button onclick="show('castlewar1')">🔱 캐슬전 1</button><button onclick="show('castle1')">🏰 캐슬배치 1</button></nav>
