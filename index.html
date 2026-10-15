@@ -2059,4 +2059,37 @@ html body #viking{--section-border:#df7777;--section-text:#fff0f0}
 }
 </style>
 
+
+<style id="castlewar1-uniform-label-cells-final">
+/* Force the complete left label cell to be identical for leader, 1-7, and substitute. */
+html body #castlewar1 .nc-war-column .nc-war-row,
+html body #castlewar1 .nc-war-column .nc-war-leader-row,
+html body #castlewar1 .nc-war-column .nc-war-row:last-child {
+  display:grid!important;
+  grid-template-columns:78px minmax(0,1fr)!important;
+  column-gap:7px!important;
+}
+html body #castlewar1 .nc-war-column .nc-war-row > b,
+html body #castlewar1 .nc-war-column .nc-war-row:not(.nc-war-leader-row) > b,
+html body #castlewar1 .nc-war-column .nc-war-row:last-child > b,
+html body #castlewar1 .nc-war-column .nc-war-leader-row > b {
+  display:flex!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+  writing-mode:horizontal-tb!important;
+  font-size:14px!important;
+  line-height:1.15!important;
+  padding:0!important;
+  margin:0!important;
+}
+</style>
+
 </body></html>
