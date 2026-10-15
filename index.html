@@ -702,10 +702,10 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  </div>
 </section>
 <section id="castle1" class="page new-castle-page">
- <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="ncLayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
-  <div class="newcastle-actions"><button class="admin-btn" onclick="runNewCastleAuto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleNewCastleManual()" id="ncManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveNewCastleFeatures()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadNewCastleFeatures()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleNewCastleAdmin()" data-newcastle="admin">🔐 관리자 수정</button></div>
+ <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="cl1LayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
+  <div class="newcastle-actions"><button class="admin-btn" onclick="runCastleLayout1Auto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleCastleLayout1Manual()" id="cl1ManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveCastleLayout1()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadCastleLayout1()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleCastleLayout1Admin()" data-newcastle="admin">🔐 관리자 수정</button></div>
   <p data-newcastle="layoutDesc">1~6번은 S등급 고정 집결장, 7~28번은 A1 → A2 → A3 → B1 → B2 → B3 → C1 → C2 → C3 순서로 배치됩니다.</p>
-  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="ncCastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="ncCastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
+  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="cl1CastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="cl1CastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
  </div>
 </section>
 
@@ -744,7 +744,7 @@ async function ensureGoogleAdmin(){
 }
 const TEAM_KEY="kor1816_teams_v2", ALLIANCE_KEY="kor1816_alliance_v1", HOME_KEY="kor1816_home_v1";
 const PAGE_KEY="kor1816_current_page_v2";
-let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,seatingLegacyDocs=[],vikingDoc=null,firebaseReady=false;
+let db=null,teamDoc=null,allianceDoc=null,homeDoc=null,seatingDoc=null,seatingLegacyDocs=[],vikingDoc=null,firebaseReady=false,castleLayout1Doc=null;
 const SEATING_KEY="kor1816_seating_v8";
 const CASTLE_KEY="kor1816_castle_v1";
 let castleDoc=null,castleAdmin=false;
@@ -1140,12 +1140,12 @@ async function show(id,updateHash=true){
  else if(id==="teams")await loadTeams();
  else if(id==="alliance")await loadAlliance();
  else if(id==="seating")await loadSeating();
- else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="battleJoin"||id==="castlewar1"||id==="castle1")await loadNewCastleFeatures();
+ else if(id==="castle")await loadCastle();else if(id==="castlewar")await loadCastleWar();else if(id==="viking")await loadViking();else if(id==="battleJoin"||id==="castlewar1")await loadNewCastleFeatures();else if(id==="castle1")await loadCastleLayout1();
  if(version!==pageLoadVersion)return;
  const vals=NAV[currentLang]||NAV.ko;
  document.querySelectorAll("#mainNav button").forEach((b,i)=>{if(vals[i])b.textContent=vals[i];});
  translatePage(currentLang);
- if(id==="battleJoin"||id==="castlewar1"||id==="castle1")ncRenderJoin();
+ if(id==="battleJoin"||id==="castlewar1")ncRenderJoin();
 }
 async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"].includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들"],en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments"],ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 キャッスル配置","🔱🛡️ キャッスル戦","🪑 席配置","🪓 バイキング","🏆 栄光の瞬間"],zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻"],de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente"],it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria"],es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria"],tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Vikingler","🏆 Zafer Anları","⚔️ Savaşa Katılım","🔱 Kale Savaşı 1","🏰 Kale Yerleşimi 1"]}
@@ -1846,7 +1846,7 @@ async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
    try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
-   db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
+   db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");castleLayout1Doc=doc(db,"siteData","castle_layout1_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
  }catch(e){console.error("Firebase init",e);}
@@ -1885,6 +1885,74 @@ function ncWarLeaderCell(key){const n=ncData.warLeaders[key]||(key==="assault"?"
 function ncSubCell(key){const n=ncData.war.substitute[key],p=ncData.participants.find(x=>x.nickname===n);return ncAdmin?ncSelectMarkup("ncSub_"+key,n):ncMemberCard(n,p?(ncPublicTier(p)+" · "+ncText("saloShort")+" "+(p.salo==="yes"?"O":"X")+" · Hilde "+(p.hilde==="yes"?"O":"X")):ncText("substitute"));}
 function ncRenderWar(){const groups=[["assault",ncText("assault")],["rush",ncText("rush")],["finish",ncText("finish")]];document.getElementById("ncWarAttack").innerHTML=groups.map(([key,label])=>'<div class="nc-war-column"><h3>'+label+'</h3><div class="nc-war-row nc-war-leader-row"><b>'+ncText("rallyLeader")+'</b>'+ncWarLeaderCell(key)+'</div>'+Array.from({length:8},(_,i)=>{const n=ncData.war[key][i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-war-row"><b>'+(i+1)+'</b>'+(ncAdmin?ncAttackSelectMarkup("ncWar_"+key+"_"+i,n):(p?ncParticipantCard(p):ncMemberCard(n)))+(ncAdmin?"":(n?'':'<span class="nc-empty">—</span>'))+'</div>';}).join("")+'</div>').join("");document.getElementById("ncWarTurrets").innerHTML=[["north","Leo li",""],["west","Jinno",""],["reserve","SsungBi"," (예비)"]].map(([key,leader,suffix])=>'<div class="nc-war-column nc-turret-column"><h3>포탑'+suffix+'</h3><div class="nc-war-row nc-war-leader-row"><b>'+ncText("rallyLeader")+'</b>'+ncParticipantCard({nickname:leader,tier:"S",status:"yes",salo:"no",hilde:"no"})+'</div>'+Array.from({length:8},(_,i)=>{const n=ncData.war[key][i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-war-row"><b>'+(i+1)+'</b>'+(ncAdmin?ncAttackSelectMarkup("ncWar_"+key+"_"+i,n):(p?ncParticipantCard(p):ncMemberCard(n)))+(ncAdmin?"":(n?'':'<span class="nc-empty">—</span>'))+'</div>';}).join("")+'</div>').join("");}
 function ncRenderLayout(){const leaders=ncData.leaders.layout||NC_FIXED_S_LEADERS;document.getElementById("ncCastleLeaders").innerHTML=Array.from({length:6},(_,i)=>{const n=leaders[i]||NC_FIXED_S_LEADERS[i];return '<div class="nc-leader-slot"><div class="nc-leader-person"><strong>'+(i+1)+' · S · '+ncText("rallyLeader")+'</strong>'+ncMemberCard(n,ncText("fixedLeader"))+'</div>'+'<span class="nc-badge">'+escapeVikingHtml(ncText("fixedLeader"))+'</span>'+'</div>';}).join("");document.getElementById("ncCastleSlots").innerHTML=Array.from({length:22},(_,j)=>{const i=j+6,n=ncData.castleSlots[i],p=ncData.participants.find(x=>x.nickname===n);return '<div class="nc-castle-slot"><strong>'+(i+1)+' · '+(p?ncRank(p):"—")+'</strong>'+(ncAdmin&&ncManual?ncSelectMarkup("ncSlot_"+i,n):ncMemberCard(n,p?(ncRank(p)+' · '+ncText("saloShort")+' '+(p.salo==="yes"?"O":"X")+' · Hilde '+(p.hilde==="yes"?"O":"X")):""))+'</div>';}).join("");document.getElementById("ncManualBtn").textContent=ncManual?ncText("manual")+" ✓":ncText("manual");}
+/* Castle Layout 1 is isolated: it reads participants from the shared source but saves only its own document. */
+let cl1Data={slots:Array(28).fill("")},cl1Participants=[],cl1Admin=false,cl1Manual=false;
+function cl1Rank(p){return ncRank(p);}
+function cl1Render(){
+ const leaders=document.getElementById("cl1CastleLeaders"),slots=document.getElementById("cl1CastleSlots");
+ if(!leaders||!slots)return;
+ leaders.innerHTML=Array.from({length:6},(_,i)=>'<div class="nc-leader-slot"><div class="nc-leader-person"><strong>'+(i+1)+' · S · '+ncText("rallyLeader")+'</strong>'+ncMemberCard(NC_FIXED_S_LEADERS[i],ncText("fixedLeader"))+'</div><span class="nc-badge">'+escapeVikingHtml(ncText("fixedLeader"))+'</span></div>').join("");
+ const names=[...new Set(cl1Participants.filter(p=>p&&p.nickname).map(p=>p.nickname))];
+ slots.innerHTML=Array.from({length:22},(_,j)=>{
+  const i=j+6,n=cl1Data.slots[i]||"",p=cl1Participants.find(x=>x.nickname===n);
+  const options='<option value="">'+escapeVikingHtml(ncText("choose"))+'</option>'+names.map(name=>{const q=cl1Participants.find(x=>x.nickname===name);return '<option value="'+escapeVikingHtml(name)+'" '+(name===n?'selected':'')+'>'+escapeVikingHtml((cl1Rank(q)||"—")+' · '+name)+'</option>';}).join("");
+  const card=cl1Admin&&cl1Manual?'<select class="nc-select" id="cl1Slot_'+i+'">'+options+'</select>':ncMemberCard(n,p?(cl1Rank(p)+' · '+ncText("saloShort")+' '+(p.salo==="yes"?"O":"X")+' · Hilde '+(p.hilde==="yes"?"O":"X")):"");
+  return '<div class="nc-castle-slot"><strong>'+(i+1)+' · '+(p?cl1Rank(p):"—")+'</strong>'+card+'</div>';
+ }).join("");
+ const manualBtn=document.getElementById("cl1ManualBtn");if(manualBtn)manualBtn.textContent=ncText("manual")+(cl1Manual?" ✓":"");
+}
+async function loadCastleLayout1(){
+ try{
+  let shared={};
+  if(db&&ncDoc){const snap=await getDoc(ncDoc);if(snap.exists())shared=snap.data()||{};}
+  cl1Participants=Array.isArray(shared.participants)?shared.participants.filter(p=>p&&p.nickname).map(p=>({nickname:String(p.nickname),status:p.status==="no"?"no":p.status==="later"?"later":"yes",tier:["A","B","C","none"].includes(p.tier)?p.tier:"A",salo:p.salo==="yes"?"yes":"no",hilde:p.hilde==="yes"?"yes":"no"})):[];
+  let own=null;
+  if(db&&castleLayout1Doc){const snap=await getDoc(castleLayout1Doc);if(snap.exists())own=snap.data();}
+  if(own&&Array.isArray(own.slots))cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(own.slots[i]||""))};
+  else cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(shared.castleSlots?.[i]||""))};
+  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 불러왔습니다.";
+  cl1Render();
+ }catch(e){
+  console.error("castle layout 1 load",e);
+  const local=readLocal("kor1816_castle_layout1_v1",null);
+  if(local&&Array.isArray(local.slots))cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(local.slots[i]||""))};
+  cl1Render();
+  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent=ncText("serverFail");
+ }
+}
+async function toggleCastleLayout1Admin(){
+ if(!cl1Admin){if(!await ensureGoogleAdmin())return;cl1Admin=true;}else cl1Admin=false;
+ cl1Render();
+}
+function toggleCastleLayout1Manual(){if(!cl1Admin){alert(ncText("needAdmin"));return;}cl1Manual=!cl1Manual;cl1Render();}
+async function saveCastleLayout1(){
+ if(!cl1Admin){alert(ncText("needAdmin"));return;}
+ if(cl1Manual){for(let i=6;i<28;i++){const el=document.getElementById("cl1Slot_"+i);if(el)cl1Data.slots[i]=el.value||"";}}
+ const placed=cl1Data.slots.slice(6).filter(Boolean);
+ if(new Set(placed).size!==placed.length){alert(ncText("duplicate"));return;}
+ const payload={slots:cl1Data.slots,updatedAt:Date.now()};
+ try{
+  if(!db||!castleLayout1Doc)throw Error("Castle Layout 1 storage unavailable");
+  await setDoc(castleLayout1Doc,payload);
+  writeLocal("kor1816_castle_layout1_v1",payload);
+  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 공용 서버에 저장했습니다.";
+  cl1Render();
+ }catch(e){
+  console.error("castle layout 1 save",e);
+  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="공용 서버 저장에 실패했습니다. 다른 기기에 반영되지 않았을 수 있습니다.";
+  alert("캐슬배치 1 서버 저장에 실패했습니다. 다른 기기에는 반영되지 않습니다.");
+ }
+}
+function runCastleLayout1Auto(confirmOverwrite){
+ if(!cl1Admin){alert(ncText("needAdmin"));return;}
+ if(confirmOverwrite&&!confirm(ncText("autoWarn")))return;
+ const order=["A1","A2","A3","B1","B2","B3","C1","C2","C3"];
+ const fixed=new Set(NC_FIXED_S_LEADERS);
+ const sorted=cl1Participants.filter(p=>p.status==="yes"&&cl1Rank(p)&&!fixed.has(p.nickname)).sort((a,b)=>order.indexOf(cl1Rank(a))-order.indexOf(cl1Rank(b))||a.nickname.localeCompare(b.nickname));
+ cl1Data.slots=Array(28).fill("");
+ for(let i=6;i<28;i++)cl1Data.slots[i]=sorted[i-6]?.nickname||"";
+ cl1Manual=false;cl1Render();saveCastleLayout1();
+}
 function updateNewCastleJoinFields(){const special=ncIsFixedS(document.getElementById("ncNick")?.value);document.querySelectorAll("#battleJoin [data-nc-optional]").forEach(el=>{el.style.display=special?"none":"";});}
 function ncRenderAll(){const deleteAllBtn=document.getElementById("ncDeleteAllBtn");if(deleteAllBtn)deleteAllBtn.style.display=ncAdmin?"inline-flex":"none";const searchResults=document.getElementById("ncNickSearchResults");if(searchResults){searchResults.hidden=true;searchResults.style.display="none";}document.querySelectorAll("[data-newcastle]").forEach(el=>{const k=el.dataset.newcastle;el.textContent=ncText(k);});const status=document.getElementById("ncStatus");if(status){const old=status.value;status.innerHTML='<option value="yes">'+ncText("yes")+'</option><option value="no">'+ncText("no")+'</option><option value="later">'+ncText("later")+'</option>';status.value=old||"yes";}const tier=document.getElementById("ncTier");if(tier){const old=tier.value;tier.innerHTML='<option value="A">'+ncText("tierA")+'</option><option value="B">'+ncText("tierB")+'</option><option value="C">'+ncText("tierC")+'</option><option value="none">'+ncText("tierNone")+'</option>';tier.value=old||"A";}updateNewCastleJoinFields();ncRenderJoin();ncRenderWar();ncRenderLayout();}
 function ncApplyAutomaticWarAssignments(){const order=["A1","A2","A3","B1","B2","B3","C1","C2","C3"];const fixedS=new Set(NC_FIXED_S_LEADERS);const leaderNames=new Set([...Object.values(ncData.warLeaders||{}),"Leo li","Jinno"].filter(Boolean));const sorted=ncData.participants.filter(p=>p.status==="yes"&&ncRank(p)&&!fixedS.has(p.nickname)&&!leaderNames.has(p.nickname)).sort((a,b)=>order.indexOf(ncRank(a))-order.indexOf(ncRank(b))||a.nickname.localeCompare(b.nickname));const keys=["rush","assault","finish","north","west","reserve"];const next={assault:Array(8).fill(""),rush:Array(8).fill(""),finish:Array(8).fill(""),north:Array(8).fill(""),west:Array(8).fill(""),reserve:Array(8).fill("")};sorted.slice(0,48).forEach((p,i)=>{next[keys[i%6]][Math.floor(i/6)]=p.nickname;});let changed=false;for(const key of keys){if(JSON.stringify(ncData.war[key])!==JSON.stringify(next[key]))changed=true;ncData.war[key]=next[key];}for(const key of ["assault","rush","finish"]){if(ncData.war.substitute[key])changed=true;ncData.war.substitute[key]="";}const leaders={assault:"Nemesis",rush:"Pham",finish:"샌디에이고"};for(const key of Object.keys(leaders)){if(ncData.warLeaders[key]!==leaders[key])changed=true;ncData.warLeaders[key]=leaders[key];}return {changed,count:Math.min(sorted.length,48)};}
