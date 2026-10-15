@@ -734,7 +734,7 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
   <div id="castleLayout1Msg" class="msg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
   <div class="castle-layout1-actions">
    <button class="admin-btn" onclick="loadCastleLayout1()">🔄 새로고침</button>
-   <button type="button" class="admin-btn" id="castleLayout1AdminBtn">🔐 관리자 수정</button>
+   <button class="admin-btn" onclick="toggleCastleLayout1Admin()" id="castleLayout1AdminBtn">🔐 관리자 수정</button>
    
    <button class="admin-btn" onclick="saveCastleLayout1()" id="castleLayout1SaveBtn" style="display:none">💾 저장</button>
   </div>
@@ -754,8 +754,7 @@ const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomai
 const ADMIN_EMAILS=["to1ggi8410@gmail.com","to1ggi8403@gmail.com"];
 let adminAuth=null;
 async function ensureGoogleAdmin(){
- let auth;
- try{auth=adminAuth||getAuth();}catch(e){console.error("Google admin auth is not initialized:",e);alert("인증 시스템이 아직 준비되지 않았습니다. 페이지를 새로고침한 뒤 다시 눌러 주세요.");return false;}
+ const auth=adminAuth||getAuth();
  const allowed=ADMIN_EMAILS.map(x=>x.toLowerCase());
  let user=auth.currentUser;
  if(!user||!user.email){
@@ -1878,8 +1877,7 @@ async function addVikingTeams(){document.getElementById("vikingMsg").textContent
 async function initFirebase(){
  try{
    const app=initializeApp(firebaseConfig);
-   adminAuth=getAuth(app);
-   try{await Promise.race([signInAnonymously(adminAuth),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
+   try{await Promise.race([signInAnonymously(getAuth(app)),new Promise((_,rej)=>setTimeout(()=>rej(Error("auth timeout")),4000))]);}catch(e){console.warn("anonymous auth",e);}
    db=getFirestore(app);ncDoc=doc(db,"siteData","castle_features_v1");teamDoc=doc(db,"siteData","teams");allianceDoc=doc(db,"siteData","alliance");homeDoc=doc(db,"siteData","home");seatingDoc=doc(db,"siteData","seating_v4");seatingLegacyDocs=[{name:"seating_v3",ref:doc(db,"siteData","seating_v3")},{name:"seating_v2",ref:doc(db,"siteData","seating_v2")},{name:"seating",ref:doc(db,"siteData","seating")}];vikingDoc=doc(db,"siteData","viking_v1");castleLayout1Doc=doc(db,"siteData","castle_layout1_v1");vikingPhotoDocs=Object.fromEntries(Array.from({length:25},(_,k)=>[k+1,doc(db,"siteData","viking_photos_team_"+(k+1))]));castleDoc=doc(db,"siteData","castle_v1");castleWarDoc=castleDoc;castleWarLegacyDoc=null;firebaseReady=true;
    const active=document.querySelector(".page.active")?.id||"home";
    await show(active,false);
@@ -1927,7 +1925,7 @@ function normalizeCastleLayout1(raw){const slots=Array.isArray(raw?.slots)?raw.s
 function castleLayout1ActiveParticipants(){return (ncData.participants||[]).filter(p=>p.status==="yes"&&p.nickname&&!NC_FIXED_S_LEADERS.includes(p.nickname)&&ncRank(p)).sort((a,b)=>{const order=["A1","A2","A3","B1","B2","B3","C1","C2","C3"];return order.indexOf(ncRank(a))-order.indexOf(ncRank(b))||a.nickname.localeCompare(b.nickname);});}
 function renderCastleLayout1(){const root=document.getElementById("castleLayout1Slots");if(!root)return;const slots=castleLayout1Data.slots;const cols=['<div class="castle-layout1-column">','<div class="castle-layout1-column">'];for(let n=1;n<=28;n++){const idx=n-1,name=slots[idx]||"",p=ncData.participants.find(x=>x.nickname===name);let body;if(castleLayout1Admin&&n>6){const names=[...new Set([...NC_FIXED_S_LEADERS,...(ncData.participants||[]).map(x=>x.nickname).filter(Boolean)])];body='<select aria-label="칸 '+n+' 닉네임" data-castle-layout1-slot="'+idx+'"><option value="">— 비우기 —</option>'+names.map(x=>'<option value="'+escapeVikingHtml(x)+'" '+(x===name?'selected':'')+'>'+escapeVikingHtml(x)+'</option>').join("")+'</select>';}else if(p){body=ncParticipantCard(p);}else if(NC_FIXED_S_LEADERS.includes(name)){body=ncMemberCard(name,"집결장");}else{body='<div class="nc-empty">—</div>';}const card='<div class="castle-layout1-slot"><span class="castle-layout1-number">'+n+'</span><div class="castle-layout1-content">'+body+'</div></div>';cols[n<=14?0:1]+=card;}cols[0]+='</div>';cols[1]+='</div>';root.innerHTML=cols.join("");}
 async function loadCastleLayout1(){try{try{if(ncDoc){const participantSnap=await getDoc(ncDoc);if(participantSnap.exists())ncData=ncNormalize(participantSnap.data());else ncData=ncNormalize(readLocal(NC_KEY,ncData));}else ncData=ncNormalize(readLocal(NC_KEY,ncData));}catch(participantError){console.warn("castle layout1 roster read",participantError);ncData=ncNormalize(readLocal(NC_KEY,ncData));}const local=normalizeCastleLayout1(readLocal(CASTLE_LAYOUT1_KEY,null));castleLayout1Data=local;if(castleLayout1Doc){const snap=await getDoc(castleLayout1Doc);if(snap.exists()){const cloud=normalizeCastleLayout1(snap.data());if(local.updatedAt>cloud.updatedAt){castleLayout1Data=local;try{await setDoc(castleLayout1Doc,local);}catch(e){console.warn("castle layout1 sync",e);}}else castleLayout1Data=cloud;}else{const participants=castleLayout1ActiveParticipants();for(let i=6;i<28;i++)castleLayout1Data.slots[i]=participants[i-6]?.nickname||"";castleLayout1Data.updatedAt=Date.now();try{await setDoc(castleLayout1Doc,castleLayout1Data);}catch(e){console.warn("castle layout1 initial save",e);}}}writeLocal(CASTLE_LAYOUT1_KEY,castleLayout1Data);renderCastleLayout1();const m=document.getElementById("castleLayout1Msg");if(m)m.textContent="최신 캐슬배치 1 내용을 불러왔습니다.";}catch(e){console.error("castle layout1 load",e);castleLayout1Data=normalizeCastleLayout1(readLocal(CASTLE_LAYOUT1_KEY,castleLayout1Data));renderCastleLayout1();const m=document.getElementById("castleLayout1Msg");if(m)m.textContent="서버 연결이 안 되어 이 기기의 저장 내용을 표시합니다.";}}
-async function toggleCastleLayout1Admin(){const b=document.getElementById("castleLayout1AdminBtn"),s=document.getElementById("castleLayout1SaveBtn"),m=document.getElementById("castleLayout1Msg");try{if(castleLayout1Admin){castleLayout1Admin=false;}else{if(m)m.textContent="Google 관리자 인증을 확인하고 있습니다…";if(!await ensureGoogleAdmin()){if(m)m.textContent="관리자 인증이 완료되지 않았습니다. 로그인 창이나 안내 메시지를 확인해 주세요.";return;}castleLayout1Admin=true;}renderCastleLayout1();if(b)b.textContent=castleLayout1Admin?"🔒 수정 종료":"🔐 관리자 수정";if(s)s.style.display=castleLayout1Admin?"inline-flex":"none";if(m)m.textContent=castleLayout1Admin?"관리자 수정 모드가 켜졌습니다.":"관리자 수정 모드를 종료했습니다.";}catch(e){console.error("castle layout1 admin toggle",e);if(m)m.textContent="관리자 수정 실행 오류: "+(e?.message||e);alert("캐슬배치 1 관리자 수정 오류: "+(e?.message||e));}}
+async function toggleCastleLayout1Admin(){if(castleLayout1Admin)castleLayout1Admin=false;else{if(!await ensureGoogleAdmin())return;castleLayout1Admin=true;}renderCastleLayout1();const b=document.getElementById("castleLayout1AdminBtn"),s=document.getElementById("castleLayout1SaveBtn");if(b)b.textContent=castleLayout1Admin?"🔒 수정 종료":"🔐 관리자 수정";if(s)s.style.display=castleLayout1Admin?"inline-flex":"none";}
 function runCastleLayout1Auto(){if(!castleLayout1Admin){alert("관리자 수정 모드를 먼저 켜 주세요.");return;}if(!confirm("1~6번 집결장은 유지하고, 등록된 참가자를 등급순으로 7~28번에 자동 배치할까요?"))return;const participants=castleLayout1ActiveParticipants();for(let i=6;i<28;i++)castleLayout1Data.slots[i]=participants[i-6]?.nickname||"";renderCastleLayout1();}
 async function saveCastleLayout1(){if(!castleLayout1Admin){alert("관리자 수정 모드를 먼저 켜 주세요.");return;}document.querySelectorAll("#castleLayout1Slots [data-castle-layout1-slot]").forEach(el=>{castleLayout1Data.slots[Number(el.dataset.castleLayout1Slot)]=el.value;});for(let i=0;i<6;i++)castleLayout1Data.slots[i]=NC_FIXED_S_LEADERS[i];const names=castleLayout1Data.slots.slice(6).filter(Boolean);if(new Set(names).size!==names.length||names.some(n=>NC_FIXED_S_LEADERS.includes(n))){alert("7~28번에는 중복 닉네임을 넣을 수 없습니다. 집결장 닉네임도 선택할 수 없습니다.");return;}castleLayout1Data.updatedAt=Date.now();writeLocal(CASTLE_LAYOUT1_KEY,castleLayout1Data);try{if(!castleLayout1Doc)throw Error("Castle Layout 1 server document is unavailable");await setDoc(castleLayout1Doc,castleLayout1Data);const m=document.getElementById("castleLayout1Msg");if(m)m.textContent="캐슬배치 1이 공용 서버에 저장되었습니다.";renderCastleLayout1();}catch(e){console.error("castle layout1 save",e);const m=document.getElementById("castleLayout1Msg");if(m)m.textContent="공용 서버 저장 실패: 이 기기에 임시 저장되었습니다.";}}
 
@@ -1957,13 +1955,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
  ncRenderAll();
- const castleLayout1AdminButton=document.getElementById("castleLayout1AdminBtn");
- if(castleLayout1AdminButton)castleLayout1AdminButton.addEventListener("click",()=>{toggleCastleLayout1Admin();});
- initFirebase();
  await restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
+ initFirebase();
 });
 </script>
 
