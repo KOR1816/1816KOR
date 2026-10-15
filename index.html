@@ -1956,11 +1956,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
  ncRenderAll();
+ await initFirebase();
  await restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
- initFirebase();
 });
 </script>
 
