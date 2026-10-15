@@ -702,10 +702,10 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
  </div>
 </section>
 <section id="castle1" class="page new-castle-page">
- <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="cl1LayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
-  <div class="newcastle-actions"><button class="admin-btn" onclick="runCastleLayout1Auto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleCastleLayout1Manual()" id="cl1ManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveCastleLayout1()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadCastleLayout1()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleCastleLayout1Admin()" data-newcastle="admin">🔐 관리자 수정</button></div>
+ <div class="card"><h2 data-newcastle="titleLayout">🏰 캐슬배치 1</h2><div class="msg" id="ncLayoutMsg">최신 캐슬배치 1 내용을 불러왔습니다.</div>
+  <div class="newcastle-actions"><button class="admin-btn" onclick="runCastleLayout1Auto(true)" data-newcastle="auto">자동 배치</button><button class="admin-btn" onclick="toggleCastleLayout1Manual()" id="ncManualBtn" data-newcastle="manual">수동 수정</button><button class="admin-btn" onclick="saveCastleLayout1()" data-newcastle="save">💾 저장</button><button class="admin-btn" onclick="loadCastleLayout1()" data-newcastle="refresh">🔄 새로고침</button><button class="admin-btn" onclick="toggleCastleLayout1Admin()" data-newcastle="admin">🔐 관리자 수정</button></div>
   <p data-newcastle="layoutDesc">1~6번은 S등급 고정 집결장, 7~28번은 A1 → A2 → A3 → B1 → B2 → B3 → C1 → C2 → C3 순서로 배치됩니다.</p>
-  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="cl1CastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="cl1CastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
+  <h3 data-newcastle="fixedLeader">집결장 고정</h3><div id="ncCastleLeaders" class="nc-castle-leaders"></div><h3 data-newcastle="layoutDesc">등급별 자동 배치 / 수동 변경</h3><div id="ncCastleSlots" class="nc-castle-slots"></div><h3 data-newcastle="waiting">대기 명단</h3><div id="ncLayoutWaiting" class="newcastle-list"></div>
  </div>
 </section>
 
@@ -1889,7 +1889,7 @@ function ncRenderLayout(){const leaders=ncData.leaders.layout||NC_FIXED_S_LEADER
 let cl1Data={slots:Array(28).fill("")},cl1Participants=[],cl1Admin=false,cl1Manual=false;
 function cl1Rank(p){return ncRank(p);}
 function cl1Render(){
- const leaders=document.getElementById("cl1CastleLeaders"),slots=document.getElementById("cl1CastleSlots");
+ const leaders=document.getElementById("ncCastleLeaders"),slots=document.getElementById("ncCastleSlots");
  if(!leaders||!slots)return;
  leaders.innerHTML=Array.from({length:6},(_,i)=>'<div class="nc-leader-slot"><div class="nc-leader-person"><strong>'+(i+1)+' · S · '+ncText("rallyLeader")+'</strong>'+ncMemberCard(NC_FIXED_S_LEADERS[i],ncText("fixedLeader"))+'</div><span class="nc-badge">'+escapeVikingHtml(ncText("fixedLeader"))+'</span></div>').join("");
  const names=[...new Set(cl1Participants.filter(p=>p&&p.nickname).map(p=>p.nickname))];
@@ -1899,7 +1899,7 @@ function cl1Render(){
   const card=cl1Admin&&cl1Manual?'<select class="nc-select" id="cl1Slot_'+i+'">'+options+'</select>':ncMemberCard(n,p?(cl1Rank(p)+' · '+ncText("saloShort")+' '+(p.salo==="yes"?"O":"X")+' · Hilde '+(p.hilde==="yes"?"O":"X")):"");
   return '<div class="nc-castle-slot"><strong>'+(i+1)+' · '+(p?cl1Rank(p):"—")+'</strong>'+card+'</div>';
  }).join("");
- const manualBtn=document.getElementById("cl1ManualBtn");if(manualBtn)manualBtn.textContent=ncText("manual")+(cl1Manual?" ✓":"");
+ const manualBtn=document.getElementById("ncManualBtn");if(manualBtn)manualBtn.textContent=ncText("manual")+(cl1Manual?" ✓":"");
 }
 async function loadCastleLayout1(){
  try{
@@ -1910,14 +1910,14 @@ async function loadCastleLayout1(){
   if(db&&castleLayout1Doc){const snap=await getDoc(castleLayout1Doc);if(snap.exists())own=snap.data();}
   if(own&&Array.isArray(own.slots))cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(own.slots[i]||""))};
   else cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(shared.castleSlots?.[i]||""))};
-  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 불러왔습니다.";
+  const msg=document.getElementById("ncLayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 불러왔습니다.";
   cl1Render();
  }catch(e){
   console.error("castle layout 1 load",e);
   const local=readLocal("kor1816_castle_layout1_v1",null);
   if(local&&Array.isArray(local.slots))cl1Data={slots:Array.from({length:28},(_,i)=>i<6?"":String(local.slots[i]||""))};
   cl1Render();
-  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent=ncText("serverFail");
+  const msg=document.getElementById("ncLayoutMsg");if(msg)msg.textContent=ncText("serverFail");
  }
 }
 async function toggleCastleLayout1Admin(){
@@ -1935,11 +1935,11 @@ async function saveCastleLayout1(){
   if(!db||!castleLayout1Doc)throw Error("Castle Layout 1 storage unavailable");
   await setDoc(castleLayout1Doc,payload);
   writeLocal("kor1816_castle_layout1_v1",payload);
-  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 공용 서버에 저장했습니다.";
+  const msg=document.getElementById("ncLayoutMsg");if(msg)msg.textContent="최신 캐슬배치 1 내용을 공용 서버에 저장했습니다.";
   cl1Render();
  }catch(e){
   console.error("castle layout 1 save",e);
-  const msg=document.getElementById("cl1LayoutMsg");if(msg)msg.textContent="공용 서버 저장에 실패했습니다. 다른 기기에 반영되지 않았을 수 있습니다.";
+  const msg=document.getElementById("ncLayoutMsg");if(msg)msg.textContent="공용 서버 저장에 실패했습니다. 다른 기기에 반영되지 않았을 수 있습니다.";
   alert("캐슬배치 1 서버 저장에 실패했습니다. 다른 기기에는 반영되지 않습니다.");
  }
 }
@@ -1970,7 +1970,7 @@ function ncSetLang(){ncRenderAll();}
 function exportNewCastleBackup(){const blob=new Blob([JSON.stringify(ncData,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="kor1816-castle-features-backup.json";a.click();URL.revokeObjectURL(url);alert(ncText("exported"));}
 async function importNewCastleBackup(event){if(!ncAdmin){alert(ncText("needAdmin"));event.target.value="";return;}const file=event.target.files?.[0];if(!file)return;try{const d=ncNormalize(JSON.parse(await file.text()));ncData=d;ncRenderAll();await saveNewCastleFeatures();}catch(e){alert(ncText("badBackup"));}finally{event.target.value="";}}
 
-window.show=show;window.loadNewCastleFeatures=loadNewCastleFeatures;window.saveNewCastleFeatures=saveNewCastleFeatures;window.submitNewCastleParticipation=submitNewCastleParticipation;window.cancelNewCastleParticipation=cancelNewCastleParticipation;window.deleteAllNewCastleParticipants=deleteAllNewCastleParticipants;window.updateNewCastleJoinFields=updateNewCastleJoinFields;window.toggleNewCastleAdmin=toggleNewCastleAdmin;window.toggleNewCastleManual=toggleNewCastleManual;window.runNewCastleAuto=runNewCastleAuto;window.runNewCastleWarAuto=runNewCastleWarAuto;window.exportNewCastleBackup=exportNewCastleBackup;window.importNewCastleBackup=importNewCastleBackup;window.loadViking=loadViking;window.joinVikingTeam=joinVikingTeam;window.toggleVikingCustomNick=toggleVikingCustomNick;window.toggleVikingPhotoAdmin=toggleVikingPhotoAdmin;window.triggerVikingPhoto=triggerVikingPhoto;window.leaveVikingTeam=leaveVikingTeam;window.addVikingTeams=addVikingTeams;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
+window.show=show;window.loadNewCastleFeatures=loadNewCastleFeatures;window.saveNewCastleFeatures=saveNewCastleFeatures;window.submitNewCastleParticipation=submitNewCastleParticipation;window.cancelNewCastleParticipation=cancelNewCastleParticipation;window.deleteAllNewCastleParticipants=deleteAllNewCastleParticipants;window.updateNewCastleJoinFields=updateNewCastleJoinFields;window.toggleNewCastleAdmin=toggleNewCastleAdmin;window.toggleNewCastleManual=toggleNewCastleManual;window.runNewCastleAuto=runNewCastleAuto;window.runNewCastleWarAuto=runNewCastleWarAuto;window.loadCastleLayout1=loadCastleLayout1;window.saveCastleLayout1=saveCastleLayout1;window.toggleCastleLayout1Admin=toggleCastleLayout1Admin;window.toggleCastleLayout1Manual=toggleCastleLayout1Manual;window.runCastleLayout1Auto=runCastleLayout1Auto;window.exportNewCastleBackup=exportNewCastleBackup;window.importNewCastleBackup=importNewCastleBackup;window.loadViking=loadViking;window.joinVikingTeam=joinVikingTeam;window.toggleVikingCustomNick=toggleVikingCustomNick;window.toggleVikingPhotoAdmin=toggleVikingPhotoAdmin;window.triggerVikingPhoto=triggerVikingPhoto;window.leaveVikingTeam=leaveVikingTeam;window.addVikingTeams=addVikingTeams;window.loadHome=loadHome;window.toggleTeamsAdmin=toggleTeamsAdmin;window.toggleSeatingAdmin=toggleSeatingAdmin;window.loadCastle=loadCastle;window.saveCastle=saveCastle;window.toggleCastleAdmin=toggleCastleAdmin;window.loadCastleWar=loadCastleWar;window.saveCastleWar=saveCastleWar;window.toggleCastleWarAdmin=toggleCastleWarAdmin;window.saveSeating=saveSeating;window.saveHome=saveHome;window.toggleHomeAdmin=toggleHomeAdmin;window.loadAlliance=loadAlliance;window.saveAlliance=saveAlliance;window.toggleAllianceAdmin=toggleAllianceAdmin;window.saveAllTeams=saveAllTeams;window.refreshTeams=loadTeams;
 document.addEventListener("DOMContentLoaded",async()=>{
  const lang=document.getElementById("languageSelect");
  const urlLang=new URLSearchParams(location.search).get("lang");
