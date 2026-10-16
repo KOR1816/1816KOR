@@ -47,7 +47,7 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 </head>
 <body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
-<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🪓 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a><a id="battleJoinLink" href="./?lang=ko#battleJoin">⚔️ 캐슬참전</a><a id="castlewar1Link" href="./?lang=ko#castlewar1">🔱 캐슬전 1</a><a id="castlelayout1Link" href="./?lang=ko#castlelayout1">🏰 캐슬배치 1</a></nav>
+<nav id="mainNav"><a id="nav-asd1" href="./?lang=ko">🏠 홈</a><a id="nav-asd2" href="./notices.html?lang=ko">📢 공지</a><a id="nav-asd3" href="./#teams">⚔️ 성검쟁탈</a><a id="nav-asd4" href="./#alliance">🗡️ 3대연맹전</a><a id="nav-asd5" href="./#castle">🏰 캐슬배치</a><a id="nav-asd6" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="nav-asd7" href="./#seating">🪑 자리배치</a><a id="nav-asd8" href="./#viking">🪓 바이킹</a><a id="nav-asd9" href="./glory.html?lang=ko">🏆 영광의 순간들</a><a id="nav-asd10" href="./?lang=ko#battleJoin">⚔️ 캐슬참전</a><a id="nav-asd11" href="./?lang=ko#castlewar1">🔱 캐슬전 1</a><a id="nav-asd12" href="./?lang=ko#castlelayout1">🏰 캐슬배치 1</a></nav>
 <script>
 (function(){
  const p=new URLSearchParams(location.search), urlLang=p.get("lang");
@@ -64,7 +64,7 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
  tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Viking","🏆 Zafer Anları","⚔️ Kale Savaşına Katılım","🔱 Kale Savaşı 1","🏰 Kale Dizilimi 1"]
  };
  if(!labels[lang])lang="ko";
- const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
+ const ids=["nav-asd1","nav-asd2","nav-asd3","nav-asd4","nav-asd5","nav-asd6","nav-asd7","nav-asd8","nav-asd9","nav-asd10","nav-asd11","nav-asd12"];
  const paths=["./index.html","./notices.html","./index.html?page=teams","./index.html?page=alliance","./index.html?page=castle","./index.html?page=castlewar","./index.html?page=seating","./index.html?page=viking","./glory.html","./index.html?page=battleJoin","./index.html?page=castlewar1","./index.html?page=castlelayout1"];
  ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];const href=paths[i],hashAt=href.indexOf("#"),base=hashAt>=0?href.slice(0,hashAt):href,hash=hashAt>=0?href.slice(hashAt):"";el.href=base+(base.includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)+hash;});
  try{localStorage.setItem("kor1816_lang",lang)}catch{}
