@@ -260,8 +260,32 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   es:{intro:"⚔️ Órdenes de batalla",sub:"Lee el plan · Lucha en equipo",bear:"🐻 Caza del oso",sword:"🗡️ Choque por la Espada Sagrada",alliance:"🛡️ Guerra de las Tres Alianzas",golden:"Glaives doradas del lunes",leaders:"Líderes de reunión",members:"Miembros de reunión",ratio:"Proporción de tropas",troops:"Tropas",team1:"Equipo 1",team2:"Equipo 2",intel:"Guarda la información del domingo",refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",hint:"Después de guardar, los mismos avisos estarán disponibles en otros dispositivos."},
   tr:{intro:"⚔️ Savaş Duyuruları",sub:"Planı oku · Birlikte savaş",bear:"🐻 Ayı Avı",sword:"🗡️ Kutsal Kılıç Savaşı",alliance:"🛡️ Üç İttifak Savaşı",golden:"Pazartesi Altın Mızraklar",leaders:"Toplanma Liderleri",members:"Toplanma Üyeleri",ratio:"Birlik Oranı",troops:"Birlikler",team1:"1. Takım",team2:"2. Takım",intel:"Pazar istihbaratını sakla",refresh:"🔄 Yenile",edit:"🔐 Yönetici Düzenleme",save:"💾 Kaydet",hint:"Kaydettikten sonra aynı duyurular diğer cihazlarda da görüntülenir."}
  };
+ const EN_LINE_MAP={
+ "집결장: 알카 · 페라 · 로사":"Rally Leaders: Alka · Pera · Rosa",
+ "집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네":"Rally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane",
+ "영웅 없이 X":"No heroes",
+ "비율: 10 · 10 · 80":"Troop Ratio: 10 · 10 · 80",
+ "또는":"Or",
+ "비율: 1 · 10 · 89":"Troop Ratio: 1 · 10 · 89",
+ "병력: 100,000":"Troops: 100,000",
+ "1군: UCT 14:00 (한국시간 23:00) — 투력순":"Team 1: UTC 14:00 (23:00 KST) — Selected by power ranking",
+ "2군: UCT 12:00 (한국시간 21:00) — 선착순 투표":"Team 2: UTC 12:00 (21:00 KST) — First-come, first-served voting",
+ "1군: UCT 12:00 (한국시간 21:00) — 투력순":"Team 1: UTC 12:00 (21:00 KST) — Selected by power ranking",
+ "2군: UCT 14:00 (한국시간 23:00) — 선착순 투표":"Team 2: UTC 14:00 (23:00 KST) — First-come, first-served voting",
+ "❗️ 일요일 정보(Intel)를 아껴두세요":"❗️ Save Sunday Intel",
+ "UTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)":"UTC 00:00 (09:00 KST) — 🚫 Pan / ✅ Do / ✅ Collect",
+ "UTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)":"UTC 08:00 (17:00 KST) — 🚫 Pan / ✅ Do / 🚫 Collect",
+ "UTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)":"UTC 16:00 (01:00 KST) — ✅ Pan / 🚫 Do / 🚫 Collect",
+ "💡 작동 방식":"💡 How it works",
+ "✅ PAN = 정보 스킬 사용 (화면 이동/탐색)":"✅ PAN = Use the Intel skill (navigate / explore)",
+ "DO = 정보 미션 완료":"DO = Complete the Intel mission",
+ "COLLECT = 보상 수령":"COLLECT = Claim rewards",
+ "정보 이벤트":"Intel Event",
+ "(PAN 유지 15시간)":"(Keep PAN active for 15 hours)"
+ };
  async function translateText(text,target){
   if(target==="ko")return text;
+  if(target==="en"&&EN_LINE_MAP[text])return EN_LINE_MAP[text];
   let source=text, protectedTerms=[];
   if(target==="en")for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
   try{
