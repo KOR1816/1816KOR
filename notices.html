@@ -378,7 +378,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   }
   return clean;
  }
- async function applyLanguage(next){
+ async function applyLanguage(next,refreshSource=false){
   lang=next;document.documentElement.lang=lang;
   try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
   const L=labels[lang]||labels.en;
@@ -407,7 +407,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   navIds.forEach((id,i)=>{const a=document.getElementById(id);if(a&&navNames[lang])a.textContent=navNames[lang][i]});
   const footer=document.querySelector("footer");if(footer)footer.textContent="KOR1816 · Together, We Grow Stronger! ❤️";
   for(const el of document.querySelectorAll(".content")){
-   if(!originals.has(el)||(!originals.get(el)&&el.textContent.trim()))originals.set(el,el.textContent);
+   if(refreshSource||!originals.has(el)||(!originals.get(el)&&el.textContent.trim()))originals.set(el,el.textContent);
    const source=koreanOnly(originals.get(el));
    if(lang==="ko"){el.textContent=source;continue}
    const fieldId=el.id;
@@ -424,7 +424,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  }
  select.value=lang;
  select.addEventListener("change",()=>{const u=new URL(location.href);u.searchParams.set("lang",select.value);history.replaceState(null,"",u);void applyLanguage(select.value)});
- window.addEventListener("kor1816-notices-rendered",()=>void applyLanguage(lang));
+ window.addEventListener("kor1816-notices-rendered",()=>void applyLanguage(lang,true));
  window.kor1816ApplyNoticeLanguage=applyLanguage;
  void applyLanguage(lang);
 })();
