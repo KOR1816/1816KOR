@@ -2377,4 +2377,39 @@ html body #castlewar1 #ncWarAttack .nc-war-column{
 }
 </style>
 
+
+<style id="castlewar1-mobile-single-line-nicknames">
+/* Mobile: prevent long nicknames in Castle War 1 attack groups from wrapping and making rows look vertically misaligned. */
+@media(max-width:560px){
+  html body #castlewar1 #ncWarAttack .nc-war-row{align-items:center!important;min-height:48px!important;}
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-member-card,
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-participant-card{
+    min-width:0!important;width:100%!important;box-sizing:border-box!important;
+    align-items:center!important;overflow:hidden!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-participant-card{
+    grid-template-columns:24px 28px minmax(0,1fr)!important;
+    column-gap:5px!important;min-height:38px!important;padding:3px 0!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-member-main{
+    min-width:0!important;width:100%!important;overflow:hidden!important;gap:2px!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-name-line{
+    display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:4px!important;
+    width:100%!important;min-width:0!important;overflow:hidden!important;white-space:nowrap!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-name-line>strong{
+    display:block!important;flex:1 1 auto!important;min-width:0!important;overflow:hidden!important;
+    text-overflow:ellipsis!important;white-space:nowrap!important;overflow-wrap:normal!important;
+    word-break:normal!important;font-size:12px!important;line-height:1.2!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-barracks{
+    flex:0 0 auto!important;font-size:10px!important;white-space:nowrap!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-meta{
+    display:block!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;
+    text-overflow:ellipsis!important;white-space:nowrap!important;font-size:10px!important;line-height:1.15!important;
+  }
+}
+</style>
 </body></html>
