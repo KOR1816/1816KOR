@@ -11,7 +11,7 @@ if(nav.children.length!==items.length||[...nav.children].some((e,i)=>e.dataset.n
 // Delegated navigation fallback for all menu buttons.
 if(navRef)navRef.addEventListener("click",e=>{
  const el=e.target.closest("[data-nav-key]");
- if(!el||!nav.contains(el))return;
+ if(!el||!navRef.contains(el))return;
  const item=items.find(x=>x.key===el.dataset.navKey);
  if(!item)return;
  e.preventDefault();
