@@ -628,14 +628,21 @@ footer{background:#070b14!important;color:#8394b2!important;border-top:1px solid
 @media(max-width:600px){#castlelayout1 .castle-layout1-slots{gap:6px}#castlelayout1 .castle-layout1-column{grid-auto-rows:minmax(66px,auto);gap:6px}#castlelayout1 .castle-layout1-slot{grid-template-columns:28px minmax(0,1fr);gap:5px;padding:5px;min-height:66px}#castlelayout1 .castle-layout1-number{min-height:38px;font-size:12px}#castlelayout1 .castle-layout1-content>.nc-member-card{gap:4px!important}#castlelayout1 .nc-avatar{width:28px!important;height:28px!important;min-width:28px!important}#castlelayout1 .castle-layout1-content .nc-rank-label{min-width:18px}#castlelayout1 .castle-layout1-content .nc-barracks{font-size:10px}}
 </style>
 <style id="castlewar1-spacing-fix">
-/* Keep the Castle participation panel aligned with the other event panels. */
-#battleJoin{width:100%;min-width:0}
-#battleJoin>.card{display:block;width:100%;max-width:none;margin:0 auto;position:relative;left:auto;right:auto;transform:none}
-/* Give Assault, Charge, and Finish the same clearly visible separation as the turret cards. */
-#castlewar1 .nc-war-attack{column-gap:16px;row-gap:16px;padding-left:4px;padding-right:4px;scroll-padding-inline:4px}
-#castlewar1 .nc-war-column{scroll-snap-align:start}
+/* Match the outer title/content panel to Castle Participation (same as the standard event card). */
+#castlewar1.new-castle-page>.card{
+  display:block;width:100%;max-width:none;min-width:0;margin:0 auto;
+  position:static;left:auto;right:auto;transform:none;overflow:visible;
+  padding:20px;border:1px solid #344c70;border-radius:16px;
+  background:linear-gradient(155deg,rgba(24,39,65,.98),rgba(10,17,31,.98));
+  box-shadow:0 10px 28px rgba(0,0,0,.2);
+}
+/* Keep the three attack groups separated like the turret groups on mobile. */
+#castlewar1 #ncWarAttack{column-gap:16px!important;row-gap:16px!important;padding-left:4px!important;padding-right:4px!important;scroll-padding-inline:4px}
+#castlewar1 #ncWarAttack .nc-war-column{scroll-snap-align:start}
 @media(max-width:760px){
-  #castlewar1 .nc-war-attack{grid-template-columns:repeat(3,minmax(290px,1fr));column-gap:16px;row-gap:16px;overflow-x:auto;padding:0 4px 10px}
+  #castlewar1.new-castle-page>.card{padding:12px!important;border-radius:16px!important}
+  #castlewar1 #ncWarAttack{grid-template-columns:repeat(3,minmax(285px,1fr))!important;column-gap:16px!important;row-gap:16px!important;overflow-x:auto!important;padding:0 4px 10px!important}
+  #castlewar1 #ncWarAttack .nc-war-column{min-width:285px!important}
 }
 </style>
 </head><body>
