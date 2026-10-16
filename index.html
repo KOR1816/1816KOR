@@ -1213,7 +1213,7 @@ async function show(id,updateHash=true){
  translatePage(currentLang);
  if(id==="battleJoin"||id==="castlewar1"||id==="castle1")ncRenderJoin();
 }
-async function restorePage(){const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1","castlelayout1"].includes(h)?h:(["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1","castlelayout1"].includes(saved)?saved:"home"),false);}
+async function restorePage(){const valid=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1","castlelayout1"];const params=new URLSearchParams(location.search);const requested=params.get("page");if(requested){const target=valid.includes(requested)?requested:"home";params.delete("page");const query=params.toString();history.replaceState(null,"",location.pathname+(query?"?"+query:"")+"#"+target);return show(target,false);}const h=location.hash.slice(1);const saved=readLocal(PAGE_KEY,"home");return show(valid.includes(h)?h:(valid.includes(saved)?saved:"home"),false);}
 const NAV={ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들","⚔️ 캐슬참전","🔱 캐슬전 1","🏰 캐슬배치 1"],en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"],ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 キャッスル配置","🔱🛡️ キャッスル戦","🪑 席配置","🪓 バイキング","🏆 栄光の瞬間","⚔️ キャッスル参戦","🔱 キャッスル戦 1","🏰 キャッスル配置 1"],zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻","⚔️ 城堡参战","🔱 城堡战 1","🏰 城堡布局 1"],de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente","⚔️ Burgteilnahme","🔱 Burgenkrieg 1","🏰 Burgaufstellung 1"],it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria","⚔️ Partecipa al Castello","🔱 Guerra del Castello 1","🏰 Disposizione Castello 1"],es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria","⚔️ Participación en el Castillo","🔱 Guerra del Castillo 1","🏰 Distribución del Castillo 1"],tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Vikingler","🏆 Zafer Anları","⚔️ Savaşa Katılım","🔱 Kale Savaşı 1","🏰 Kale Yerleşimi 1"]}
 const I18N={
 ko:{
@@ -2018,8 +2018,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
     /* Module scripts execute before DOMContentLoaded. If the real app installed
        its show() function, never let this emergency fallback reset the page. */
     if(window.show!==fallbackShow) return;
-    var current=location.hash.slice(1);
+    var params=new URLSearchParams(location.search);
+    var requested=params.get("page");
+    var current=requested||location.hash.slice(1);
     if(ids.indexOf(current)<0) current="home";
+    if(requested){params.delete("page");var query=params.toString();try{history.replaceState(null,"",location.pathname+(query?"?"+query:"")+"#"+current);}catch(e){}}
     try{fallbackShow(current);}catch(e){fallbackShow("home");}
   });
 })();
