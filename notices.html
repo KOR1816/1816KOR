@@ -47,25 +47,25 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 </head>
 <body>
 <header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
-<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🪓 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a></nav>
+<nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🪓 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a><a id="battleJoinLink" href="./?lang=ko#battleJoin">⚔️ 캐슬참전</a><a id="castlewar1Link" href="./?lang=ko#castlewar1">🔱 캐슬전 1</a><a id="castlelayout1Link" href="./?lang=ko#castlelayout1">🏰 캐슬배치 1</a></nav>
 <script>
 (function(){
  const p=new URLSearchParams(location.search), urlLang=p.get("lang");
  let lang=urlLang||"ko";
  try{lang=urlLang||localStorage.getItem("kor1816_lang")||"ko"}catch{}
  const labels={
- ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들"],
- en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments"],
- ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 城配置","⚔️ 城戦","🪑 席配置","🪓 バイキング","🏆 栄光の瞬間"],
- zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻"],
- de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente"],
- it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria"],
- es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Formación del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria"],
- tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Viking","🏆 Zafer Anları"]
+ ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들","⚔️ 캐슬참전","🔱 캐슬전 1","🏰 캐슬배치 1"],
+ en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"],
+ ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🛡️ 3大連盟戦","🏰 城配置","⚔️ 城戦","🪑 席配置","🪓 バイキング","🏆 栄光の瞬間","⚔️ 城戦参加","🔱 城戦 1","🏰 城配置 1"],
+ zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🛡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻","⚔️ 参加城战","🔱 城堡战 1","🏰 城堡布局 1"],
+ de:["🏠 Startseite","📢 Hinweise","⚔️ Heiliges Schwertduell","🛡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente","⚔️ Burgkampf-Teilnahme","🔱 Burgenkrieg 1","🏰 Burgaufstellung 1"],
+ it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🛡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria","⚔️ Partecipazione alla guerra","🔱 Guerra del Castello 1","🏰 Disposizione del Castello 1"],
+ es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🛡️ Guerra de las Tres Alianzas","🏰 Formación del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria","⚔️ Participación en la batalla","🔱 Guerra del Castillo 1","🏰 Formación del Castillo 1"],
+ tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🛡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Viking","🏆 Zafer Anları","⚔️ Kale Savaşına Katılım","🔱 Kale Savaşı 1","🏰 Kale Dizilimi 1"]
  };
  if(!labels[lang])lang="ko";
- const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink"];
- const paths=["./","./notices.html","./#teams","./#alliance","./#castle","./#castlewar","./#seating","./#viking","./glory.html"];
+ const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
+ const paths=["./","./notices.html","./#teams","./#alliance","./#castle","./#castlewar","./#seating","./#viking","./glory.html","./#battleJoin","./#castlewar1","./#castlelayout1"];
  ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];const href=paths[i],hashAt=href.indexOf("#"),base=hashAt>=0?href.slice(0,hashAt):href,hash=hashAt>=0?href.slice(hashAt):"";el.href=base+(base.includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)+hash;});
  try{localStorage.setItem("kor1816_lang",lang)}catch{}
 })();
@@ -196,7 +196,7 @@ try{const app=initializeApp(firebaseConfig);try{await signInAnonymously(getAuth(
 header{box-sizing:border-box;position:relative;width:100%;padding:28px 20px!important;background:linear-gradient(135deg,#101d35,#172b4e 55%,#251d32)!important;text-align:center!important;border-bottom:1px solid #3d527c!important}
 header h1{display:block;width:100%;margin:0!important;padding:0!important;text-align:center!important;font-family:Arial,"Malgun Gothic",sans-serif!important;font-size:34px!important;line-height:1.25!important;letter-spacing:0!important;color:#fff!important;text-shadow:0 2px 12px #000!important;box-sizing:border-box}
 header .sub{display:block;width:100%;margin:8px 0 0!important;padding:0!important;text-align:center!important;font-family:Arial,"Malgun Gothic",sans-serif!important;font-size:16px!important;line-height:1.4!important;letter-spacing:0!important;opacity:.8!important;color:#eef2ff!important;box-sizing:border-box}
-nav#mainNav,nav#siteNav{display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important;padding:14px!important;margin:0!important;background:rgba(7,12,23,.94)!important;border-bottom:1px solid #263b60!important;position:sticky!important;top:0!important;z-index:5!important}
+nav#mainNav,nav#siteNav{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch!important;justify-content:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important;padding:14px!important;margin:0!important;background:rgba(7,12,23,.94)!important;border-bottom:1px solid #263b60!important;position:sticky!important;top:0!important;z-index:5!important}
 nav#mainNav a,nav#mainNav button,nav#siteNav a{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:44px!important;height:100%!important;margin:0!important;padding:8px 6px!important;border:1px solid #39557f!important;border-radius:10px!important;background:linear-gradient(180deg,#243a61,#172946)!important;color:#fff!important;text-decoration:none!important;font-family:Arial,"Malgun Gothic",sans-serif!important;font-size:14px!important;font-weight:700!important;line-height:1.2!important;letter-spacing:0!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;cursor:pointer!important;box-shadow:0 3px 10px rgba(0,0,0,.25)!important}
 nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:linear-gradient(180deg,#3a5785,#243c63)!important;border-color:#e5b84b!important;color:#fff!important}
 @media(max-width:1000px){nav#mainNav,nav#siteNav{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;padding:12px 8px!important}nav#mainNav a,nav#mainNav button,nav#siteNav a{min-height:42px!important;padding:8px 5px!important;font-size:13px!important}}
