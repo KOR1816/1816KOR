@@ -45,10 +45,16 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 @media(max-width:600px){html body .intro h2{font-size:22px!important;line-height:1.35!important}}
 </style>
 <style id="notice-shared-language-selector">
-.kor-lang{position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;margin:0;z-index:10}.kor-lang label{font-size:12px;opacity:.85}.kor-lang select{padding:7px 28px 7px 9px;border-radius:9px;border:1px solid #49688f;background:#1b2745;color:#fff;font-weight:700;cursor:pointer}.kor-lang select:focus{outline:none;border-color:#e5b84b}header{position:relative;padding-right:20px;text-align:center}</style>
+.kor-lang{position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;margin:0;z-index:10}
+.kor-lang label{font-size:12px;opacity:.85}
+.kor-lang select{padding:7px 28px 7px 9px;border-radius:9px;border:1px solid #49688f;background:#1b2745;color:#fff;font-weight:700;cursor:pointer}
+.kor-lang select:focus{outline:none;border-color:#e5b84b}
+header{position:relative;padding-right:20px}
+@media(max-width:600px){.kor-lang{top:10px;right:12px}.kor-lang label{display:none}.kor-lang select{max-width:115px;padding:6px 22px 6px 7px;font-size:12px}header h1{padding-right:110px!important}}
+</style>
 </head>
 <body>
-<header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="noticeLanguage">언어</label><select id="noticeLanguage" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option><option value="tr">Türkçe</option></select></div></header>
+<header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="noticeLanguage">언어</label><select id="noticeLanguage" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option></select></div></header>
 <nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🪓 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a><a id="battleJoinLink" href="./?lang=ko#battleJoin">⚔️ 캐슬참전</a><a id="castlewar1Link" href="./?lang=ko#castlewar1">🔱 캐슬전 1</a><a id="castlelayout1Link" href="./?lang=ko#castlelayout1">🏰 캐슬배치 1</a></nav>
 <script>
 (function(){
@@ -115,28 +121,6 @@ goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n\nUTC00:00 (�
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
-const savedEnglish={};
-function rememberEnglish(source){
- if(!source||typeof source!=="object")return;
- for(const id of ids){
-  const lines=String(source[id]||"").split(/\\r?\\n/);
-  for(let i=0;i<lines.length-1;i++){
-   const ko=lines[i].trim(), en=lines[i+1].trim();
-   if(/[가-힣]/.test(ko)&&/[A-Za-z]{2,}/.test(en)&&!/[가-힣]/.test(en)){
-    savedEnglish[id+"::"+ko]=en;
-   }
-  }
- }
-}
-rememberEnglish({
- bearLeaders:"집결장: 알카 · 페라 · 로사\\nRally Leaders: Alka · Pera · Rosa",
- bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\\n영웅 없이 X\\nNo heroes",
- bearRatio:"비율: 10 · 10 · 80\\nTroop Ratio: 10 · 10 · 80\\n또는 / OR\\n비율: 1 · 10 · 89\\nTroop Ratio: 1 · 10 · 89",
- bearTroops:"병력: 100,000\\nTroops: 100,000",
- swordTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
- swordTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting",
- allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
-});
 function say(s){
  status.textContent=s;
  const lang=new URLSearchParams(location.search).get("lang")||(()=>{try{return localStorage.getItem("kor1816_lang")||"ko"}catch{return "ko"}})();
@@ -170,9 +154,9 @@ function render(){data=cleanNoticeData(data);for(const id of ids){document.getEl
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local){rememberEnglish(local);data={...defaults,...cleanNoticeData(local)}} data=cleanNoticeData(normalizeSword(normalizeBear(data))); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local) data={...defaults,...cleanNoticeData(local)}; data=cleanNoticeData(normalizeSword(normalizeBear(data))); render(); say("저장된 공지를 불러왔습니다.");
  if(!docRef)return;
- try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){rememberEnglish(cloud);const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
+ try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
  else{data=cleanNoticeData(normalizeSword(normalizeBear({...defaults,...cloud})));writeLocal();render()}
  }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
@@ -243,7 +227,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
 <script>
 (function(){
  const select=document.getElementById("noticeLanguage");
- const supported=["ko","en","ja","zh","de","it","es","tr"];
+ const supported=["ko","en"];
  let lang=new URLSearchParams(location.search).get("lang");
  try{lang=lang||localStorage.getItem("kor1816_lang")||"ko"}catch(e){}
  if(!supported.includes(lang))lang="ko";
@@ -252,85 +236,12 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  const englishTerms=Object.keys(terms);
  const labels={
   ko:{intro:"⚔️ 전투 공지",sub:"킹샷 전투 공지",bear:"🐻 곰사냥",sword:"🗡️ 성검쟁탈",alliance:"🛡️ 3대연맹전",golden:"골든 글레이브 월요일",leaders:"집결장",members:"집결원",ratio:"비율",troops:"병력",team1:"1군",team2:"2군",intel:"일요일 정보(Intel)를 아껴두세요",refresh:"🔄 새로고침",edit:"🔐 관리자 수정",save:"💾 저장",hint:"수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다."},
-  en:{intro:"⚔️ Battle Orders",sub:"READ THE PLAN · FIGHT AS ONE",bear:"🐻 Bear Hunt",sword:"🗡️ Holy Sword Clash",alliance:"🛡️ Three Alliances War",golden:"Golden Glaives Monday",leaders:"RALLY LEADERS",members:"RALLY MEMBERS",ratio:"TROOP RATIO",troops:"TROOPS",team1:"TEAM 1",team2:"TEAM 2",intel:"SAVE SUNDAY INTEL",refresh:"🔄 Refresh",edit:"🔐 Admin Edit",save:"💾 Save",hint:"Save after editing to share the same notices across devices."},
-  ja:{intro:"⚔️ 戦闘のお知らせ",sub:"作戦を確認 · 一丸となって戦おう",bear:"🐻 熊狩り",sword:"🗡️ 聖剣争奪",alliance:"🛡️ 3大連盟戦",golden:"ゴールデングレイブ月曜日",leaders:"集結リーダー",members:"集結メンバー",ratio:"兵士比率",troops:"兵士数",team1:"第1チーム",team2:"第2チーム",intel:"日曜日の情報を温存",refresh:"🔄 更新",edit:"🔐 管理者編集",save:"💾 保存",hint:"保存すると他の端末でも同じお知らせを確認できます。"},
-  zh:{intro:"⚔️ 战斗公告",sub:"查看计划 · 团结作战",bear:"🐻 熊猎",sword:"🗡️ 圣剑争夺",alliance:"🛡️ 三大联盟战",golden:"黄金长戟星期一",leaders:"集结发起者",members:"集结成员",ratio:"兵力比例",troops:"兵力",team1:"第一队",team2:"第二队",intel:"保留星期日情报",refresh:"🔄 刷新",edit:"🔐 管理员编辑",save:"💾 保存",hint:"保存后，其他设备也能看到相同公告。"},
-  de:{intro:"⚔️ Kampfmeldungen",sub:"Plan lesen · Gemeinsam kämpfen",bear:"🐻 Bärenjagd",sword:"🗡️ Kampf um das Heilige Schwert",alliance:"🛡️ Krieg der drei Allianzen",golden:"Goldene Glefen am Montag",leaders:"Rallye-Anführer",members:"Rallye-Mitglieder",ratio:"Truppenverhältnis",troops:"Truppen",team1:"Team 1",team2:"Team 2",intel:"Sonntags-Intel aufbewahren",refresh:"🔄 Aktualisieren",edit:"🔐 Admin-Bearbeitung",save:"💾 Speichern",hint:"Nach dem Speichern sind dieselben Meldungen auch auf anderen Geräten verfügbar."},
-  it:{intro:"⚔️ Ordini di battaglia",sub:"Leggi il piano · Combatti insieme",bear:"🐻 Caccia all'orso",sword:"🗡️ Scontro per la Spada Sacra",alliance:"🛡️ Guerra delle Tre Alleanze",golden:"Lance d'oro del lunedì",leaders:"Leader di raduno",members:"Partecipanti al raduno",ratio:"Rapporto truppe",troops:"Truppe",team1:"Squadra 1",team2:"Squadra 2",intel:"Conserva le informazioni della domenica",refresh:"🔄 Aggiorna",edit:"🔐 Modifica amministratore",save:"💾 Salva",hint:"Dopo il salvataggio, gli stessi avvisi saranno visibili anche sugli altri dispositivi."},
-  es:{intro:"⚔️ Órdenes de batalla",sub:"Lee el plan · Lucha en equipo",bear:"🐻 Caza del oso",sword:"🗡️ Choque por la Espada Sagrada",alliance:"🛡️ Guerra de las Tres Alianzas",golden:"Glaives doradas del lunes",leaders:"Líderes de reunión",members:"Miembros de reunión",ratio:"Proporción de tropas",troops:"Tropas",team1:"Equipo 1",team2:"Equipo 2",intel:"Guarda la información del domingo",refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",hint:"Después de guardar, los mismos avisos estarán disponibles en otros dispositivos."},
-  tr:{intro:"⚔️ Savaş Duyuruları",sub:"Planı oku · Birlikte savaş",bear:"🐻 Ayı Avı",sword:"🗡️ Kutsal Kılıç Savaşı",alliance:"🛡️ Üç İttifak Savaşı",golden:"Pazartesi Altın Mızraklar",leaders:"Toplanma Liderleri",members:"Toplanma Üyeleri",ratio:"Birlik Oranı",troops:"Birlikler",team1:"1. Takım",team2:"2. Takım",intel:"Pazar istihbaratını sakla",refresh:"🔄 Yenile",edit:"🔐 Yönetici Düzenleme",save:"💾 Kaydet",hint:"Kaydettikten sonra aynı duyurular diğer cihazlarda da görüntülenir."}
+  en:{intro:"⚔️ Battle Orders",sub:"READ THE PLAN · FIGHT AS ONE",bear:"🐻 Bear Hunt",sword:"🗡️ Holy Sword Clash",alliance:"🛡️ Three Alliances War",golden:"Golden Glaives Monday",leaders:"RALLY LEADERS",members:"RALLY MEMBERS",ratio:"TROOP RATIO",troops:"TROOPS",team1:"TEAM 1",team2:"TEAM 2",intel:"SAVE SUNDAY INTEL",refresh:"🔄 Refresh",edit:"🔐 Admin Edit",save:"💾 Save",hint:"Save after editing to share the same notices across devices."}
  };
- const EN_LINE_MAP={
- "집결장: 알카 · 페라 · 로사":"Rally Leaders: Alka · Pera · Rosa",
- "집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네":"Rally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane",
- "영웅 없이 X":"No heroes",
- "비율: 10 · 10 · 80":"Troop Ratio: 10 · 10 · 80",
- "또는":"Or",
- "비율: 1 · 10 · 89":"Troop Ratio: 1 · 10 · 89",
- "병력: 100,000":"Troops: 100,000",
- "1군: UCT 14:00 (한국시간 23:00) — 투력순":"Team 1: UTC 14:00 (23:00 KST) — Selected by power ranking",
- "2군: UCT 12:00 (한국시간 21:00) — 선착순 투표":"Team 2: UTC 12:00 (21:00 KST) — First-come, first-served voting",
- "1군: UCT 12:00 (한국시간 21:00) — 투력순":"Team 1: UTC 12:00 (21:00 KST) — Selected by power ranking",
- "2군: UCT 14:00 (한국시간 23:00) — 선착순 투표":"Team 2: UTC 14:00 (23:00 KST) — First-come, first-served voting",
- "❗️ 일요일 정보(Intel)를 아껴두세요":"❗️ Save Sunday Intel",
- "UTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)":"UTC 00:00 (09:00 KST) — 🚫 Pan / ✅ Do / ✅ Collect",
- "UTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)":"UTC 08:00 (17:00 KST) — 🚫 Pan / ✅ Do / 🚫 Collect",
- "UTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)":"UTC 16:00 (01:00 KST) — ✅ Pan / 🚫 Do / 🚫 Collect",
- "💡 작동 방식":"💡 How it works",
- "✅ PAN = 정보 스킬 사용 (화면 이동/탐색)":"✅ PAN = Use the Intel skill (navigate / explore)",
- "DO = 정보 미션 완료":"DO = Complete the Intel mission",
- "COLLECT = 보상 수령":"COLLECT = Claim rewards",
- "정보 이벤트":"Intel Event",
- "(PAN 유지 15시간)":"(Keep PAN active for 15 hours)"
- };
- function normalizeNoticeLine(text){
-  return String(text||"").normalize("NFC").replace(/[\u00a0\u2007\u202f]/g," ").replace(/[ \t]+/g," ").trim();
- }
- function englishNoticeLine(text){
-  const line=normalizeNoticeLine(text);
-  if(EN_LINE_MAP[line])return EN_LINE_MAP[line];
-  // Match the game notice text even if an editor changes spacing or UTC formatting.
-  const timeLine=line.replace(/UTC\s*(00|08|16):00/g,"UTC $1:00");
-  if(EN_LINE_MAP[timeLine])return EN_LINE_MAP[timeLine];
-  const m=line.match(/^UTC\s*(00|08|16):00\s*\(한국\s*(09|17|01):00\)\s*—\s*(.*)$/);
-  if(m){
-   const schedule=m[1]==="00"?"🚫 Pan / ✅ Do / ✅ Collect":m[1]==="08"?"🚫 Pan / ✅ Do / 🚫 Collect":"✅ Pan / 🚫 Do / 🚫 Collect";
-   return "UTC "+m[1]+":00 ("+m[2]+" KST) — "+schedule;
-  }
-  // Robust fallback for common notice variants and edited wording.
-  let out=line
-   .replace(/집결장:?/g,"Rally Leaders:")
-   .replace(/집결원:?/g,"Rally Members:")
-   .replace(/비율:?/g,"Troop Ratio:")
-   .replace(/병력:?/g,"Troops:")
-   .replace(/영웅 없이\s*X?/g,"No heroes")
-   .replace(/일요일 정보\s*\(Intel\)를 아껴두세요/g,"Save Sunday Intel")
-   .replace(/정보 이벤트/g,"Intel Event")
-   .replace(/작동 방식/g,"How it works")
-   .replace(/정보 스킬 사용\s*\(화면 이동\/탐색\)/g,"Use the Intel skill (navigate / explore)")
-   .replace(/정보 미션 완료/g,"Complete the Intel mission")
-   .replace(/보상 수령/g,"Claim rewards")
-   .replace(/탐색\(Pan\)/g,"Pan")
-   .replace(/진행\(Do\)/g,"Do")
-   .replace(/수령\(Collect\)/g,"Collect")
-   .replace(/한국시간|한국/g,"KST")
-   .replace(/투력순으로 선정|투력순/g,"Selected by power ranking")
-   .replace(/선착순 투표로 선정|선착순 투표/g,"First-come, first-served voting")
-   .replace(/1군:?/g,"Team 1:")
-   .replace(/2군:?/g,"Team 2:")
-   .replace(/또는/g,"or")
-   .replace(/PAN 유지 15시간/g,"Keep PAN active for 15 hours");
-  return out===line&&/[가-힣]/.test(line)?line.replace(/[가-힣]+/g,""):out;
- }
  async function translateText(text,target){
-  const clean=normalizeNoticeLine(text);
   if(target==="ko")return text;
-  if(target==="en"){
-   const exact=englishNoticeLine(clean);
-   if(exact)return exact;
-  }
   let source=text, protectedTerms=[];
-  if(target==="en")for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
+  for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
   try{
    const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(target)+"&dt=t&q="+encodeURIComponent(source);
    const res=await fetch(url,{mode:"cors"});
@@ -356,31 +267,17 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   if(sub)sub.textContent=lang==="ko"?"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!":"Kingdom 1816 · "+({en:"Bite back if challenged! · Bear-loving community!!",ja:"挑発したら噛みつく！ · クマ好きの集まり!!",zh:"惹我们就反击！ · 熊迷聚会!!",de:"Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"}[lang]||"");
   const navNames={
    ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들","⚔️ 캐슬참전","🔱 캐슬전 1","🏰 캐슬배치 1"],
-   en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"],
-   ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 城の配置","🔱🛡️ 城戦","🪑 配置","🪓 バイキング","🏆 栄光の瞬間","⚔️ 城戦参加","🔱 城戦 1","🏰 城の配置 1"],
-   zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻","⚔️ 城堡参战","🔱 城堡战 1","🏰 城堡布局 1"],
-   de:["🏠 Start","📢 Meldungen","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente","⚔️ Burgkampf-Teilnahme","🔱 Burgenkrieg 1","🏰 Burgaufstellung 1"],
-   it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria","⚔️ Partecipazione al castello","🔱 Guerra del Castello 1","🏰 Disposizione del Castello 1"],
-   es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria","⚔️ Participación en el castillo","🔱 Guerra del Castillo 1","🏰 Distribución del Castillo 1"],
-   tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Vikingler","🏆 Zafer Anları","⚔️ Kale Katılımı","🔱 Kale Savaşı 1","🏰 Kale Yerleşimi 1"]
+   en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"]
   };
   const navIds=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
-  navIds.forEach((id,i)=>{const a=document.getElementById(id);if(a&&navNames[lang])a.textContent=navNames[lang][i]});
+  if(navNames[lang])navIds.forEach((id,i)=>{const a=document.getElementById(id);if(a)a.textContent=navNames[lang][i]});
   const footer=document.querySelector("footer");if(footer)footer.textContent="KOR1816 · Together, We Grow Stronger! ❤️";
   for(const el of document.querySelectorAll(".content")){
    if(!originals.has(el)||(!originals.get(el)&&el.textContent.trim()))originals.set(el,el.textContent);
    const source=koreanOnly(originals.get(el));
    if(lang==="ko"){el.textContent=source;continue}
-   const fieldId=el.id;
    const out=[];
-   for(const line of source.split("\n")){
-    if(!line.trim()){out.push("");continue}
-    const cleanLine=normalizeNoticeLine(line);
-    const saved=savedEnglish[fieldId+"::"+cleanLine];
-    // Prefer existing bilingual notice text, then the built-in English glossary, then online translation.
-    const mapped=lang==="en"?englishNoticeLine(cleanLine):null;
-    out.push(lang==="en"&&(saved||mapped)?(saved||mapped):await translateText(cleanLine,lang));
-   }
+   for(const line of source.split("\n"))out.push(line.trim()?await translateText(line,lang):"");
    el.textContent=out.join("\n");
   }
  }
