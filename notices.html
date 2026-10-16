@@ -117,7 +117,7 @@ swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순",
 swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표",
 allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순",
 allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표",
-goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n\nUTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\nUTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\nUTC00:00 (한국 09:00) — ✅ 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\n\n💡 작동 방식\n✅ PAN = 정보 스킬 사용 (화면 이동/탐색)\nDO = 정보 미션 완료\nCOLLECT = 보상 수령\n\n정보 이벤트\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\n(PAN 유지 15시간)
+goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n\nUTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\nUTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\nUTC00:00 (한국 09:00) — ✅ 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\n\n💡 작동 방식\n✅ PAN = 정보 스킬 사용 (화면 이동/탐색)\nDO = 정보 미션 완료\nCOLLECT = 보상 수령\n\n정보 이벤트\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\n(PAN 유지 15시간)"
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
@@ -130,12 +130,12 @@ function say(s){
  }
 }
 function koreanOnly(value){
- return String(value||"").split(/\\r?\\n/).filter(line=>{
+ return String(value||"").split(/\r?\n/).filter(line=>{
   const t=line.trim();
   if(!t)return true;
   if(/[가-힣]/.test(t))return true;
   return !/[A-Za-z]{2,}/.test(t);
- }).join("\\n").replace(/\\n{3,}/g,"\\n\\n").trim();
+ }).join("\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 function cleanNoticeData(source){
  const out={...source};
@@ -271,8 +271,8 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
    const source=koreanOnly(originals.get(el));
    if(lang==="ko"){el.textContent=source;continue}
    const out=[];
-   for(const line of source.split("\\n"))out.push(line.trim()?await translateText(line,lang):"");
-   el.textContent=out.join("\\n");
+   for(const line of source.split("\n"))out.push(line.trim()?await translateText(line,lang):"");
+   el.textContent=out.join("\n");
   }
  }
  select.value=lang;
