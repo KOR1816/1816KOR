@@ -2350,7 +2350,7 @@ html body #castlewar1 #ncWarTurrets .nc-turret-column{min-width:285px!important}
 
 
 <style id="castlewar1-attack-column-width-match-turrets">
-/* Match the turret grid: fill desktop width evenly; keep 285px minimum columns on narrow screens. */
+/* Match each attack group to the turret in the same column: identical grid tracks, gap, and container width. */
 html body #castlewar1 #ncWarAttack.nc-war-attack{
   display:grid!important;
   width:100%!important;
@@ -2359,7 +2359,9 @@ html body #castlewar1 #ncWarAttack.nc-war-attack{
   gap:12px!important;
   align-items:start!important;
   overflow-x:auto!important;
-  padding-bottom:8px!important;
+  padding:0 0 8px!important;
+  margin-left:0!important;
+  margin-right:0!important;
 }
 html body #castlewar1 #ncWarAttack .nc-war-column{
   box-sizing:border-box!important;
