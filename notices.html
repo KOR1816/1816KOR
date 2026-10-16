@@ -324,20 +324,29 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  }
  async function translateText(text,target){
   const clean=normalizeNoticeLine(text);
-  if(target==="ko")return text;
-  if(target==="en"){
-   const exact=englishNoticeLine(clean);
-   if(exact)return exact;
+  if(target==="ko")return clean;
+  const fixed={
+   "집결장: 알카 · 페라 · 로사":["Rally Leaders: Alka · Pera · Rosa","集結リーダー：Alka · Pera · Rosa","集结队长：Alka · Pera · Rosa","Versammlungsleiter: Alka · Pera · Rosa","Leader raduno: Alka · Pera · Rosa","Líderes de reunión: Alka · Pera · Rosa","Toplanma liderleri: Alka · Pera · Rosa"],
+   "집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네":["Rally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane","集結メンバー：Amadeus · Chenko · Yeonwoo · Margo · Amane","集结成员：Amadeus · Chenko · Yeonwoo · Margo · Amane","Versammlungsteilnehmer: Amadeus · Chenko · Yeonwoo · Margo · Amane","Membri raduno: Amadeus · Chenko · Yeonwoo · Margo · Amane","Miembros de reunión: Amadeus · Chenko · Yeonwoo · Margo · Amane","Toplanma üyeleri: Amadeus · Chenko · Yeonwoo · Margo · Amane"],
+   "영웅 없이 X":["No heroes","英雄なし","不带英雄","Keine Helden","Senza eroi","Sin héroes","Kahramansız"],
+   "비율: 10 · 10 · 80":["Troop Ratio: 10 · 10 · 80","兵士比率：10 · 10 · 80","兵力比例：10 · 10 · 80","Truppenverhältnis: 10 · 10 · 80","Rapporto truppe: 10 · 10 · 80","Proporción de tropas: 10 · 10 · 80","Birlik oranı: 10 · 10 · 80"],
+   "또는":["OR","または","或","ODER","OPPURE","O","VEYA"],
+   "비율: 1 · 10 · 89":["Troop Ratio: 1 · 10 · 89","兵士比率：1 · 10 · 89","兵力比例：1 · 10 · 89","Truppenverhältnis: 1 · 10 · 89","Rapporto truppe: 1 · 10 · 89","Proporción de tropas: 1 · 10 · 89","Birlik oranı: 1 · 10 · 89"],
+   "병력: 100,000":["Troops: 100,000","兵力：100,000","兵力：100,000","Truppen: 100.000","Truppe: 100.000","Tropas: 100.000","Birlik: 100.000"],
+   "❗️ 일요일 정보(Intel)를 아껴두세요":["❗️ Save Sunday Intel","❗️ 日曜日のインテルを温存","❗️ 留好周日情报","❗️ Sonntags-Intel aufbewahren","❗️ Conserva le informazioni della domenica","❗️ Guarda la información del domingo","❗️ Pazar istihbaratını sakla"],
+   "💡 작동 방식":["💡 How it works","💡 操作方法","💡 操作方式","💡 So funktioniert es","💡 Come funziona","💡 Cómo funciona","💡 Nasıl çalışır"],
+   "정보 이벤트":["Intel Event","インテルイベント","情报活动","Intel-Event","Evento Intel","Evento Intel","İstihbarat etkinliği"],
+   "(PAN 유지 15시간)":["(Keep PAN active for 15 hours)","（PANを15時間維持）","（保持 PAN 15 小时）","(PAN 15 Stunden aktiv halten)","(Mantieni PAN attivo per 15 ore)","(Mantén PAN activo durante 15 horas)","(PAN'ı 15 saat etkin tut)"]
+  };
+  const langs={en:0,ja:1,zh:2,de:3,it:4,es:5,tr:6};
+  if(fixed[clean]&&langs[target]!==undefined)return fixed[clean][langs[target]];
+  if(target==="en"){const exact=englishNoticeLine(clean);if(exact)return exact;}
+  const schedule=clean.match(/^UTC(00|08|16):00 \(한국 (09|17|01):00\) — (.*)$/);
+  if(schedule&&target==="en"){
+   const actions=schedule[1]==="00"?"🚫 Pan / ✅ Do / ✅ Collect":schedule[1]==="08"?"🚫 Pan / ✅ Do / 🚫 Collect":"✅ Pan / 🚫 Do / 🚫 Collect";
+   return "UTC "+schedule[1]+":00 ("+schedule[2]+" KST) — "+actions;
   }
-  let source=text, protectedTerms=[];
-  if(target==="en")for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
-  try{
-   const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(target)+"&dt=t&q="+encodeURIComponent(source);
-   const res=await fetch(url,{mode:"cors"});
-   if(res.ok){const d=await res.json(),out=Array.isArray(d?.[0])?d[0].map(x=>x?.[0]||"").join(""):"";if(out)source=out}
-  }catch(e){console.warn("Notice translation unavailable",e)}
-  for(const [token,value] of protectedTerms)source=source.split(token).join(value);
-  return source;
+  return clean;
  }
  async function applyLanguage(next){
   lang=next;document.documentElement.lang=lang;
