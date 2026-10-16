@@ -248,6 +248,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  try{lang=lang||localStorage.getItem("kor1816_lang")||"ko"}catch(e){}
  if(!supported.includes(lang))lang="ko";
  const originals=new WeakMap();
+ let translationRun=0;
  const terms={"곰사냥":"Bear Hunt","집결장":"Rally Leader","집결원":"Rally Member","성검쟁탈":"Holy Sword Clash","3대연맹전":"Three Alliances War","골든 글레이브":"Golden Glaives","투력순":"Power Ranking","선착순 투표":"First-Come, First-Served Voting","일요일 정보":"Sunday Intel","정보 스킬":"Intel skill","정보 미션":"Intel missions","보상 수령":"Claim rewards","탐색":"Pan","진행":"Do","수령":"Collect","영웅 없이":"No heroes","병력":"Troops","비율":"Troop Ratio"};
  const englishTerms=Object.keys(terms);
  const labels={
@@ -379,6 +380,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   return clean;
  }
  async function applyLanguage(next,refreshSource=false){
+  const thisRun=++translationRun;
   lang=next;document.documentElement.lang=lang;
   try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
   const L=labels[lang]||labels.en;
@@ -418,13 +420,15 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
     const saved=savedEnglish[fieldId+"::"+cleanLine];
     // Use saved bilingual text when present; otherwise always run the built-in static translator.
     out.push(lang==="en"&&saved?saved:await translateText(cleanLine,lang));
+    if(thisRun!==translationRun)return;
    }
    el.textContent=out.join("\n");
   }
  }
+ if(thisRun!==translationRun)return;
  select.value=lang;
- select.addEventListener("change",()=>{const u=new URL(location.href);u.searchParams.set("lang",select.value);history.replaceState(null,"",u);void applyLanguage(select.value)});
  window.addEventListener("kor1816-notices-rendered",()=>void applyLanguage(lang,true));
+ select.addEventListener("change",()=>{const u=new URL(location.href);u.searchParams.set("lang",select.value);history.replaceState(null,"",u);void applyLanguage(select.value)});
  window.kor1816ApplyNoticeLanguage=applyLanguage;
  void applyLanguage(lang);
 })();
