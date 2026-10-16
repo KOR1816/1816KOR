@@ -2412,4 +2412,22 @@ html body #castlewar1 #ncWarAttack .nc-war-column{
   }
 }
 </style>
+
+<style id="castlewar1-mobile-keep-tier-next-to-nickname">
+/* Attack groups: keep the barracks tier immediately after the nickname, matching the turret cards. */
+@media(max-width:560px){
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-name-line{
+    justify-content:flex-start!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-name-line>strong{
+    flex:0 1 auto!important;
+    width:auto!important;
+    max-width:100%!important;
+  }
+  html body #castlewar1 #ncWarAttack .nc-war-row .nc-name-line .nc-barracks{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+  }
+}
+</style>
 </body></html>
