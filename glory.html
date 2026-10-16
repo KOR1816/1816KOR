@@ -237,4 +237,31 @@ html body main > .hero > h2{
 }
 </style>
 
+<style id="glory-translation-result-fit-20261016">
+/* Long win/loss words (especially Turkish, German, Italian and Spanish) must stay inside each score panel. */
+html body #records .matchup,
+html body #records .side,
+html body #records .phases,
+html body #records .phase{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html body #records .result{
+  display:block!important;max-width:100%!important;min-width:0!important;
+  font-size:clamp(18px,4.2vw,44px)!important;line-height:1.08!important;
+  letter-spacing:0!important;white-space:normal!important;
+  overflow-wrap:anywhere!important;word-break:normal!important;
+}
+html body #records .phase strong{
+  display:block!important;max-width:100%!important;min-width:0!important;
+  font-size:clamp(11px,2.5vw,18px)!important;line-height:1.2!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
+}
+html body #records .phase span,
+html body #records .opponent-label{min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important;line-height:1.25!important}
+@media(max-width:560px){
+  html body #records .matchup{gap:8px!important;padding-left:0!important;padding-right:0!important}
+  html body #records .result{font-size:clamp(17px,5vw,24px)!important}
+  html body #records .phase{padding:8px 5px!important}
+  html body #records .phase strong{font-size:clamp(11px,3.1vw,14px)!important}
+}
+</style>
+
 </body></html>
