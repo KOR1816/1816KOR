@@ -8,13 +8,18 @@ function url(item,lang){const u=new URL(item.href,location.href);u.searchParams.
 let navRef=null;function refresh(){const nav=document.getElementById("mainNav")||document.getElementById("siteNav");if(!nav)return;navRef=nav;const lang=getLang(),active=activeRoute(),isIndex=!!document.getElementById("mainNav")&&!/notices\.html$/i.test(location.pathname);
 if(nav.children.length!==items.length||[...nav.children].some((e,i)=>e.dataset.navKey!==items[i].key)){nav.replaceChildren();items.forEach((it,i)=>{const e=document.createElement(isIndex?"button":"a");e.id="nav-asd"+(i+1);e.dataset.navKey=it.key;if(isIndex){e.type="button";e.dataset.route=it.route}nav.appendChild(e)})}
 [...nav.children].forEach((e,i)=>{const it=items[i],label=it.labels[langs.indexOf(lang)]||it.labels[0],href=url(it,lang);if(e.textContent!==label)e.textContent=label;if(isIndex){if(e.dataset.route!==it.route)e.dataset.route=it.route}else if(e.getAttribute("href")!==href)e.setAttribute("href",href);const on=it.route===active;if(e.classList.contains("nav-active")!==on)e.classList.toggle("nav-active",on);if(on){if(e.getAttribute("aria-current")!=="page")e.setAttribute("aria-current","page")}else e.removeAttribute("aria-current")})}
-// Delegated navigation fallback for all menu buttons.
+// One navigation path: switch embedded pages with show(); only standalone pages navigate.
 if(navRef)navRef.addEventListener("click",e=>{
  const el=e.target.closest("[data-nav-key]");
  if(!el||!navRef.contains(el))return;
  const item=items.find(x=>x.key===el.dataset.navKey);
  if(!item)return;
  e.preventDefault();
+ e.stopImmediatePropagation();
+ if(navRef.id==="mainNav" && item.route!=="notices" && item.route!=="glory" && typeof window.show==="function"){
+   window.show(item.route,true);
+   return;
+ }
  location.href=url(item,getLang());
 });
 window.KOR1816Nav={items,refresh};
