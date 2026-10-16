@@ -113,6 +113,17 @@ goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n❗️ Save yo
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
+function mergeBilingual(source){
+ const out={...defaults,...(source||{})};
+ for(const id of ids){
+  const saved=String(source?.[id]||"");
+  const original=String(defaults[id]||"");
+  if(/[가-힣]/.test(saved)&&!/[A-Za-z]{2,}/.test(saved)&&/[A-Za-z]{2,}/.test(original)){
+   out[id]=original;
+  }
+ }
+ return out;
+}
 function say(s){
  status.textContent=s;
  const lang=new URLSearchParams(location.search).get("lang")||(()=>{try{return localStorage.getItem("kor1816_lang")||"ko"}catch{return "ko"}})();
@@ -133,11 +144,11 @@ function render(){for(const id of ids){document.getElementById(id).textContent=d
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local) data={...defaults,...local}; data=normalizeSword(normalizeBear(data)); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local) data=mergeBilingual(local); data=normalizeSword(normalizeBear(data)); render(); say("저장된 공지를 불러왔습니다.");
  if(!docRef)return;
  try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
- else{data=normalizeSword(normalizeBear({...defaults,...cloud}));writeLocal();render()}
+ else{data=normalizeSword(normalizeBear(mergeBilingual(cloud)));writeLocal();render()}
  }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
  say("최신 공지를 불러왔습니다.");
  }catch(e){console.error(e);say("서버 연결에 실패했습니다. 현재 기기의 저장본을 표시합니다.")}
