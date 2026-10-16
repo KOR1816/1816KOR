@@ -115,6 +115,28 @@ goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n\nUTC00:00 (�
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
+const savedEnglish={};
+function rememberEnglish(source){
+ if(!source||typeof source!=="object")return;
+ for(const id of ids){
+  const lines=String(source[id]||"").split(/\\r?\\n/);
+  for(let i=0;i<lines.length-1;i++){
+   const ko=lines[i].trim(), en=lines[i+1].trim();
+   if(/[가-힣]/.test(ko)&&/[A-Za-z]{2,}/.test(en)&&!/[가-힣]/.test(en)){
+    savedEnglish[id+"::"+ko]=en;
+   }
+  }
+ }
+}
+rememberEnglish({
+ bearLeaders:"집결장: 알카 · 페라 · 로사\\nRally Leaders: Alka · Pera · Rosa",
+ bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\\n영웅 없이 X\\nNo heroes",
+ bearRatio:"비율: 10 · 10 · 80\\nTroop Ratio: 10 · 10 · 80\\n또는 / OR\\n비율: 1 · 10 · 89\\nTroop Ratio: 1 · 10 · 89",
+ bearTroops:"병력: 100,000\\nTroops: 100,000",
+ swordTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
+ swordTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting",
+ allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
+});
 function say(s){
  status.textContent=s;
  const lang=new URLSearchParams(location.search).get("lang")||(()=>{try{return localStorage.getItem("kor1816_lang")||"ko"}catch{return "ko"}})();
@@ -148,9 +170,9 @@ function render(){data=cleanNoticeData(data);for(const id of ids){document.getEl
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local) data={...defaults,...cleanNoticeData(local)}; data=cleanNoticeData(normalizeSword(normalizeBear(data))); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local){rememberEnglish(local);data={...defaults,...cleanNoticeData(local)}} data=cleanNoticeData(normalizeSword(normalizeBear(data))); render(); say("저장된 공지를 불러왔습니다.");
  if(!docRef)return;
- try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
+ try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){rememberEnglish(cloud);const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
  else{data=cleanNoticeData(normalizeSword(normalizeBear({...defaults,...cloud})));writeLocal();render()}
  }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
@@ -282,8 +304,13 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
    if(!originals.has(el)||(!originals.get(el)&&el.textContent.trim()))originals.set(el,el.textContent);
    const source=koreanOnly(originals.get(el));
    if(lang==="ko"){el.textContent=source;continue}
+   const fieldId=el.id;
    const out=[];
-   for(const line of source.split("\n"))out.push(line.trim()?await translateText(line,lang):"");
+   for(const line of source.split("\n")){
+    if(!line.trim()){out.push("");continue}
+    const saved=savedEnglish[fieldId+"::"+line.trim()];
+    out.push(lang==="en"&&saved?saved:await translateText(line,lang));
+   }
    el.textContent=out.join("\n");
   }
  }
