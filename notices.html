@@ -351,7 +351,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   };
   const langs={en:0,ja:1,zh:2,de:3,it:4,es:5,tr:6};
   if(fixed[clean]&&langs[target]!==undefined)return fixed[clean][langs[target]];
-  if(target==="en"){const exact=englishNoticeLine(clean);if(exact)return exact;}
+  if(target==="en"){const exact=englishNoticeLine(clean);if(exact&&!/[가-힣]/.test(exact))return exact;}
   const schedule=clean.match(/^UTC(00|08|16):00 \(한국 (09|17|01):00\) — (.*)$/);
   if(schedule&&target==="en"){
    const actions=schedule[1]==="00"?"🚫 Pan / ✅ Do / ✅ Collect":schedule[1]==="08"?"🚫 Pan / ✅ Do / 🚫 Collect":"✅ Pan / 🚫 Do / 🚫 Collect";
@@ -415,9 +415,8 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
     if(!line.trim()){out.push("");continue}
     const cleanLine=normalizeNoticeLine(line);
     const saved=savedEnglish[fieldId+"::"+cleanLine];
-    // Prefer existing bilingual notice text, then the built-in English glossary, then online translation.
-    const mapped=lang==="en"?englishNoticeLine(cleanLine):null;
-    out.push(lang==="en"&&(saved||mapped)?(saved||mapped):await translateText(cleanLine,lang));
+    // Use saved bilingual text when present; otherwise always run the built-in static translator.
+    out.push(lang==="en"&&saved?saved:await translateText(cleanLine,lang));
    }
    el.textContent=out.join("\n");
   }
