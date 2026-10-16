@@ -2002,7 +2002,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 <style>.page.active{display:block!important}</style>
 <script>
 (function(){
-  var ids=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1"];
+  var ids=["home","teams","alliance","seating","castle","castlewar","viking","battleJoin","castlewar1","castle1","castlelayout1"];
   function fallbackShow(id){
     if(ids.indexOf(id)<0) id="home";
     document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});
@@ -2011,11 +2011,15 @@ document.addEventListener("DOMContentLoaded",async()=>{
     try{history.replaceState(null,"",location.pathname+location.search+"#"+id);}catch(e){}
     window.scrollTo(0,0);
   }
-  if(typeof window.show!=="function") window.show=fallbackShow;
+  var fallbackInstalled=typeof window.show!=="function";
+  if(fallbackInstalled) window.show=fallbackShow;
   document.addEventListener("DOMContentLoaded",function(){
+    /* The module app restores the requested page after Firebase initialization.
+       Do not let this fallback race it or flash/reset the page to Home. */
+    if(!fallbackInstalled) return;
     var current=location.hash.slice(1);
     if(ids.indexOf(current)<0) current="home";
-    try{window.show(current,false);}catch(e){fallbackShow(current);}
+    try{fallbackShow(current);}catch(e){fallbackShow("home");}
   });
 })();
 </script>
