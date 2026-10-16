@@ -1990,8 +1990,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
  if(lang){lang.value=savedLang;lang.addEventListener("change",e=>setLanguage(e.target.value));}
  setLanguage(savedLang);
  ncRenderAll();
+ // Restore the requested hash route immediately, before Firebase can delay startup.
+ // The selected page becomes active synchronously; its loader can finish while Firebase initializes.
+ void restorePage();
  await initFirebase();
- await restorePage();
  document.getElementById("homeView").style.display="grid";document.getElementById("homeEdit").style.display="none";
  document.getElementById("allianceView").style.display="block";document.getElementById("allianceEdit").style.display="none";
  window.addEventListener("hashchange",restorePage);
