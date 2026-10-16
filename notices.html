@@ -292,7 +292,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   // Match the game notice text even if an editor changes spacing or UTC formatting.
   const timeLine=line.replace(/UTC\s*(00|08|16):00/g,"UTC $1:00");
   if(EN_LINE_MAP[timeLine])return EN_LINE_MAP[timeLine];
-  const m=line.match(/^UTC\s*(00|08|16):00\s*\(한국\s*(09|17|01):00\)\s*—\s*(.*)$/);
+  const m=line.match(/^U?TC\s*(00|08|16):00\s*\(한국(?:시간)?\s*(09|17|01):00\)\s*—\s*(.*)$/);
   if(m){
    const schedule=m[1]==="00"?"🚫 Pan / ✅ Do / ✅ Collect":m[1]==="08"?"🚫 Pan / ✅ Do / 🚫 Collect":"✅ Pan / 🚫 Do / 🚫 Collect";
    return "UTC "+m[1]+":00 ("+m[2]+" KST) — "+schedule;
@@ -320,7 +320,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
    .replace(/2군:?/g,"Team 2:")
    .replace(/또는/g,"or")
    .replace(/PAN 유지 15시간/g,"Keep PAN active for 15 hours");
-  return out===line&&/[가-힣]/.test(line)?line.replace(/[가-힣]+/g,""):out;
+  return out===line&&/[가-힣]/.test(line)?null:out;
  }
  async function translateText(text,target){
   const clean=normalizeNoticeLine(text);
