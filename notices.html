@@ -283,9 +283,29 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  "정보 이벤트":"Intel Event",
  "(PAN 유지 15시간)":"(Keep PAN active for 15 hours)"
  };
+ function normalizeNoticeLine(text){
+  return String(text||"").normalize("NFC").replace(/[\\u00a0\\u2007\\u202f]/g," ").replace(/[ \\t]+/g," ").trim();
+ }
+ function englishNoticeLine(text){
+  const line=normalizeNoticeLine(text);
+  if(EN_LINE_MAP[line])return EN_LINE_MAP[line];
+  // Match the game notice text even if an editor changes spacing or UTC formatting.
+  const timeLine=line.replace(/UTC\\s*(00|08|16):00/g,"UTC $1:00");
+  if(EN_LINE_MAP[timeLine])return EN_LINE_MAP[timeLine];
+  const m=line.match(/^UTC\\s*(00|08|16):00\\s*\\(한국\\s*(09|17|01):00\\)\\s*—\\s*(.*)$/);
+  if(m){
+   const schedule={"00":"🚫 Pan / ✅ Do / ✅ Collect","08":"🚫 Pan / ✅ Do / 🚫 Collect","16":"✅ Pan / 🚫 Do / 🚫 Collect"}[m[1]];
+   return "UTC "+m[1]+":00 ("+m[2]+" KST) — "+schedule;
+  }
+  return null;
+ }
  async function translateText(text,target){
+  const clean=normalizeNoticeLine(text);
   if(target==="ko")return text;
-  if(target==="en"&&EN_LINE_MAP[text])return EN_LINE_MAP[text];
+  if(target==="en"){
+   const exact=englishNoticeLine(clean);
+   if(exact)return exact;
+  }
   let source=text, protectedTerms=[];
   if(target==="en")for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
   try{
@@ -332,8 +352,11 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
    const out=[];
    for(const line of source.split("\n")){
     if(!line.trim()){out.push("");continue}
-    const saved=savedEnglish[fieldId+"::"+line.trim()];
-    out.push(lang==="en"&&saved?saved:await translateText(line,lang));
+    const cleanLine=normalizeNoticeLine(line);
+    const saved=savedEnglish[fieldId+"::"+cleanLine];
+    // Prefer existing bilingual notice text, then the built-in English glossary, then online translation.
+    const mapped=lang==="en"?englishNoticeLine(cleanLine):null;
+    out.push(lang==="en"&&(saved||mapped)?(saved||mapped):await translateText(cleanLine,lang));
    }
    el.textContent=out.join("\n");
   }
