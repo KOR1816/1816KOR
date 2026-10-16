@@ -2350,22 +2350,27 @@ html body #castlewar1 #ncWarTurrets .nc-turret-column{min-width:285px!important}
 
 
 <style id="castlewar1-attack-column-width-match-turrets">
-/* Make Assault / Charge / Finish columns exactly the same width as each turret column. */
+/* Match the turret grid: fill desktop width evenly; keep 285px minimum columns on narrow screens. */
 html body #castlewar1 #ncWarAttack.nc-war-attack{
-  grid-template-columns:repeat(3,minmax(285px,285px))!important;
-  align-items:start!important;
+  display:grid!important;
+  width:100%!important;
   box-sizing:border-box!important;
+  grid-template-columns:repeat(3,minmax(285px,1fr))!important;
+  gap:12px!important;
+  align-items:start!important;
+  overflow-x:auto!important;
+  padding-bottom:8px!important;
 }
 html body #castlewar1 #ncWarAttack .nc-war-column{
   box-sizing:border-box!important;
-  width:285px!important;
+  width:100%!important;
   min-width:285px!important;
-  max-width:285px!important;
+  max-width:none!important;
 }
-@media(max-width:760px){
+@media(max-width:560px){
   html body #castlewar1 #ncWarAttack.nc-war-attack{
-    grid-template-columns:repeat(3,minmax(285px,285px))!important;
-    overflow-x:auto!important;
+    grid-template-columns:repeat(3,minmax(285px,1fr))!important;
+    gap:8px!important;
   }
 }
 </style>
