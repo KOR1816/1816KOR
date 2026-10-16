@@ -284,15 +284,15 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  "(PAN 유지 15시간)":"(Keep PAN active for 15 hours)"
  };
  function normalizeNoticeLine(text){
-  return String(text||"").normalize("NFC").replace(/[\\u00a0\\u2007\\u202f]/g," ").replace(/[ \\t]+/g," ").trim();
+  return String(text||"").normalize("NFC").replace(/[\u00a0\u2007\u202f]/g," ").replace(/[ \t]+/g," ").trim();
  }
  function englishNoticeLine(text){
   const line=normalizeNoticeLine(text);
   if(EN_LINE_MAP[line])return EN_LINE_MAP[line];
   // Match the game notice text even if an editor changes spacing or UTC formatting.
-  const timeLine=line.replace(/UTC\\s*(00|08|16):00/g,"UTC $1:00");
+  const timeLine=line.replace(/UTC\s*(00|08|16):00/g,"UTC $1:00");
   if(EN_LINE_MAP[timeLine])return EN_LINE_MAP[timeLine];
-  const m=line.match(/^UTC\\s*(00|08|16):00\\s*\\(한국\\s*(09|17|01):00\\)\\s*—\\s*(.*)$/);
+  const m=line.match(/^UTC\s*(00|08|16):00\s*\(한국\s*(09|17|01):00\)\s*—\s*(.*)$/);
   if(m){
    const schedule={"00":"🚫 Pan / ✅ Do / ✅ Collect","08":"🚫 Pan / ✅ Do / 🚫 Collect","16":"✅ Pan / 🚫 Do / 🚫 Collect"}[m[1]];
    return "UTC "+m[1]+":00 ("+m[2]+" KST) — "+schedule;
