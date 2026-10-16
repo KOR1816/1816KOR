@@ -44,11 +44,9 @@ header,header h1,header .sub{text-align:left!important}
 html body .intro h2{font-size:24px!important;line-height:1.3!important}
 @media(max-width:600px){html body .intro h2{font-size:22px!important;line-height:1.35!important}}
 </style>
-<style id="notice-shared-language-selector">
-.kor-lang{position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;margin:0;z-index:10}.kor-lang label{font-size:12px;opacity:.85}.kor-lang select{padding:7px 28px 7px 9px;border-radius:9px;border:1px solid #49688f;background:#1b2745;color:#fff;font-weight:700;cursor:pointer}.kor-lang select:focus{outline:none;border-color:#e5b84b}header{position:relative;padding-right:20px;text-align:center}</style>
 </head>
 <body>
-<header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div><div class="kor-lang"><label for="noticeLanguage">언어</label><select id="noticeLanguage" aria-label="Language"><option value="ko">한국어</option><option value="en">English</option></select></div></header>
+<header><h1>🏰 KOR1816</h1><div class="sub">Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!</div></header>
 <nav id="mainNav"><a id="homeLink" href="./?lang=ko">🏠 홈</a><a id="noticeLink" href="./notices.html?lang=ko">📢 공지</a><a id="teamsLink" href="./#teams">⚔️ 성검쟁탈</a><a id="allianceLink" href="./#alliance">🗡️ 3대연맹전</a><a id="castleLink" href="./#castle">🏰 캐슬배치</a><a id="castlewarLink" href="./#castlewar">🔱🛡️ 캐슬전</a><a id="seatingLink" href="./#seating">🪑 자리배치</a><a id="vikingLink" href="./#viking">🪓 바이킹</a><a id="gloryLink" href="./glory.html?lang=ko">🏆 영광의 순간들</a><a id="battleJoinLink" href="./?lang=ko#battleJoin">⚔️ 캐슬참전</a><a id="castlewar1Link" href="./?lang=ko#castlewar1">🔱 캐슬전 1</a><a id="castlelayout1Link" href="./?lang=ko#castlelayout1">🏰 캐슬배치 1</a></nav>
 <script>
 (function(){
@@ -73,24 +71,24 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 })();
 </script>
 <main>
-<div class="intro"><h2>⚔️ 전투 공지</h2><p>킹샷 전투 공지</p></div>
+<div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
 <div class="cards">
-<section class="card"><div class="art">🐻</div><h3>🐻 곰사냥</h3>
-<div class="block"><h4>집결장</h4><div id="bearLeaders" class="content view-only"></div><div class="edit-only"><label class="label">집결장</label><textarea id="eBearLeaders"></textarea></div></div>
-<div class="block"><h4>집결원</h4><div id="bearMembers" class="content view-only"></div><div class="edit-only"><label class="label">집결원</label><textarea id="eBearMembers"></textarea></div></div>
-<div class="block"><h4>비율</h4><div id="bearRatio" class="content view-only"></div><div class="edit-only"><label class="label">비율</label><textarea id="eBearRatio"></textarea></div></div>
-<div class="block"><h4>병력</h4><div id="bearTroops" class="content view-only"></div><div class="edit-only"><label class="label">병력</label><textarea id="eBearTroops"></textarea></div></div>
+<section class="card"><div class="art">🐻</div><h3>곰사냥 · Bear Hunt</h3>
+<div class="block"><h4>집결장 · RALLY LEADERS</h4><div id="bearLeaders" class="content view-only"></div><div class="edit-only"><label class="label">집결장</label><textarea id="eBearLeaders"></textarea></div></div>
+<div class="block"><h4>집결원 · RALLY MEMBERS</h4><div id="bearMembers" class="content view-only"></div><div class="edit-only"><label class="label">집결원</label><textarea id="eBearMembers"></textarea></div></div>
+<div class="block"><h4>비율 · TROOP RATIO</h4><div id="bearRatio" class="content view-only"></div><div class="edit-only"><label class="label">비율</label><textarea id="eBearRatio"></textarea></div></div>
+<div class="block"><h4>병력 · TROOPS</h4><div id="bearTroops" class="content view-only"></div><div class="edit-only"><label class="label">병력</label><textarea id="eBearTroops"></textarea></div></div>
 </section>
-<section class="card"><div class="art">🗡️</div><h3>🗡️ 성검쟁탈</h3>
-<div class="block"><h4>1군</h4><div id="swordTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eSwordTeam1"></textarea></div></div>
-<div class="block"><h4>2군</h4><div id="swordTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eSwordTeam2"></textarea></div></div>
+<section class="card"><div class="art">🗡️</div><h3>성검쟁탈 · Holy Sword Clash</h3>
+<div class="block"><h4>1군 · TEAM 1</h4><div id="swordTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eSwordTeam1"></textarea></div></div>
+<div class="block"><h4>2군 · TEAM 2</h4><div id="swordTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eSwordTeam2"></textarea></div></div>
 </section>
-<section class="card"><div class="art">🛡️</div><h3>🛡️ 3대연맹전</h3>
+<section class="card"><div class="art">🛡️</div><h3>3대연맹전 · Three Alliances War</h3>
 <div class="block"><h4>1군 · TEAM 1</h4><div id="allianceTeam1" class="content view-only"></div><div class="edit-only"><label class="label">1군 내용</label><textarea id="eAllianceTeam1"></textarea></div></div>
 <div class="block"><h4>2군 · TEAM 2</h4><div id="allianceTeam2" class="content view-only"></div><div class="edit-only"><label class="label">2군 내용</label><textarea id="eAllianceTeam2"></textarea></div></div>
 </section>
-<section class="card"><div class="art">⚔️</div><h3>골든 글레이브 월요일</h3>
-<div class="block"><h4>일요일 정보(Intel)를 아껴두세요</h4><div id="goldenGlaives" class="content view-only"></div><div class="edit-only"><label class="label">골든 글레이브 공지</label><textarea id="eGoldenGlaives"></textarea></div></div>
+<section class="card"><div class="art">⚔️</div><h3>골든 글레이브 월요일 (GOLDEN GLAIVES MONDAY)</h3>
+<div class="block"><h4>일요일 정보(Intel)를 아껴두세요 · SAVE SUNDAY INTEL</h4><div id="goldenGlaives" class="content view-only"></div><div class="edit-only"><label class="label">골든 글레이브 공지</label><textarea id="eGoldenGlaives"></textarea></div></div>
 </section>
 </div>
 <div class="actions"><button id="refreshBtn">🔄 새로고침</button><button id="editBtn">🔐 관리자 수정</button><button id="saveBtn" style="display:none">💾 저장</button></div>
@@ -103,40 +101,18 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
 const ADMIN_PASSWORD="0001", KEY="kor1816_notices_v1";
 const defaults={
-bearLeaders:"집결장: 알카 · 페라 · 로사",
-bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X",
-bearRatio:"비율: 10 · 10 · 80\n또는\n비율: 1 · 10 · 89",
-bearTroops:"병력: 100,000",
-swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순",
-swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표",
-allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순",
-allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표",
-goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n\nUTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\nUTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\nUTC00:00 (한국 09:00) — ✅ 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\n\n💡 작동 방식\n✅ PAN = 정보 스킬 사용 (화면 이동/탐색)\nDO = 정보 미션 완료\nCOLLECT = 보상 수령\n\n정보 이벤트\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\n(PAN 유지 15시간)"
+bearLeaders:"집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa",
+bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
+bearRatio:"비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89",
+bearTroops:"병력: 100,000\nTroops: 100,000",
+swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순\nTeam 1: UCT 14:00 (23:00 KST) — Power ranking",
+swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표\nTeam 2: UCT 12:00 (21:00 KST) — First-come voting",
+allianceTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순\nTeam 1: UCT 12:00 (21:00 KST) — Power ranking",
+allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표\nTeam 2: UCT 14:00 (23:00 KST) — First-come voting",
+goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n❗️ Save your Sunday Intel\n\nUTC00:00 (한국 09:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\nUTC08:00 (한국 17:00) — 🚫 탐색(Pan) / ✅ 진행(Do) / 🚫 수령(Collect)\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\nUTC00:00 (한국 09:00) — ✅ 탐색(Pan) / ✅ 진행(Do) / ✅ 수령(Collect)\n\n💡 작동 방식 · HOW IT WORKS\n✅ PAN = 정보 스킬 사용 (화면 이동/탐색)\nPAN = Use the Intel Pan skill (explore/move)\nDO = 정보 미션 완료\nDO = Complete Intel missions\nCOLLECT = 보상 수령\nCOLLECT = Claim rewards\n\n정보 이벤트 · INTEL EVENT\nUTC16:00 (한국 01:00) — ✅ 탐색(Pan) / 🚫 진행(Do) / 🚫 수령(Collect)\n(PAN 유지 15시간 · Pan remains active for 15 hours)"
 };
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
-const savedEnglish={};
-function rememberEnglish(source){
- if(!source||typeof source!=="object")return;
- for(const id of ids){
-  const lines=String(source[id]||"").split(/\\r?\\n/);
-  for(let i=0;i<lines.length-1;i++){
-   const ko=lines[i].trim(), en=lines[i+1].trim();
-   if(/[가-힣]/.test(ko)&&/[A-Za-z]{2,}/.test(en)&&!/[가-힣]/.test(en)){
-    savedEnglish[id+"::"+ko]=en;
-   }
-  }
- }
-}
-rememberEnglish({
- bearLeaders:"집결장: 알카 · 페라 · 로사\\nRally Leaders: Alka · Pera · Rosa",
- bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\\n영웅 없이 X\\nNo heroes",
- bearRatio:"비율: 10 · 10 · 80\\nTroop Ratio: 10 · 10 · 80\\n또는 / OR\\n비율: 1 · 10 · 89\\nTroop Ratio: 1 · 10 · 89",
- bearTroops:"병력: 100,000\\nTroops: 100,000",
- swordTeam1:"1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking",
- swordTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting",
- allianceTeam2:"2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting"
-});
 function say(s){
  status.textContent=s;
  const lang=new URLSearchParams(location.search).get("lang")||(()=>{try{return localStorage.getItem("kor1816_lang")||"ko"}catch{return "ko"}})();
@@ -144,19 +120,6 @@ function say(s){
   fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(s),{mode:"cors"})
    .then(r=>r.ok?r.json():null).then(d=>{const out=Array.isArray(d?.[0])?d[0].map(x=>x?.[0]||"").join(""):"";if(out&&status.textContent===s)status.textContent=out;}).catch(()=>{});
  }
-}
-function koreanOnly(value){
- return String(value||"").split(/\r?\n/).filter(line=>{
-  const t=line.trim();
-  if(!t)return true;
-  if(/[가-힣]/.test(t))return true;
-  return !/[A-Za-z]{2,}/.test(t);
- }).join("\n").replace(/\s*\/\s*OR\b/gi,"").replace(/\n{3,}/g,"\n\n").trim();
-}
-function cleanNoticeData(source){
- const out={...source};
- for(const id of ids)if(typeof out[id]==="string")out[id]=koreanOnly(out[id]);
- return out;
 }
 function normalizeSword(source){const d={...source};
  if(d.swordTeam1==="1군: UCT 12:00 (한국시간 21:00) — 투력순으로 선정\nTeam 1: UCT 12:00 (21:00 KST) — Selected by power ranking")d.swordTeam1=defaults.swordTeam1;
@@ -166,15 +129,15 @@ function normalizeSword(source){const d={...source};
  return d
 }
 function normalizeBear(source){const d={...source};const legacy={bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]};for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}return d}
-function render(){data=cleanNoticeData(data);for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}window.dispatchEvent(new Event("kor1816-notices-rendered"))}
+function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local){rememberEnglish(local);data={...defaults,...cleanNoticeData(local)}} data=cleanNoticeData(normalizeSword(normalizeBear(data))); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local) data={...defaults,...local}; data=normalizeSword(normalizeBear(data)); render(); say("저장된 공지를 불러왔습니다.");
  if(!docRef)return;
- try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){rememberEnglish(cloud);const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
+ try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
- else{data=cleanNoticeData(normalizeSword(normalizeBear({...defaults,...cloud})));writeLocal();render()}
+ else{data=normalizeSword(normalizeBear({...defaults,...cloud}));writeLocal();render()}
  }}else if(local){await setDoc(docRef,{noticesV1:{...data,updatedAt:Number(local.updatedAt)||Date.now()}},{merge:true})}
  say("최신 공지를 불러왔습니다.");
  }catch(e){console.error(e);say("서버 연결에 실패했습니다. 현재 기기의 저장본을 표시합니다.")}
@@ -188,7 +151,7 @@ function toggleEdit(){
 }
 async function save(){
  if(!admin)return;
- for(const id of ids)data[id]=koreanOnly(document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value);
+ for(const id of ids)data[id]=document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value.trim();
  const updatedAt=Date.now();data.updatedAt=updatedAt;writeLocal();render();
  try{if(!docRef)throw Error("Firebase is not ready");await setDoc(docRef,{noticesV1:{...data,updatedAt}},{merge:true});say("공지 저장 완료! 다른 기기에서도 확인할 수 있습니다.")}
  catch(e){console.error(e);say("기기에는 저장했지만 공용 서버 저장에 실패했습니다.")}
@@ -241,85 +204,63 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
 </style>
 
 <script>
-(function(){
- const select=document.getElementById("noticeLanguage");
- const supported=["ko","en"];
- let lang=new URLSearchParams(location.search).get("lang");
- try{lang=lang||localStorage.getItem("kor1816_lang")||"ko"}catch(e){}
- if(!supported.includes(lang))lang="ko";
- const originals=new WeakMap();
- const terms={"곰사냥":"Bear Hunt","집결장":"Rally Leader","집결원":"Rally Member","성검쟁탈":"Holy Sword Clash","3대연맹전":"Three Alliances War","골든 글레이브":"Golden Glaives","투력순":"Power Ranking","선착순 투표":"First-Come, First-Served Voting","일요일 정보":"Sunday Intel","정보 스킬":"Intel skill","정보 미션":"Intel missions","보상 수령":"Claim rewards","탐색":"Pan","진행":"Do","수령":"Collect","영웅 없이":"No heroes","병력":"Troops","비율":"Troop Ratio"};
- const englishTerms=Object.keys(terms);
- const labels={
-  ko:{intro:"⚔️ 전투 공지",sub:"킹샷 전투 공지",bear:"🐻 곰사냥",sword:"🗡️ 성검쟁탈",alliance:"🛡️ 3대연맹전",golden:"골든 글레이브 월요일",leaders:"집결장",members:"집결원",ratio:"비율",troops:"병력",team1:"1군",team2:"2군",intel:"일요일 정보(Intel)를 아껴두세요",refresh:"🔄 새로고침",edit:"🔐 관리자 수정",save:"💾 저장",hint:"수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다."},
-  en:{intro:"⚔️ Battle Orders",sub:"READ THE PLAN · FIGHT AS ONE",bear:"🐻 Bear Hunt",sword:"🗡️ Holy Sword Clash",alliance:"🛡️ Three Alliances War",golden:"Golden Glaives Monday",leaders:"RALLY LEADERS",members:"RALLY MEMBERS",ratio:"TROOP RATIO",troops:"TROOPS",team1:"TEAM 1",team2:"TEAM 2",intel:"SAVE SUNDAY INTEL",refresh:"🔄 Refresh",edit:"🔐 Admin Edit",save:"💾 Save",hint:"Save after editing to share the same notices across devices."},
-  ja:{intro:"⚔️ 戦闘のお知らせ",sub:"作戦を確認 · 一丸となって戦おう",bear:"🐻 熊狩り",sword:"🗡️ 聖剣争奪",alliance:"🛡️ 3大連盟戦",golden:"ゴールデングレイブ月曜日",leaders:"集結リーダー",members:"集結メンバー",ratio:"兵士比率",troops:"兵士数",team1:"第1チーム",team2:"第2チーム",intel:"日曜日の情報を温存",refresh:"🔄 更新",edit:"🔐 管理者編集",save:"💾 保存",hint:"保存すると他の端末でも同じお知らせを確認できます。"},
-  zh:{intro:"⚔️ 战斗公告",sub:"查看计划 · 团结作战",bear:"🐻 熊猎",sword:"🗡️ 圣剑争夺",alliance:"🛡️ 三大联盟战",golden:"黄金长戟星期一",leaders:"集结发起者",members:"集结成员",ratio:"兵力比例",troops:"兵力",team1:"第一队",team2:"第二队",intel:"保留星期日情报",refresh:"🔄 刷新",edit:"🔐 管理员编辑",save:"💾 保存",hint:"保存后，其他设备也能看到相同公告。"},
-  de:{intro:"⚔️ Kampfmeldungen",sub:"Plan lesen · Gemeinsam kämpfen",bear:"🐻 Bärenjagd",sword:"🗡️ Kampf um das Heilige Schwert",alliance:"🛡️ Krieg der drei Allianzen",golden:"Goldene Glefen am Montag",leaders:"Rallye-Anführer",members:"Rallye-Mitglieder",ratio:"Truppenverhältnis",troops:"Truppen",team1:"Team 1",team2:"Team 2",intel:"Sonntags-Intel aufbewahren",refresh:"🔄 Aktualisieren",edit:"🔐 Admin-Bearbeitung",save:"💾 Speichern",hint:"Nach dem Speichern sind dieselben Meldungen auch auf anderen Geräten verfügbar."},
-  it:{intro:"⚔️ Ordini di battaglia",sub:"Leggi il piano · Combatti insieme",bear:"🐻 Caccia all'orso",sword:"🗡️ Scontro per la Spada Sacra",alliance:"🛡️ Guerra delle Tre Alleanze",golden:"Lance d'oro del lunedì",leaders:"Leader di raduno",members:"Partecipanti al raduno",ratio:"Rapporto truppe",troops:"Truppe",team1:"Squadra 1",team2:"Squadra 2",intel:"Conserva le informazioni della domenica",refresh:"🔄 Aggiorna",edit:"🔐 Modifica amministratore",save:"💾 Salva",hint:"Dopo il salvataggio, gli stessi avvisi saranno visibili anche sugli altri dispositivi."},
-  es:{intro:"⚔️ Órdenes de batalla",sub:"Lee el plan · Lucha en equipo",bear:"🐻 Caza del oso",sword:"🗡️ Choque por la Espada Sagrada",alliance:"🛡️ Guerra de las Tres Alianzas",golden:"Glaives doradas del lunes",leaders:"Líderes de reunión",members:"Miembros de reunión",ratio:"Proporción de tropas",troops:"Tropas",team1:"Equipo 1",team2:"Equipo 2",intel:"Guarda la información del domingo",refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",hint:"Después de guardar, los mismos avisos estarán disponibles en otros dispositivos."},
-  tr:{intro:"⚔️ Savaş Duyuruları",sub:"Planı oku · Birlikte savaş",bear:"🐻 Ayı Avı",sword:"🗡️ Kutsal Kılıç Savaşı",alliance:"🛡️ Üç İttifak Savaşı",golden:"Pazartesi Altın Mızraklar",leaders:"Toplanma Liderleri",members:"Toplanma Üyeleri",ratio:"Birlik Oranı",troops:"Birlikler",team1:"1. Takım",team2:"2. Takım",intel:"Pazar istihbaratını sakla",refresh:"🔄 Yenile",edit:"🔐 Yönetici Düzenleme",save:"💾 Kaydet",hint:"Kaydettikten sonra aynı duyurular diğer cihazlarda da görüntülenir."}
- };
- async function translateText(text,target){
-  if(target==="ko")return text;
-  let source=text, protectedTerms=[];
-  if(target==="en")for(const ko of englishTerms){const token="KSTERM"+protectedTerms.length+"X";if(source.includes(ko)){source=source.split(ko).join(token);protectedTerms.push([token,terms[ko]])}}
+(async function translateNoticeChrome(lang){
+ const excluded='.content,textarea,input,select,option,script,style,footer .brand,.nickname,[class*="nickname"],[contenteditable="true"]';
+ const sourceNodes=[];
+ const walker=document.createTreeWalker(document.querySelector("main")||document.body,NodeFilter.SHOW_TEXT);
+ let node;
+ while((node=walker.nextNode())){
+  const p=node.parentElement,raw=node.nodeValue.trim();
+  if(!p||p.closest(excluded)||!raw||!/[가-힣]/.test(raw)||/[A-Za-z]{2,}/.test(raw))continue;
+  if(!node.__kor1816Original)node.__kor1816Original=raw;
+  sourceNodes.push(node);
+ }
+ for(const n of sourceNodes){
+  const source=n.__kor1816Original;
   try{
-   const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(target)+"&dt=t&q="+encodeURIComponent(source);
-   const res=await fetch(url,{mode:"cors"});
-   if(res.ok){const d=await res.json(),out=Array.isArray(d?.[0])?d[0].map(x=>x?.[0]||"").join(""):"";if(out)source=out}
-  }catch(e){console.warn("Notice translation unavailable",e)}
-  for(const [token,value] of protectedTerms)source=source.split(token).join(value);
-  return source;
+   const res=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="+encodeURIComponent(lang)+"&dt=t&q="+encodeURIComponent(source),{mode:"cors"});
+   if(!res.ok)continue;
+   const data=await res.json(),out=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||"").join(""):"";
+   if(out&&out!==source)n.nodeValue=n.nodeValue.replace(n.nodeValue.trim(),out);
+  }catch(e){console.warn("Notice page translation unavailable",e);}
  }
- async function applyLanguage(next){
-  lang=next;document.documentElement.lang=lang;
-  try{localStorage.setItem("kor1816_lang",lang)}catch(e){}
-  const L=labels[lang]||labels.en;
-  const intro=document.querySelector(".intro h2"),introP=document.querySelector(".intro p");
-  if(intro)intro.textContent=L.intro;if(introP)introP.textContent=L.sub;
-  const cards=[...document.querySelectorAll(".cards>.card")],titles=[L.bear,L.sword,L.alliance,L.golden];
-  cards.forEach((card,i)=>{const h=card.querySelector("h3");if(h)h.textContent=titles[i]});
-  const blockTitles=[[L.leaders,L.members,L.ratio,L.troops],[L.team1,L.team2],[L.team1,L.team2],[L.intel]];
-  cards.forEach((card,i)=>[...card.querySelectorAll(".block h4")].forEach((h,j)=>{if(blockTitles[i]?.[j])h.textContent=blockTitles[i][j]}));
+ const labels={en:{refresh:"🔄 Refresh",edit:"🔐 Admin Edit",save:"💾 Save",loading:"Loading battle orders...",loaded:"Saved notices loaded.",latest:"Latest notices loaded.",hint:"After editing, save to view the same notices on other devices.",footer:"KOR1816 · Together, We Grow Stronger! ❤️"},
+ ja:{refresh:"🔄 更新",edit:"🔐 管理者編集",save:"💾 保存",loading:"戦闘指示を読み込み中...",loaded:"保存済みのお知らせを読み込みました。",latest:"最新のお知らせを読み込みました。",hint:"編集後に保存すると、他の端末でも同じお知らせを確認できます。",footer:"KOR1816 · 共に成長し、より強く！ ❤️"},
+ zh:{refresh:"🔄 刷新",edit:"🔐 管理员编辑",save:"💾 保存",loading:"正在加载战斗公告...",loaded:"已加载保存的公告。",latest:"已加载最新公告。",hint:"编辑后保存，其他设备也能看到相同公告。",footer:"KOR1816 · 携手成长，更加强大！ ❤️"},
+ de:{refresh:"🔄 Aktualisieren",edit:"🔐 Admin-Bearbeitung",save:"💾 Speichern",loading:"Kampfaufträge werden geladen...",loaded:"Gespeicherte Hinweise geladen.",latest:"Neueste Hinweise geladen.",hint:"Nach der Bearbeitung speichern, damit dieselben Hinweise auch auf anderen Geräten angezeigt werden.",footer:"KOR1816 · Gemeinsam wachsen wir stärker! ❤️"},
+ it:{refresh:"🔄 Aggiorna",edit:"🔐 Modifica admin",save:"💾 Salva",loading:"Caricamento degli ordini di battaglia...",loaded:"Avvisi salvati caricati.",latest:"Ultimi avvisi caricati.",hint:"Dopo le modifiche, salva per vedere gli stessi avvisi anche sugli altri dispositivi.",footer:"KOR1816 · Insieme diventiamo più forti! ❤️"},
+ es:{refresh:"🔄 Actualizar",edit:"🔐 Edición de administrador",save:"💾 Guardar",loading:"Cargando órdenes de batalla...",loaded:"Avisos guardados cargados.",latest:"Avisos más recientes cargados.",hint:"Guarda después de editar para ver los mismos avisos en otros dispositivos.",footer:"KOR1816 · ¡Juntos crecemos más fuertes! ❤️"},
+ tr:{refresh:"🔄 Yenile",edit:"🔐 Yönetici düzenlemesi",save:"💾 Kaydet",loading:"Savaş emirleri yükleniyor...",loaded:"Kaydedilen duyurular yüklendi.",latest:"En güncel duyurular yüklendi.",hint:"Düzenledikten sonra kaydedin; aynı duyurular diğer cihazlarda da görünür.",footer:"KOR1816 · Birlikte daha güçlüyüz! ❤️"}};
+ const fixed=labels[lang];
+ const subtitles={en:"Kingdom 1816 · Bite back if challenged! · Bear-loving community!!",ja:"Kingdom 1816 · 挑発したら噛みつく！ · クマ好きの集まり!!",zh:"Kingdom 1816 · 惹我们就反击！ · 熊迷聚会!!",de:"Kingdom 1816 · Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Kingdom 1816 · Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"Kingdom 1816 · ¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Kingdom 1816 · Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"};
+ const sub=document.querySelector("header .sub");if(sub&&subtitles[lang])sub.textContent=subtitles[lang];
+ const headings={
+  en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🗡️ Three Alliances War","TEAM 1","TEAM 2"],
+  ja:["⚔️ 戦闘指示","作戦を確認 · 一丸となって戦おう","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
+  zh:["⚔️ 战斗公告","查看计划 · 团结作战","🐻 猎熊","集结队长","集结成员","兵力比例","兵力","🗡️ 圣剑争夺","第一队","第二队","🛡️ 三大联盟战","第一队","第二队"],
+  de:["⚔️ Kampfaufträge","Plan lesen · Gemeinsam kämpfen","🐻 Bärenjagd","Rally-Leiter","Rally-Mitglieder","Truppenverhältnis","Truppen","🗡️ Heiliges Schwertduell","TEAM 1","TEAM 2","🛡️ Krieg der drei Allianzen","TEAM 1","TEAM 2"],
+  it:["⚔️ Ordini di battaglia","Leggi il piano · Combatti unito","🐻 Caccia all'orso","Leader del rally","Membri del rally","Rapporto truppe","Truppe","🗡️ Duello della Spada Sacra","SQUADRA 1","SQUADRA 2","🛡️ Guerra delle Tre Alleanze","SQUADRA 1","SQUADRA 2"],
+  es:["⚔️ Órdenes de batalla","Consulta el plan · Lucha en equipo","🐻 Caza del oso","Líderes de rally","Miembros del rally","Proporción de tropas","Tropas","🗡️ Duelo de la Espada Sagrada","EQUIPO 1","EQUIPO 2","🛡️ Guerra de las Tres Alianzas","EQUIPO 1","EQUIPO 2"],
+  tr:["⚔️ Savaş Emirleri","Planı oku · Birlikte savaş","🐻 Ayı Avı","Sefer Liderleri","Sefer Katılımcıları","Birlik Oranı","Birlikler","🗡️ Kutsal Kılıç Savaşı","1. TAKIM","2. TAKIM","🛡️ Üç İttifak Savaşı","1. TAKIM","2. TAKIM"]
+ };
+ if(headings[lang]){
+  const intro=document.querySelector(".intro");if(intro){const h=intro.querySelector("h2"),p=intro.querySelector("p");if(h)h.textContent=headings[lang][0];if(p)p.textContent=headings[lang][1];}
+  const cards=[...document.querySelectorAll(".cards>.card")];
+  cards.forEach((card,i)=>{const h=card.querySelector("h3");if(h)h.textContent=headings[lang][[2,7,10][i]];});
+  document.querySelectorAll(".cards>.card").forEach((card,i)=>{
+   const blocks=[...card.querySelectorAll(".block h4")];
+   blocks.forEach((h,j)=>{const pos=i===0?3+j:i===1?8+j:11+j;if(headings[lang][pos])h.textContent=headings[lang][pos];});
+  });
+ }
+ if(fixed){
   const refresh=document.getElementById("refreshBtn"),edit=document.getElementById("editBtn"),save=document.getElementById("saveBtn");
-  if(refresh)refresh.textContent=L.refresh;if(edit)edit.textContent=document.body.classList.contains("editing")?(lang==="ko"?"🔒 수정 종료":"🔒 Exit Edit"):L.edit;if(save)save.textContent=L.save;
-  const hint=document.querySelector(".hint");if(hint)hint.textContent=L.hint;
-  const sub=document.querySelector("header .sub");
-  if(sub)sub.textContent=lang==="ko"?"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!":"Kingdom 1816 · "+({en:"Bite back if challenged! · Bear-loving community!!",ja:"挑発したら噛みつく！ · クマ好きの集まり!!",zh:"惹我们就反击！ · 熊迷聚会!!",de:"Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"}[lang]||"");
-  const navNames={
-   ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들","⚔️ 캐슬참전","🔱 캐슬전 1","🏰 캐슬배치 1"],
-   en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"],
-   ja:["🏠 ホーム","📢 お知らせ","⚔️ 聖剣争奪","🗡️ 3大連盟戦","🏰 城の配置","🔱🛡️ 城戦","🪑 配置","🪓 バイキング","🏆 栄光の瞬間","⚔️ 城戦参加","🔱 城戦 1","🏰 城の配置 1"],
-   zh:["🏠 首页","📢 公告","⚔️ 圣剑争夺","🗡️ 三大联盟战","🏰 城堡布局","🔱🛡️ 城堡战","🪑 座位安排","🪓 维京","🏆 荣耀时刻","⚔️ 城堡参战","🔱 城堡战 1","🏰 城堡布局 1"],
-   de:["🏠 Start","📢 Meldungen","⚔️ Heiliges Schwertduell","🗡️ Krieg der drei Allianzen","🏰 Burgaufstellung","🔱🛡️ Burgenkrieg","🪑 Sitzplan","🪓 Wikinger","🏆 Ruhmreiche Momente","⚔️ Burgkampf-Teilnahme","🔱 Burgenkrieg 1","🏰 Burgaufstellung 1"],
-   it:["🏠 Home","📢 Avvisi","⚔️ Duello della Spada Sacra","🗡️ Guerra delle Tre Alleanze","🏰 Disposizione del Castello","🔱🛡️ Guerra del Castello","🪑 Posti","🪓 Vichinghi","🏆 Momenti di gloria","⚔️ Partecipazione al castello","🔱 Guerra del Castello 1","🏰 Disposizione del Castello 1"],
-   es:["🏠 Inicio","📢 Avisos","⚔️ Duelo de la Espada Sagrada","🗡️ Guerra de las Tres Alianzas","🏰 Distribución del Castillo","🔱🛡️ Guerra del Castillo","🪑 Asientos","🪓 Vikingos","🏆 Momentos de gloria","⚔️ Participación en el castillo","🔱 Guerra del Castillo 1","🏰 Distribución del Castillo 1"],
-   tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç Savaşı","🗡️ Üç İttifak Savaşı","🏰 Kale Yerleşimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Vikingler","🏆 Zafer Anları","⚔️ Kale Katılımı","🔱 Kale Savaşı 1","🏰 Kale Yerleşimi 1"]
-  };
-  const navIds=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
-  navIds.forEach((id,i)=>{const a=document.getElementById(id);if(a&&navNames[lang])a.textContent=navNames[lang][i]});
-  const footer=document.querySelector("footer");if(footer)footer.textContent="KOR1816 · Together, We Grow Stronger! ❤️";
-  for(const el of document.querySelectorAll(".content")){
-   if(!originals.has(el)||(!originals.get(el)&&el.textContent.trim()))originals.set(el,el.textContent);
-   const source=koreanOnly(originals.get(el));
-   if(lang==="ko"){el.textContent=source;continue}
-   const fieldId=el.id;
-   const out=[];
-   for(const line of source.split("\n")){
-    if(!line.trim()){out.push("");continue}
-    const saved=savedEnglish[fieldId+"::"+line.trim()];
-    out.push(lang==="en"&&saved?saved:await translateText(line,lang));
-   }
-   el.textContent=out.join("\n");
-  }
+  if(refresh)refresh.textContent=fixed.refresh;if(edit)edit.textContent=fixed.edit;if(save)save.textContent=fixed.save;
+  const hint=document.querySelector(".hint");if(hint)hint.textContent=fixed.hint;
+  const footer=document.querySelector("footer");if(footer)footer.textContent=fixed.footer;
+  const status=document.getElementById("status");
+  if(status){const s=status.textContent;if(s.includes("불러오는 중"))status.textContent=fixed.loading;else if(s.includes("저장된 공지"))status.textContent=fixed.loaded;else if(s.includes("최신 공지"))status.textContent=fixed.latest;}
  }
- select.value=lang;
- select.addEventListener("change",()=>{const u=new URL(location.href);u.searchParams.set("lang",select.value);history.replaceState(null,"",u);void applyLanguage(select.value)});
- window.addEventListener("kor1816-notices-rendered",()=>void applyLanguage(lang));
- window.kor1816ApplyNoticeLanguage=applyLanguage;
- void applyLanguage(lang);
-})();
+})(new URLSearchParams(location.search).get("lang")||localStorage.getItem("kor1816_lang")||"ko");
 </script>
 
 <style id="notice-final-left-alignment">
