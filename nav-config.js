@@ -8,6 +8,15 @@ function url(item,lang){const u=new URL(item.href,location.href);u.searchParams.
 function refresh(){const nav=document.getElementById("mainNav")||document.getElementById("siteNav");if(!nav)return;const lang=getLang(),active=activeRoute(),isIndex=!!document.getElementById("mainNav")&&!/notices\.html$/i.test(location.pathname);
 if(nav.children.length!==items.length||[...nav.children].some((e,i)=>e.dataset.navKey!==items[i].key)){nav.replaceChildren();items.forEach((it,i)=>{const e=document.createElement(isIndex?"button":"a");e.id="nav-asd"+(i+1);e.dataset.navKey=it.key;if(isIndex){e.type="button";e.dataset.route=it.route}nav.appendChild(e)})}
 [...nav.children].forEach((e,i)=>{const it=items[i],label=it.labels[langs.indexOf(lang)]||it.labels[0],href=url(it,lang);if(e.textContent!==label)e.textContent=label;if(isIndex){if(e.dataset.route!==it.route)e.dataset.route=it.route}else if(e.getAttribute("href")!==href)e.setAttribute("href",href);const on=it.route===active;if(e.classList.contains("nav-active")!==on)e.classList.toggle("nav-active",on);if(on){if(e.getAttribute("aria-current")!=="page")e.setAttribute("aria-current","page")}else e.removeAttribute("aria-current")})}
+// Delegated navigation fallback for all menu buttons.
+nav.addEventListener("click",e=>{
+ const el=e.target.closest("[data-nav-key]");
+ if(!el||!nav.contains(el))return;
+ const item=items.find(x=>x.key===el.dataset.navKey);
+ if(!item)return;
+ e.preventDefault();
+ location.href=url(item,getLang());
+});
 window.KOR1816Nav={items,refresh};
 const style=document.createElement("style");style.textContent='nav#mainNav .nav-active,nav#siteNav .nav-active{background:linear-gradient(180deg,#ffbd45,#f08000)!important;border-color:#ffe08a!important;color:#201307!important;box-shadow:0 0 0 2px #ffb52e55,0 4px 14px #0007!important}nav#mainNav .nav-active:hover,nav#siteNav .nav-active:hover{background:linear-gradient(180deg,#ffd16a,#f08a12)!important;color:#201307!important}';document.head.appendChild(style);
 refresh();new MutationObserver(refresh).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:["class"]});const s=document.getElementById("languageSelect");if(s)s.addEventListener("change",()=>setTimeout(refresh,0));
