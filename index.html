@@ -2011,12 +2011,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
     try{history.replaceState(null,"",location.pathname+location.search+"#"+id);}catch(e){}
     window.scrollTo(0,0);
   }
-  var fallbackInstalled=typeof window.show!=="function";
-  if(fallbackInstalled) window.show=fallbackShow;
+  if(typeof window.show!=="function") window.show=fallbackShow;
   document.addEventListener("DOMContentLoaded",function(){
-    /* The module app restores the requested page after Firebase initialization.
-       Do not let this fallback race it or flash/reset the page to Home. */
-    if(!fallbackInstalled) return;
+    /* Module scripts execute before DOMContentLoaded. If the real app installed
+       its show() function, never let this emergency fallback reset the page. */
+    if(window.show!==fallbackShow) return;
     var current=location.hash.slice(1);
     if(ids.indexOf(current)<0) current="home";
     try{fallbackShow(current);}catch(e){fallbackShow("home");}
