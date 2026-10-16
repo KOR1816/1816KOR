@@ -135,7 +135,7 @@ function koreanOnly(value){
   if(!t)return true;
   if(/[가-힣]/.test(t))return true;
   return !/[A-Za-z]{2,}/.test(t);
- }).join("\n").replace(/\n{3,}/g,"\n\n").trim();
+ }).join("\n").replace(/\s*\/\s*OR\b/gi,"").replace(/\n{3,}/g,"\n\n").trim();
 }
 function cleanNoticeData(source){
  const out={...source};
@@ -265,6 +265,12 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   const hint=document.querySelector(".hint");if(hint)hint.textContent=L.hint;
   const sub=document.querySelector("header .sub");
   if(sub)sub.textContent=lang==="ko"?"Kingdom 1816 · 건들면 문다! · 곰친자들의 모임!!":"Kingdom 1816 · "+({en:"Bite back if challenged! · Bear-loving community!!",ja:"挑発したら噛みつく！ · クマ好きの集まり!!",zh:"惹我们就反击！ · 熊迷聚会!!",de:"Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"}[lang]||"");
+  const navNames={
+   ko:["🏠 홈","📢 공지","⚔️ 성검쟁탈","🗡️ 3대연맹전","🏰 캐슬배치","🔱🛡️ 캐슬전","🪑 자리배치","🪓 바이킹","🏆 영광의 순간들","⚔️ 캐슬참전","🔱 캐슬전 1","🏰 캐슬배치 1"],
+   en:["🏠 Home","📢 Notices","⚔️ Holy Sword Clash","🗡️ Three Alliances War","🏰 Castle Layout","🔱🛡️ Castle War","🪑 Seating","🪓 Viking","🏆 Glorious Moments","⚔️ Castle Participation","🔱 Castle War 1","🏰 Castle Layout 1"]
+  };
+  const navIds=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
+  if(navNames[lang])navIds.forEach((id,i)=>{const a=document.getElementById(id);if(a)a.textContent=navNames[lang][i]});
   const footer=document.querySelector("footer");if(footer)footer.textContent="KOR1816 · Together, We Grow Stronger! ❤️";
   for(const el of document.querySelectorAll(".content")){
    if(!originals.has(el))originals.set(el,el.textContent);
