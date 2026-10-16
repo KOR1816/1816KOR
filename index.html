@@ -2348,4 +2348,26 @@ html body #castlewar1 #ncWarTurrets .nc-turret-column{min-width:285px!important}
 }
 </style>
 
+
+<style id="castlewar1-attack-column-width-match-turrets">
+/* Make Assault / Charge / Finish columns exactly the same width as each turret column. */
+html body #castlewar1 #ncWarAttack.nc-war-attack{
+  grid-template-columns:repeat(3,minmax(285px,285px))!important;
+  align-items:start!important;
+  box-sizing:border-box!important;
+}
+html body #castlewar1 #ncWarAttack .nc-war-column{
+  box-sizing:border-box!important;
+  width:285px!important;
+  min-width:285px!important;
+  max-width:285px!important;
+}
+@media(max-width:760px){
+  html body #castlewar1 #ncWarAttack.nc-war-attack{
+    grid-template-columns:repeat(3,minmax(285px,285px))!important;
+    overflow-x:auto!important;
+  }
+}
+</style>
+
 </body></html>
