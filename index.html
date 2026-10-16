@@ -943,7 +943,7 @@ async function saveSeating(){
    setMsg("seatingMsg","최신 자리배치 내용을 불러왔습니다.");
  }catch(e){console.error(e);setMsg("seatingMsg","현재 브라우저에 안전하게 임시 저장되었습니다.");}
 }
-let seatingAdmin=false;async function toggleSeatingAdmin(){if(seatingAdmin){seatingAdmin=false;}else{if(!await ensureGoogleAdmin())return;seatingAdmin=true;}document.getElementById("seatingEdit").style.display=seatingAdmin?"block":"none";document.getElementById("seatingAdminBtn").textContent=seatingAdmin?"🔒 수정 종료":"🔐 관리자 수정";}
+let seatingAdmin=false,seatingAdminBusy=false;async function toggleSeatingAdmin(){const btn=document.getElementById("seatingAdminBtn"),msg=document.getElementById("seatingMsg"),panel=document.getElementById("seatingEdit");if(seatingAdminBusy)return; if(seatingAdmin){seatingAdmin=false;panel.style.display="none";btn.textContent="🔐 관리자 수정";return;}seatingAdminBusy=true;btn.disabled=true;btn.textContent="🔄 인증 중…";if(msg)msg.textContent="Google 관리자 인증을 확인하고 있습니다…";try{if(!await ensureGoogleAdmin()){btn.textContent="🔐 관리자 수정";if(msg)msg.textContent="관리자 인증이 완료되지 않았습니다. 다시 눌러주세요.";return;}seatingAdmin=true;panel.style.display="block";btn.textContent="🔒 수정 종료";if(msg)msg.textContent="관리자 수정 모드가 열렸습니다.";}catch(e){console.error("seating admin button",e);if(msg)msg.textContent="관리자 수정 창을 열지 못했습니다. 다시 시도해 주세요.";btn.textContent="🔐 관리자 수정";}finally{seatingAdminBusy=false;btn.disabled=false;}}
 function renderTeams(){
  ["A","B","C","D"].forEach(t=>{for(let n=1;n<=7;n++){const e=document.getElementById("team-"+t+"-"+n);if(e)e.value=teamData[t][n-1]||"";}});
  for(let n=1;n<=2;n++){const e=document.getElementById("extra-"+n);if(e)e.value=teamData.extra[n-1]||"";}
@@ -2528,4 +2528,4 @@ html body .language-select,html body #languageSelect,html body #gloryLanguage{
 </style>
 
 <script src="./nav-config.js"></script>
-</body></html>
+\n<style id="seating-admin-click-fix-20261017">\n/* Keep seating controls above decorative layers and visibly responsive while authenticating. */\nhtml body #seating .seating-admin-actions{position:relative!important;z-index:50!important;isolation:isolate!important}\nhtml body #seating #seatingAdminBtn,html body #seating .seating-admin-actions button{position:relative!important;z-index:51!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}\nhtml body #seating #seatingAdminBtn:disabled{opacity:.78!important;cursor:wait!important}\n</style>\n</body></html>
