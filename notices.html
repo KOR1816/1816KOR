@@ -65,7 +65,7 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
  };
  if(!labels[lang])lang="ko";
  const ids=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
- const paths=["./","./notices.html","./#teams","./#alliance","./#castle","./#castlewar","./#seating","./#viking","./glory.html","./#battleJoin","./#castlewar1","./#castlelayout1"];
+ const paths=["./index.html","./notices.html","./index.html#teams","./index.html#alliance","./index.html#castle","./index.html#castlewar","./index.html#seating","./index.html#viking","./glory.html","./index.html#battleJoin","./index.html#castlewar1","./index.html#castlelayout1"];
  ids.forEach((id,i)=>{const el=document.getElementById(id);el.textContent=labels[lang][i];const href=paths[i],hashAt=href.indexOf("#"),base=hashAt>=0?href.slice(0,hashAt):href,hash=hashAt>=0?href.slice(hashAt):"";el.href=base+(base.includes("?")?"&":"?")+"lang="+encodeURIComponent(lang)+hash;});
  try{localStorage.setItem("kor1816_lang",lang)}catch{}
 })();
