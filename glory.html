@@ -129,7 +129,7 @@ function applyLanguage(){
   tr:["🏠 Ana Sayfa","📢 Duyurular","⚔️ Kutsal Kılıç","🗡️ Üç İttifak Savaşı","🏰 Kale Dizilimi","🔱🛡️ Kale Savaşı","🪑 Oturma Düzeni","🪓 Viking","🏆 Zafer Anları","⚔️ Kale Savaşına Katılım","🔱 Kale Savaşı 1","🏰 Kale Dizilimi 1"]
  };
  const navIds=["homeLink","noticeLink","teamsLink","allianceLink","castleLink","castlewarLink","seatingLink","vikingLink","gloryLink","battleJoinLink","castlewar1Link","castlelayout1Link"];
- const navPaths=["index.html#home","notices.html","index.html#teams","index.html#alliance","index.html#castle","index.html#castlewar","index.html#seating","index.html#viking","glory.html","index.html#battleJoin","index.html#castlewar1","index.html#castlelayout1"];
+ const navPaths=["index.html","notices.html","index.html?page=teams","index.html?page=alliance","index.html?page=castle","index.html?page=castlewar","index.html?page=seating","index.html?page=viking","glory.html","index.html?page=battleJoin","index.html?page=castlewar1","index.html?page=castlelayout1"];
  navIds.forEach((id,i)=>{const el=document.getElementById(id);const href=navPaths[i],hashAt=href.indexOf("#"),base=hashAt>=0?href.slice(0,hashAt):href,hash=hashAt>=0?href.slice(hashAt):"";el.href=base+(base.includes("?")?"&":"?")+"lang="+encodeURIComponent(currentLang)+hash;el.textContent=navLabels[currentLang][i];});
  document.getElementById("memo").placeholder=t.placeholder||TEXT.ko.placeholder;
  const prep=document.getElementById("prep"),castle=document.getElementById("castle");
