@@ -155,8 +155,8 @@ function normalizeBear(source){
  return d;
 }
 function render(){data=normalizeBear(data);for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
-function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
-function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
+function readLocal(){try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");return saved?normalizeBear(saved):null}catch{return null}}
+function writeLocal(){try{data=normalizeBear(data);localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:data.updatedAt||Date.now()}))}catch{}}
 async function refresh(){
  const local=readLocal(); if(local) data=mergeBilingual(local); data=normalizeSword(normalizeBear(data)); render(); say("공지 최신내용을 불러왔습니다.");
  if(!docRef)return;
@@ -177,7 +177,7 @@ function toggleEdit(){
 async function save(){
  if(!admin)return;
  for(const id of ids)data[id]=document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value.trim();
- const updatedAt=Date.now();data.updatedAt=updatedAt;writeLocal();render();
+ data=normalizeSword(normalizeBear(data));const updatedAt=Date.now();data.updatedAt=updatedAt;render();writeLocal();
  try{if(!docRef)throw Error("Firebase is not ready");await setDoc(docRef,{noticesV1:{...data,updatedAt}},{merge:true});say("공지 저장 완료! 다른 기기에서도 확인할 수 있습니다.")}
  catch(e){console.error(e);say("기기에는 저장했지만 공용 서버 저장에 실패했습니다.")}
 }
