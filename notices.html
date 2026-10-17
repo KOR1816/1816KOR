@@ -114,15 +114,8 @@ goldenGlaives:"❗️ 일요일 정보(Intel)를 아껴두세요\n❗️ Save yo
 let data={...defaults},db=null,docRef=null,admin=false;
 const ids=Object.keys(defaults), status=document.getElementById("status");
 function mergeBilingual(source){
- const out={...defaults,...(source||{})};
- for(const id of ids){
-  const saved=String(source?.[id]||"");
-  const original=String(defaults[id]||"");
-  if(/[가-힣]/.test(saved)&&!/[A-Za-z]{2,}/.test(saved)&&/[A-Za-z]{2,}/.test(original)){
-   out[id]=original;
-  }
- }
- return out;
+ // Preserve saved/admin-edited text exactly. Language selection must never replace user content with defaults.
+ return {...defaults,...(source||{})};
 }
 function say(s){
  status.textContent=s;
