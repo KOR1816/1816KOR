@@ -71,7 +71,7 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 })();
 </script>
 <main>
-<div class="intro"><h2>⚔️ 전투 공지 · BATTLE ORDERS</h2><p>READ THE PLAN · FIGHT AS ONE</p></div>
+<div class="intro"><h2>📢 공지</h2><div id="status" class="status">공지 최신내용을 불러오는 중...</div></div>
 <div class="cards">
 <section class="card"><div class="art">🐻</div><h3>곰사냥 · Bear Hunt</h3>
 <div class="block"><h4>집결장 · RALLY LEADERS</h4><div id="bearLeaders" class="content view-only"></div><div class="edit-only"><label class="label">집결장</label><textarea id="eBearLeaders"></textarea></div></div>
@@ -92,7 +92,7 @@ html body .intro h2{font-size:24px!important;line-height:1.3!important}
 </section>
 </div>
 <div class="actions"><button id="refreshBtn">🔄 새로고침</button><button id="editBtn">🔐 관리자 수정</button><button id="saveBtn" style="display:none">💾 저장</button></div>
-<div id="status" class="status">공지 내용을 불러오는 중...</div><div class="hint">수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다.</div>
+<div class="hint">수정 후 저장하면 다른 기기에서도 같은 공지를 볼 수 있습니다.</div>
 </main><footer>KOR1816 · Together, We Grow Stronger! ❤️</footer>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -144,7 +144,7 @@ function render(){for(const id of ids){document.getElementById(id).textContent=d
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
- const local=readLocal(); if(local) data=mergeBilingual(local); data=normalizeSword(normalizeBear(data)); render(); say("저장된 공지를 불러왔습니다.");
+ const local=readLocal(); if(local) data=mergeBilingual(local); data=normalizeSword(normalizeBear(data)); render(); say("공지 최신내용을 불러왔습니다.");
  if(!docRef)return;
  try{const snap=await getDoc(docRef);if(snap.exists()){const cloud=snap.data().noticesV1;if(cloud){const localTime=Number(local?.updatedAt)||0,cloudTime=Number(cloud.updatedAt)||0;
  if(local&&localTime>cloudTime){await setDoc(docRef,{noticesV1:{...data,updatedAt:localTime}},{merge:true})}
@@ -246,13 +246,13 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
  const subtitles={en:"Kingdom 1816 · Bite back if challenged! · Bear-loving community!!",ja:"Kingdom 1816 · 挑発したら噛みつく！ · クマ好きの集まり!!",zh:"Kingdom 1816 · 惹我们就反击！ · 熊迷聚会!!",de:"Kingdom 1816 · Wer uns reizt, wird gebissen! · Treff der Bärenfans!!",it:"Kingdom 1816 · Se ci provochi, mordiamo! · Comunità di appassionati di orsi!!",es:"Kingdom 1816 · ¡Si nos provocas, mordemos! · ¡Comunidad amante de los osos!!",tr:"Kingdom 1816 · Bizi kışkırtırsan ısırırız! · Ayı severler topluluğu!!"};
  const sub=document.querySelector("header .sub");if(sub&&subtitles[lang])sub.textContent=subtitles[lang];
  const headings={
-  en:["⚔️ Battle Orders","READ THE PLAN · FIGHT AS ONE","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🗡️ Three Alliances War","TEAM 1","TEAM 2"],
-  ja:["⚔️ 戦闘指示","作戦を確認 · 一丸となって戦おう","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
-  zh:["⚔️ 战斗公告","查看计划 · 团结作战","🐻 猎熊","集结队长","集结成员","兵力比例","兵力","🗡️ 圣剑争夺","第一队","第二队","🛡️ 三大联盟战","第一队","第二队"],
-  de:["⚔️ Kampfaufträge","Plan lesen · Gemeinsam kämpfen","🐻 Bärenjagd","Rally-Leiter","Rally-Mitglieder","Truppenverhältnis","Truppen","🗡️ Heiliges Schwertduell","TEAM 1","TEAM 2","🛡️ Krieg der drei Allianzen","TEAM 1","TEAM 2"],
-  it:["⚔️ Ordini di battaglia","Leggi il piano · Combatti unito","🐻 Caccia all'orso","Leader del rally","Membri del rally","Rapporto truppe","Truppe","🗡️ Duello della Spada Sacra","SQUADRA 1","SQUADRA 2","🛡️ Guerra delle Tre Alleanze","SQUADRA 1","SQUADRA 2"],
-  es:["⚔️ Órdenes de batalla","Consulta el plan · Lucha en equipo","🐻 Caza del oso","Líderes de rally","Miembros del rally","Proporción de tropas","Tropas","🗡️ Duelo de la Espada Sagrada","EQUIPO 1","EQUIPO 2","🛡️ Guerra de las Tres Alianzas","EQUIPO 1","EQUIPO 2"],
-  tr:["⚔️ Savaş Emirleri","Planı oku · Birlikte savaş","🐻 Ayı Avı","Sefer Liderleri","Sefer Katılımcıları","Birlik Oranı","Birlikler","🗡️ Kutsal Kılıç Savaşı","1. TAKIM","2. TAKIM","🛡️ Üç İttifak Savaşı","1. TAKIM","2. TAKIM"]
+  en:["📢 Notice","","🐻 Bear Hunt","RALLY LEADERS","RALLY MEMBERS","TROOP RATIO","TROOPS","🗡️ Holy Sword Clash","TEAM 1","TEAM 2","🗡️ Three Alliances War","TEAM 1","TEAM 2"],
+  ja:["📢 お知らせ","","🐻 熊狩り","集結リーダー","集結メンバー","兵力比率","兵力","🗡️ 聖剣争奪","第1チーム","第2チーム","🛡️ 三大連盟戦","第1チーム","第2チーム"],
+  zh:["📢 公告","","🐻 猎熊","集结队长","集结成员","兵力比例","兵力","🗡️ 圣剑争夺","第一队","第二队","🛡️ 三大联盟战","第一队","第二队"],
+  de:["📢 Hinweise","","🐻 Bärenjagd","Rally-Leiter","Rally-Mitglieder","Truppenverhältnis","Truppen","🗡️ Heiliges Schwertduell","TEAM 1","TEAM 2","🛡️ Krieg der drei Allianzen","TEAM 1","TEAM 2"],
+  it:["📢 Avviso","","🐻 Caccia all'orso","Leader del rally","Membri del rally","Rapporto truppe","Truppe","🗡️ Duello della Spada Sacra","SQUADRA 1","SQUADRA 2","🛡️ Guerra delle Tre Alleanze","SQUADRA 1","SQUADRA 2"],
+  es:["📢 Aviso","","🐻 Caza del oso","Líderes de rally","Miembros del rally","Proporción de tropas","Tropas","🗡️ Duelo de la Espada Sagrada","EQUIPO 1","EQUIPO 2","🛡️ Guerra de las Tres Alianzas","EQUIPO 1","EQUIPO 2"],
+  tr:["📢 Duyuru","","🐻 Ayı Avı","Sefer Liderleri","Sefer Katılımcıları","Birlik Oranı","Birlikler","🗡️ Kutsal Kılıç Savaşı","1. TAKIM","2. TAKIM","🛡️ Üç İttifak Savaşı","1. TAKIM","2. TAKIM"]
  };
  if(headings[lang]){
   const intro=document.querySelector(".intro");if(intro){const h=intro.querySelector("h2"),p=intro.querySelector("p");if(h)h.textContent=headings[lang][0];if(p)p.textContent=headings[lang][1];}
@@ -269,7 +269,7 @@ nav#mainNav a:hover,nav#mainNav button:hover,nav#siteNav a:hover{background:line
   const hint=document.querySelector(".hint");if(hint)hint.textContent=fixed.hint;
   const footer=document.querySelector("footer");if(footer)footer.textContent=fixed.footer;
   const status=document.getElementById("status");
-  if(status){const s=status.textContent;if(s.includes("불러오는 중"))status.textContent=fixed.loading;else if(s.includes("저장된 공지"))status.textContent=fixed.loaded;else if(s.includes("최신 공지"))status.textContent=fixed.latest;}
+  if(status){const s=status.textContent;if(s.includes("불러오는 중"))status.textContent=fixed.loading;else if(s.includes("저장된 공지")||s.includes("공지 최신내용"))status.textContent=fixed.latest;else if(s.includes("최신 공지"))status.textContent=fixed.latest;}
  }
 })(new URLSearchParams(location.search).get("lang")||localStorage.getItem("kor1816_lang")||"ko");
 </script>
