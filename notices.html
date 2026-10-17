@@ -149,12 +149,19 @@ function normalizeBear(source){
  };
  for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}
  for(const key of ["bearLeaders","bearMembers"]){
-  d[key]=String(d[key]||"").split("\n").filter(line=>!/^집결장\s*[:：]/.test(line)&&!/^집결원\s*[:：]/.test(line)).join("\n");
+  d[key]=String(d[key]||"").split("\n")
+   .map(line=>line.replace(/\s*집결장\s*[:：]\s*/g,"").replace(/\s*집결원\s*[:：]\s*/g,"").trim())
+   .filter(Boolean).join("\n");
  }
- if(d.bearRatio)d.bearRatio=String(d.bearRatio).split("\n").filter(line=>!/또는|\bOR\b/i.test(line)).join("\n");
+ if(d.bearRatio){
+  d.bearRatio=String(d.bearRatio)
+   .replace(/\s*또는\s*(?:\/\s*)?OR\s*/gi,"\n")
+   .replace(/\s*또는\s*/g,"\n")
+   .split("\n").map(line=>line.trim()).filter(Boolean).join("\n");
+ }
  return d;
 }
-function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
+function render(){data=normalizeBear(data);for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
 async function refresh(){
