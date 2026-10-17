@@ -148,13 +148,21 @@ function normalizeBear(source){
  }
  if(d.bearRatio){
   d.bearRatio=String(d.bearRatio)
+   .replace(/(?:^|\n)\s*(?:비율|Troop\s*Ratio)\s*[:：]\s*/g,"")
    .replace(/\s*또는\s*(?:\/\s*)?OR\s*/gi,"\n")
    .replace(/\s*또는\s*/g,"\n")
+   .replace(/(?:^|\n)\s*(?:비율|Troop\s*Ratio)\s*[:：]\s*/g,"")
    .split("\n").map(line=>line.trim()).filter(Boolean).join("\n");
  }
  return d;
 }
-function render(){data=normalizeBear(data);for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
+function removeNoticeTagline(){
+ const phrase="READ THE PLAN · FIGHT AS ONE";
+ const walker=document.createTreeWalker(document.querySelector("main")||document.body,NodeFilter.SHOW_TEXT);
+ const nodes=[];let node;while((node=walker.nextNode())){if(node.parentElement?.closest("script,style,textarea,input"))continue;if(node.nodeValue.includes(phrase))nodes.push(node)}
+ for(const n of nodes)n.nodeValue=n.nodeValue.replaceAll(phrase,"").trim();
+}
+function render(){data=normalizeBear(data);for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}removeNoticeTagline()}
 function readLocal(){try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");return saved?normalizeBear(saved):null}catch{return null}}
 function writeLocal(){try{data=normalizeBear(data);localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:data.updatedAt||Date.now()}))}catch{}}
 async function refresh(){
