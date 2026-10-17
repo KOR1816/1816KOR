@@ -101,9 +101,9 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 const firebaseConfig={apiKey:"AIzaSyB_7Uk6QkCQAt6LyWMVuQNARaXD78WdlZQ",authDomain:"kor1816.firebaseapp.com",projectId:"kor1816",storageBucket:"kor1816.firebasestorage.app",messagingSenderId:"838991083698",appId:"1:838991083698:web:de37c21f443386d902b1ab",measurementId:"G-SZ2ZX729BT"};
 const ADMIN_PASSWORD="0001", KEY="kor1816_notices_v1";
 const defaults={
-bearLeaders:"집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa",
-bearMembers:"집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
-bearRatio:"비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89",
+bearLeaders:"알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa",
+bearMembers:"아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes",
+bearRatio:"비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89",
 bearTroops:"병력: 100,000\nTroops: 100,000",
 swordTeam1:"1군: UCT 14:00 (한국시간 23:00) — 투력순\nTeam 1: UCT 14:00 (23:00 KST) — Power ranking",
 swordTeam2:"2군: UCT 12:00 (한국시간 21:00) — 선착순 투표\nTeam 2: UCT 12:00 (21:00 KST) — First-come voting",
@@ -139,7 +139,21 @@ function normalizeSword(source){const d={...source};
  if(d.allianceTeam2==="2군: UCT 14:00 (한국시간 23:00) — 선착순 투표로 선정\nTeam 2: UCT 14:00 (23:00 KST) — Selected by first-come, first-served voting")d.allianceTeam2=defaults.allianceTeam2;
  return d
 }
-function normalizeBear(source){const d={...source};const legacy={bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]};for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}return d}
+function normalizeBear(source){
+ const d={...source};
+ const legacy={
+  bearLeaders:["알카 · 페라 · 로사","집결장: 알카 · 페라 · 로사\nRally Leaders: Alka · Pera · Rosa"],
+  bearMembers:["아마데우스 · 첸코 · 연우 · 마르고 · 아마네\n영웅 없이 X","집결원: 아마데우스 · 첸코 · 연우 · 마르고 · 아마네\nRally Members: Amadeus · Chenko · Yeonwoo · Margo · Amane\n영웅 없이 X\nNo heroes"],
+  bearRatio:["10 · 10 · 80\n또는 / OR\n1 · 10 · 89","비율: 10 · 10 · 80\nTroop Ratio: 10 · 10 · 80\n또는 / OR\n비율: 1 · 10 · 89\nTroop Ratio: 1 · 10 · 89"],
+  bearTroops:["100,000","병력: 100,000\nTroops: 100,000"]
+ };
+ for(const [key,[oldValue,newValue]] of Object.entries(legacy)){if(!d[key]||d[key]===oldValue)d[key]=newValue}
+ for(const key of ["bearLeaders","bearMembers"]){
+  d[key]=String(d[key]||"").split("\n").filter(line=>!/^집결장\s*[:：]/.test(line)&&!/^집결원\s*[:：]/.test(line)).join("\n");
+ }
+ if(d.bearRatio)d.bearRatio=String(d.bearRatio).split("\n").filter(line=>!/또는|\bOR\b/i.test(line)).join("\n");
+ return d;
+}
 function render(){for(const id of ids){document.getElementById(id).textContent=data[id]||"";document.getElementById("e"+id[0].toUpperCase()+id.slice(1)).value=data[id]||""}}
 function readLocal(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}}
 function writeLocal(){try{localStorage.setItem(KEY,JSON.stringify({...data,updatedAt:Date.now()}))}catch{}}
